@@ -35,35 +35,34 @@ const Contact: React.FC = () => {
             className="space-y-10"
           >
             <div className="space-y-8">
-              <div className="flex items-start gap-6">
-                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <Phone size={24} />
+              <div className="flex items-start gap-4 md:gap-6">
+                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
+                  <Phone className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</h4>
-                  <p className="text-xl font-bold text-slate-900">9341749399, 7004138194</p>
+                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</h4>
+                  <p className="text-base md:text-xl font-bold text-slate-900">9341749399, 7004138194</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-6">
-                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <Mail size={24} />
+              <div className="flex items-start gap-4 md:gap-6">
+                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
+                  <Mail className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email</h4>
-                  <p className="text-xl font-bold text-slate-900">guruprintingp@gmail.com</p>
+                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email</h4>
+                  <p className="text-base md:text-xl font-bold text-slate-900">guruprintingp@gmail.com</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-6">
-                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <MapPin size={24} />
+              <div className="flex items-start gap-4 md:gap-6">
+                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
+                  <MapPin className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Address</h4>
-                  <p className="text-xl font-bold text-slate-900 leading-relaxed">
-                    Kazipur Road No. - 4,<br />
-                    Near Arvind Mahila College,<br />
+                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Address</h4>
+                  <p className="text-base md:text-xl font-bold text-slate-900 leading-relaxed">
+                    Kazipur Road No. - 4,<br className="md:hidden" /> Near Arvind Mahila College,<br />
                     Patna, Bihar - 800004.
                   </p>
                 </div>

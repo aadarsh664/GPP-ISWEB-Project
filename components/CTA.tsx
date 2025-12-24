@@ -58,9 +58,9 @@ const CTA: React.FC = () => {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-5 bg-[#25D366] text-white border-2 border-[#25D366] px-14 py-7 rounded-3xl font-black text-2xl shadow-[0_30px_70px_rgba(0,0,0,0.4)] hover:bg-white hover:text-[#25D366] transition-all group uppercase tracking-widest relative z-20"
+            className="inline-flex items-center gap-3 md:gap-5 bg-[#25D366] text-white border-2 border-[#25D366] px-6 py-4 md:px-14 md:py-7 rounded-xl md:rounded-3xl font-black text-sm md:text-2xl shadow-[0_30px_70px_rgba(0,0,0,0.4)] hover:bg-white hover:text-[#25D366] transition-all group uppercase tracking-widest relative z-20 whitespace-nowrap"
           >
-            <WhatsAppLogo size={36} className="group-hover:rotate-12 transition-transform" />
+            <WhatsAppLogo className="w-5 h-5 md:w-9 md:h-9 group-hover:rotate-12 transition-transform" />
             <span>Start Your Project</span>
           </motion.a>
         </div>

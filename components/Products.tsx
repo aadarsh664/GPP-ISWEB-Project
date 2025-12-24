@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCTS } from '../constants';
-import { X, CheckCircle, ArrowRight } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 import WhatsAppLogo from './WhatsAppLogo';
 
@@ -22,23 +22,23 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         initial={{ scale: 0.95, y: 20, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.95, y: 20, opacity: 0 }}
-        className="bg-white rounded-[32px] md:rounded-[40px] max-w-5xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative"
+        className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-y-auto shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 md:top-6 md:right-6 z-30 w-10 h-10 md:w-12 md:h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-[#FF6600] transition-colors shadow-lg"
+          className="absolute top-3 right-3 md:top-6 md:right-6 z-30 w-8 h-8 md:w-12 md:h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-[#FF6600] transition-colors shadow-lg"
         >
-          <X size={20} />
+          <X size={18} className="md:w-5 md:h-5" />
         </button>
 
         <div className="flex flex-col md:flex-row min-h-full">
-          <div className="w-full md:w-1/2 h-[200px] sm:h-[250px] md:h-auto relative shrink-0">
+          <div className="w-full md:w-1/2 h-[160px] sm:h-[250px] md:h-auto relative shrink-0">
             <img src={product.imageUrl} className="w-full h-full object-cover" alt={product.name} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>
           
-          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-16 flex flex-col justify-center">
+          <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center">
             <span className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] md:text-xs mb-3 md:mb-4 block">
               {product.category}
             </span>

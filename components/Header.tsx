@@ -7,6 +7,7 @@ import BrandLogo from './BrandLogo';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -33,6 +34,8 @@ const Header: React.FC = () => {
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
+        onAnimationComplete={() => setAnimationComplete(true)}
+        style={animationComplete ? { transform: 'none' } : undefined}
         className="fixed top-0 left-0 right-0 z-[110] bg-white/95 backdrop-blur-md border-b border-slate-100 h-20 flex items-center shadow-sm"
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">

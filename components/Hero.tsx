@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
 
   return (
-    <section id="home" className="relative h-screen min-h-[600px] w-full overflow-hidden flex items-center pt-20">
+    <section id="home" className="relative h-screen min-h-[600px] w-full overflow-hidden flex items-start lg:items-center pt-32 md:pt-40 lg:pt-20">
       <div className="absolute inset-0 z-0 bg-white">
         <div className="absolute inset-0 bg-white/10 z-10" />
         <video
