@@ -1,0 +1,7 @@
+{
+  "name": "GPP) - Official Website",
+  "description": "A high-performance, visually stunning website for GPP, featuring advanced scroll animations, a 3D gallery, and interactive service showcases, all built with React, Tailwind CSS, and Framer Motion.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

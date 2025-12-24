@@ -1,0 +1,124 @@
+
+import React, { useState, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, MoveRight } from 'lucide-react';
+
+const About: React.FC = () => {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+
+  // Scroll logic for the rotating arrow
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Rotates the arrow based on scroll progress
+  const rotation = useTransform(scrollYProgress, [0.1, 0.6], [0, 360]);
+  const arrowOpacity = useTransform(scrollYProgress, [0.1, 0.2, 0.5, 0.6], [0, 1, 1, 0]);
+
+  const cards = [
+    { id: 1, title: 'Design', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=800', label: 'Step 01' },
+    { id: 2, title: 'Print', image: 'https://images.unsplash.com/photo-1562654501-a0ccc0af3fb1?auto=format&fit=crop&q=80&w=800', label: 'Step 02' },
+    { id: 3, title: 'Deliver', image: 'https://images.unsplash.com/photo-1566131444458-96359f972b9a?auto=format&fit=crop&q=80&w=800', label: 'Step 03' }
+  ];
+
+  const brandLogos = [
+    'Logo 1', 'Logo 2', 'Logo 3', 'Logo 4', 'Logo 5', 'Logo 6', 'Logo 7', 'Logo 8'
+  ];
+
+  return (
+    <section ref={containerRef} id="about" className="py-32 bg-white overflow-hidden relative">
+      <div className="container mx-auto px-6 md:px-12">
+        <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:w-1/2 text-center md:text-left flex flex-col items-center md:items-start"
+          >
+            <span className="text-[#FF6600] font-black uppercase tracking-[0.3em] text-xs mb-6 block">Our Vision</span>
+            <h2 className="text-5xl md:text-7xl font-black mb-10 leading-[1.1] text-black tracking-tighter">
+              More Than Just <br />
+              <span className="text-[#4F46E5]">Ink on Paper.</span>
+            </h2>
+            <h3 className="text-2xl md:text-3xl font-black mb-8 text-black">Your Reliable Printing Partner.</h3>
+            <p className="text-slate-600 text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0">
+              At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind.
+            </p>
+
+            {/* Sticky/Pinned Rotating Arrow aligned left */}
+            <div className="relative w-full h-24 hidden md:flex items-center justify-start">
+              <motion.div 
+                style={{ rotate: rotation, opacity: arrowOpacity }}
+                className="text-[#FF6600] flex items-center justify-center"
+              >
+                <MoveRight size={64} className="stroke-[2.5]" />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:w-1/2 w-full flex gap-4 h-[500px] md:h-[650px]"
+          >
+            {cards.map((card, idx) => (
+              <motion.div
+                key={card.id}
+                onHoverStart={() => setHoveredCard(idx)}
+                onHoverEnd={() => setHoveredCard(null)}
+                onClick={() => setHoveredCard(hoveredCard === idx ? null : idx)}
+                animate={{ 
+                  width: hoveredCard === idx ? '60%' : hoveredCard === null ? '33.3%' : '20%',
+                }}
+                transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+                className="relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group shadow-2xl"
+              >
+                <img 
+                  src={card.image} 
+                  className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                  alt={card.title}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
+                  <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
+                      <ArrowRight className="text-white w-[14px] h-[14px] md:w-[18px] md:h-[18px]" />
+                    </div>
+                    <span className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest">{card.label}</span>
+                  </div>
+                  <h4 className="text-white font-black text-xl sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap overflow-hidden tracking-tighter leading-tight">
+                    {card.title}
+                  </h4>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Marquee */}
+        <div className="relative pt-16 border-t border-slate-100">
+          <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
+          <div className="flex overflow-hidden relative">
+            <div className="flex gap-20 whitespace-nowrap animate-marquee items-center">
+              {[...brandLogos, ...brandLogos, ...brandLogos].map((logo, i) => (
+                <div key={i} className="flex items-center gap-6 grayscale opacity-20 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                  <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center">
+                    <span className="text-[#FF6600] font-black text-xl">P</span>
+                  </div>
+                  <span className="text-3xl font-black text-black tracking-tighter">{logo}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
