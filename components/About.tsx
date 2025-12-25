@@ -99,7 +99,7 @@ const About: React.FC = () => {
                     </div>
                     <span className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest">{card.label}</span>
                   </div>
-                  <h4 className="text-white font-black text-xl sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap overflow-hidden tracking-tighter leading-tight">
+                  <h4 className="text-white font-black text-xl sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap tracking-tighter leading-tight pb-1">
                     {card.title}
                   </h4>
                 </div>
