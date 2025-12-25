@@ -1,6 +1,6 @@
 
-import React, { useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, MoveRight } from 'lucide-react';
 
 const About: React.FC = () => {
@@ -23,9 +23,17 @@ const About: React.FC = () => {
     { id: 3, title: 'Deliver', image: 'https://images.unsplash.com/photo-1566131444458-96359f972b9a?auto=format&fit=crop&q=80&w=800', label: 'Step 03' }
   ];
 
-  const brandLogos = [
-    'Logo 1', 'Logo 2', 'Logo 3', 'Logo 4', 'Logo 5', 'Logo 6', 'Logo 7', 'Logo 8'
-  ];
+  const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const [marqueeWidth, setMarqueeWidth] = useState(0);
+
+  useEffect(() => {
+    if (marqueeRef.current) {
+      // We only need the width of the first half of the logos for a seamless loop
+      const halfWidth = marqueeRef.current.scrollWidth / 2;
+      setMarqueeWidth(halfWidth);
+    }
+  }, []); // Run only once on mount
 
   return (
     <section ref={containerRef} id="about" className="py-32 bg-white overflow-hidden relative">
@@ -103,17 +111,23 @@ const About: React.FC = () => {
         {/* Marquee */}
         <div className="relative pt-16 border-t border-slate-100">
           <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
-          <div className="flex overflow-hidden relative">
-            <div className="flex gap-20 whitespace-nowrap animate-marquee items-center">
-              {[...brandLogos, ...brandLogos, ...brandLogos].map((logo, i) => (
-                <div key={i} className="flex items-center gap-6 grayscale opacity-20 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
-                  <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center">
-                    <span className="text-[#FF6600] font-black text-xl">P</span>
-                  </div>
-                  <span className="text-3xl font-black text-black tracking-tighter">{logo}</span>
+          <div className="w-full overflow-hidden">
+            <motion.div
+              ref={marqueeRef}
+              className="flex gap-20 whitespace-nowrap"
+              animate={{ x: [0, -marqueeWidth] }}
+              transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
+            >
+              {[...brandLogos, ...brandLogos].map((logo, i) => (
+                <div key={i} className="flex-shrink-0 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer flex items-center justify-center">
+                  <img 
+                    src={logo} 
+                    alt={`Client Logo ${i}`}
+                    className="h-20 md:h-24 w-auto object-contain"
+                  />
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
