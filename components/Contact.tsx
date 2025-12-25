@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
       if (response.ok) {
         setIsSuccess(true);
         (e.target as HTMLFormElement).reset(); // Form clear karein
-        setTimeout(() => setIsSuccess(false), 5000);
+        // setTimeout removed so success state persists until reload
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -110,32 +110,47 @@ const Contact: React.FC = () => {
             className="bg-slate-50 p-10 md:p-12 rounded-[40px] shadow-sm border border-slate-100"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Name</label>
-                  <input required name="name" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="John Doe" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Mobile Number</label>
-                  <input required name="mobile" type="tel" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="+91 0000000000" />
-                </div>
-              </div>
+              {!isSuccess ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Name</label>
+                      <input required name="name" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="John Doe" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Mobile Number</label>
+                      <input required name="mobile" type="tel" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="+91 0000000000" />
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</label>
-                  <input required name="email" type="email" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="john@example.com" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Company Name</label>
-                  <input name="company" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Acme Inc." />
-                </div>
-              </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</label>
+                      <input required name="email" type="email" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="john@example.com" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Company Name</label>
+                      <input name="company" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Acme Inc." />
+                    </div>
+                  </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Requirement</label>
-                <textarea required name="requirement" rows={4} className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
-              </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Requirement</label>
+                    <textarea required name="requirement" rows={4} className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
+                  </div>
+                </>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-10 text-center space-y-4"
+                >
+                  <h4 className="text-3xl md:text-4xl font-black text-slate-900">Message Sent!</h4>
+                  <p className="text-slate-500 font-medium text-lg max-w-md mx-auto">
+                    Thank you for contacting GPP. We have received your details and will get back to you shortly.
+                  </p>
+                </motion.div>
+              )}
 
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -172,12 +187,6 @@ const Contact: React.FC = () => {
                   WHATSAPP US
                 </a>
               </div>
-              
-              {isSuccess && (
-                <p className="text-center text-sm font-bold text-green-600 mt-4 animate-pulse">
-                  Thank you for contacting GPP, our representative will respond shortly.
-                </p>
-              )}
             </form>
           </motion.div>
         </div>
