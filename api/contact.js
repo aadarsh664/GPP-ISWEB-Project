@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     // Data ko Google Sheet mein append karein
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GPP_SHEET_ID,
-      range: 'GPP_Portfolio_Website!A:E', // Make sure Sheet1 exists
+      range: 'Sheet1!A:E', // Make sure Sheet1 exists
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: [[name, mobile, email, company, requirement, new Date().toLocaleString()]],
