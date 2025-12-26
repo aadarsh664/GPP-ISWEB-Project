@@ -59,7 +59,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
 
         {/* Right Side: Image Display */}
         <div className="relative h-[400px] md:h-[500px] lg:h-[650px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] order-2 mt-10 lg:mt-0">
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.img
               key={activeBrand}
               src={service.images[activeBrand]}

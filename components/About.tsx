@@ -6,6 +6,7 @@ import { ArrowRight, MoveRight } from 'lucide-react';
 const About: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const containerRef = useRef<HTMLElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   // Scroll logic for the rotating arrow
   const { scrollYProgress } = useScroll({
@@ -15,12 +16,49 @@ const About: React.FC = () => {
 
   // Rotates the arrow based on scroll progress
   const rotation = useTransform(scrollYProgress, [0.1, 0.6], [0, 360]);
-  const arrowOpacity = useTransform(scrollYProgress, [0.1, 0.2, 0.5, 0.6], [0, 1, 1, 0]);
+  const arrowOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+
+  // Tom and Jerry Effect (Magnetic Repulsion)
+  const springConfig = { stiffness: 200, damping: 15 };
+  const x = useSpring(0, springConfig);
+  const y = useSpring(0, springConfig);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!arrowRef.current) return;
+      
+      const rect = arrowRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      const dx = e.clientX - centerX;
+      const dy = e.clientY - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const triggerDistance = 200; // Detection range
+
+      if (distance < triggerDistance) {
+        // Calculate repulsion force (stronger when closer)
+        const force = (triggerDistance - distance) / triggerDistance;
+        const moveDistance = force * 120; // Max movement range
+        
+        // Move opposite to mouse direction
+        const angle = Math.atan2(dy, dx);
+        x.set(-Math.cos(angle) * moveDistance);
+        y.set(-Math.sin(angle) * moveDistance);
+      } else {
+        x.set(0);
+        y.set(0);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [x, y]);
 
   const cards = [
-    { id: 1, title: 'Design', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=800', label: 'Step 01' },
-    { id: 2, title: 'Print', image: 'https://images.unsplash.com/photo-1562654501-a0ccc0af3fb1?auto=format&fit=crop&q=80&w=800', label: 'Step 02' },
-    { id: 3, title: 'Deliver', image: 'https://images.unsplash.com/photo-1566131444458-96359f972b9a?auto=format&fit=crop&q=80&w=800', label: 'Step 03' }
+    { id: 1, title: 'Design', image: '/aboutcardimages/design.png', label: 'Step 01' },
+    { id: 2, title: 'Print', image: '/aboutcardimages/print.png', label: 'Step 02' },
+    { id: 3, title: 'Deliver', image: '/aboutcardimages/deliver.png', label: 'Step 03' }
   ];
 
   const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
@@ -59,7 +97,8 @@ const About: React.FC = () => {
             {/* Sticky/Pinned Rotating Arrow aligned left */}
             <div className="relative w-full h-24 hidden md:flex items-center justify-start">
               <motion.div 
-                style={{ rotate: rotation, opacity: arrowOpacity }}
+                ref={arrowRef}
+                style={{ rotate: rotation, opacity: arrowOpacity, x, y }}
                 className="text-[#FF6600] flex items-center justify-center"
               >
                 <MoveRight size={64} className="stroke-[2.5]" />

@@ -112,19 +112,27 @@ const WhyChooseUs: React.FC = () => {
           </div>
           
           <div className="flex overflow-hidden relative py-8">
-            <div className="flex gap-10 whitespace-nowrap animate-marquee">
+            <div className="flex gap-10 whitespace-nowrap animate-marquee" style={{ animationDuration: '60s' }}>
               {[...TESTIMONIALS, ...TESTIMONIALS].map((t, idx) => (
                 <div 
                   key={`${t.id}-${idx}`} 
                   className="inline-block w-[320px] sm:w-[400px] bg-white border border-slate-100 p-8 sm:p-10 rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all"
                 >
                   <div className="flex items-center gap-5 mb-8">
-                    <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5]">
-                      <LucideIcons.User size={24} />
+                    <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+                      {t.avatarUrl ? (
+                        <img 
+                          src={t.avatarUrl} 
+                          alt={t.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <LucideIcons.User size={24} />
+                      )}
                     </div>
                     <div>
                       <h5 className="font-black text-black text-lg">{t.name}</h5>
-                      <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">{t.designation}, {t.company}</p>
+                      <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
                     </div>
                   </div>
                   <p className="text-slate-600 leading-relaxed whitespace-normal text-base sm:text-lg mb-6">

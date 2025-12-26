@@ -77,7 +77,16 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
 
 const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const categories = Array.from(new Set(PRODUCTS.map(p => p.category)));
+
+  // Group products by category for better performance and structure
+  const productsByCategory = PRODUCTS.reduce((acc, product) => {
+    const category = product.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(product);
+    return acc;
+  }, {} as Record<string, Product[]>);
 
   return (
     <section id="products" className="py-32 bg-slate-50">
@@ -89,13 +98,13 @@ const Products: React.FC = () => {
 
         {/* Masonry Layout using CSS Columns */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-12 [column-fill:_balance]">
-          {categories.map(cat => (
-            <div key={cat} className="break-inside-avoid mb-12 space-y-8 w-full">
+          {Object.entries(productsByCategory).map(([category, products]) => (
+            <div key={category} className="break-inside-avoid mb-12 space-y-8 w-full">
               <h4 className="text-3xl font-black mb-8 pb-4 border-b-4 border-black text-black uppercase tracking-tight text-left">
-                {cat}
+                {category}
               </h4>
               <div className="flex flex-col gap-4">
-                {PRODUCTS.filter(p => p.category === cat).map(product => (
+                {products.map(product => (
                   <motion.button
                     key={product.id}
                     onClick={() => setSelectedProduct(product)}

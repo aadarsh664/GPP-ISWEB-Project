@@ -1,4 +1,3 @@
-
 export interface Product {
   id: string;
   name: string;
@@ -24,6 +23,7 @@ export interface Testimonial {
   company: string;
   designation: string;
   content: string;
+  avatarUrl?: string;
 }
 
 export interface WhyChooseUsCard {
