@@ -45,7 +45,7 @@ const WhyChooseUs: React.FC = () => {
   };
 
   return (
-    <section id="why choose gpp" className="py-32 bg-white overflow-hidden">
+    <section id="why-choose-us" className="py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
         {/* Why Choose GPP Header */}
         <div className="text-center mb-24 relative">

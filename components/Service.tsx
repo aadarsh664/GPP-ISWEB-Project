@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { SERVICES } from '../constants';
 import { Circle } from 'lucide-react';
 
@@ -9,7 +9,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
   const isDesigning = service.title.toLowerCase() === 'designing';
 
   return (
-    <div className="relative w-full bg-white border-t border-slate-100 shadow-2xl overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:min-h-screen lg:flex lg:items-center">
+    <div className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:min-h-screen lg:flex lg:items-center">
       <motion.div 
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -59,19 +59,16 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
 
         {/* Right Side: Image Display */}
         <div className="relative h-[400px] md:h-[500px] lg:h-[650px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] order-2 mt-10 lg:mt-0">
-          <AnimatePresence>
-            <motion.img
-              key={activeBrand}
-              src={service.images[activeBrand]}
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: "circOut" }}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2.5s]"
-              alt={activeBrand}
-            />
-          </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none opacity-60" />
+          <motion.img
+            key={activeBrand}
+            src={service.images[activeBrand]}
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, ease: "circOut" }}
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2.5s]"
+            alt={activeBrand}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none opacity-30" />
           <div className="absolute bottom-8 left-8 lg:bottom-10 lg:left-10">
             <p className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] mb-2">
               {isDesigning ? 'Creative Studio' : 'Industrial Precision'}

@@ -218,6 +218,14 @@ export const PRODUCTS: Product[] = [
     imageUrl: '/product-images/Booklets.jpg'
   },
   {
+    id: 'prospectus-visual-book',
+    name: 'Prospectus & Visual Book',
+    category: 'Marketing Prints',
+    description: 'Premium prospectuses and visual books for educational institutions and corporate profiles.',
+    features: ['Gloss/Matte Finish', 'Perfect Binding', 'High-Resolution Print'],
+    imageUrl: '/product-images/Prospectus - Visual Book.jpg'
+  },
+  {
     id: 'brochures',
     name: 'Brochures',
     category: 'Marketing Prints',
@@ -256,14 +264,6 @@ export const PRODUCTS: Product[] = [
     description: 'Miniature standees for reception desks and restaurant tables.',
     features: ['Rigid Board', 'Self Standing', 'Compact Size'],
     imageUrl: '/product-images/Tabletop Standees.jpg'
-  },
-  {
-    id: 'menu-cards',
-    name: 'Menu Cards',
-    category: 'Marketing Prints',
-    description: 'Durable and appetizing menu cards for restaurants and cafes.',
-    features: ['Waterproof Lamination', 'Hardbound/Folded', 'Vibrant Food Photos'],
-    imageUrl: '/product-images/Menu Cards.jpg'
   },
 
   // Promotional Prints

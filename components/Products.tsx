@@ -35,7 +35,6 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         <div className="flex flex-col md:flex-row min-h-full">
           <div className="w-full md:w-1/2 h-[160px] sm:h-[250px] md:h-auto relative shrink-0">
             <img src={product.imageUrl} className="w-full h-full object-cover" alt={product.name} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>
           
           <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center">
