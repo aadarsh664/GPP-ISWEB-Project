@@ -91,6 +91,13 @@ const PerspectiveCarousel = () => {
 };
 
 const Footer: React.FC = () => {
+  const socialLinks = [
+    { Icon: Instagram, href: 'https://www.instagram.com/guruprintingpress/' },
+    { Icon: Youtube, href: 'https://www.youtube.com/@Guruprintingpress' },
+    { Icon: Linkedin, href: 'https://www.linkedin.com/in/guru-printing-press-89b31a3a3/' },
+    { Icon: Facebook, href: '#' }
+  ];
+
   return (
     <footer className="bg-white pt-32 overflow-hidden border-t border-slate-100">
       <div className="container mx-auto px-6 md:px-12 mb-12">
@@ -124,8 +131,14 @@ const Footer: React.FC = () => {
       <div className="bg-white container mx-auto px-6 md:px-12 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-t border-slate-100 pt-12">
           <div className="flex items-center gap-4">
-            {[Instagram, Youtube, Linkedin, Facebook].map((Icon, i) => (
-              <a key={i} href="#" className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:bg-black hover:text-white hover:scale-110 transition-all shadow-sm">
+            {socialLinks.map(({ Icon, href }, i) => (
+              <a 
+                key={i} 
+                href={href}
+                target={href === '#' ? undefined : "_blank"}
+                rel={href === '#' ? undefined : "noopener noreferrer"}
+                className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:bg-black hover:text-white hover:scale-110 transition-all shadow-sm"
+              >
                 <Icon size={20} />
               </a>
             ))}
