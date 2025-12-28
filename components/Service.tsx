@@ -9,7 +9,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
   const isDesigning = service.title.toLowerCase() === 'designing';
 
   return (
-    <div className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:min-h-screen lg:flex lg:items-center">
+    <div id={`service-0${index + 1}`} className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:min-h-screen lg:flex lg:items-center">
       <motion.div 
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -41,7 +41,7 @@ const PerspectiveCarousel = () => {
 
             return (
               <motion.div
-                key={i}
+                key={src}
                 layout
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
@@ -100,13 +100,13 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-white pt-32 overflow-hidden border-t border-slate-100">
-      <div className="container mx-auto px-6 md:px-12 mb-12">
+      <div id="our-work" className="container mx-auto px-6 md:px-12 mb-12 scroll-mt-24">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h3 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1] tracking-tighter text-black">
-            Our Gallery
+            Our Work
           </h3>
           <p className="text-[#FF6600] font-black text-xs tracking-[0.5em] uppercase">
-            A New Perspective on Print
+            Real Projects. Real Results.
           </p>
         </div>
         <PerspectiveCarousel />
@@ -133,7 +133,7 @@ const Footer: React.FC = () => {
           <div className="flex items-center gap-4">
             {socialLinks.map(({ Icon, href }, i) => (
               <a 
-                key={i} 
+                key={href} 
                 href={href}
                 target={href === '#' ? undefined : "_blank"}
                 rel={href === '#' ? undefined : "noopener noreferrer"}

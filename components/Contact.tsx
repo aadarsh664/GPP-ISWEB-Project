@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
@@ -8,6 +8,110 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I have a query regarding your services.")}`;
+
+  // Helper Component for Copyable Items
+  const CopyableItem: React.FC<{
+    icon: React.ElementType;
+    label: string;
+    value: string;
+    displayValue?: React.ReactNode;
+    isEmail?: boolean;
+  }> = ({ icon: Icon, label, value, displayValue, isEmail }) => {
+    const [tooltip, setTooltip] = useState(isEmail ? "Mail / Right Click Copy" : "Click to Copy");
+    const [showTooltip, setShowTooltip] = useState(false);
+    const tooltipRef = useRef<HTMLDivElement>(null);
+    
+    const copyToClipboard = async (text: string) => {
+      // Try Modern Clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (err) {
+          // Continue to fallback if failed
+        }
+      }
+
+      // Fallback for Mobile / Older Browsers / Non-Secure Contexts
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        return successful;
+      } catch (err) {
+        return false;
+      }
+    };
+
+    const handleCopy = async (e: React.MouseEvent) => {
+      e.preventDefault(); // Prevent context menu
+      e.stopPropagation();
+      
+      const success = await copyToClipboard(value);
+      
+      if (success) {
+        setTooltip("Copied!");
+        setShowTooltip(true); // Force show tooltip on mobile/click
+        setTimeout(() => {
+          setTooltip(isEmail ? "Mail / Right Click Copy" : "Click to Copy");
+          setShowTooltip(false);
+        }, 2000);
+      }
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+      if (isEmail) {
+        // Allow default mailto behavior
+        window.location.href = `mailto:${value}`;
+      } else {
+        handleCopy(e);
+      }
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (tooltipRef.current) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        // Tooltip follows cursor
+        tooltipRef.current.style.transform = `translate(${x + 15}px, ${y - 15}px)`;
+      }
+    };
+
+    return (
+      <div 
+        className="flex items-start gap-4 md:gap-6 group cursor-pointer relative"
+        onClick={handleClick}
+        onContextMenu={handleCopy}
+        onMouseMove={handleMouseMove}
+      >
+        <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0 transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:scale-110 shadow-sm">
+          <Icon className="w-5 h-5 md:w-6 md:h-6" />
+        </div>
+        <div>
+          <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</h4>
+          <p className="text-base md:text-xl font-bold text-slate-900 group-hover:text-[#FF6600] transition-colors leading-relaxed">
+            {displayValue || value}
+          </p>
+        </div>
+
+        {/* Tooltip */}
+        <div 
+          ref={tooltipRef}
+          className={`absolute top-0 left-0 bg-black text-white text-[10px] font-bold py-1.5 px-3 rounded-lg transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl z-50 ${showTooltip ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+        >
+          {tooltip}
+        </div>
+      </div>
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,38 +161,28 @@ const Contact: React.FC = () => {
             className="space-y-10"
           >
             <div className="space-y-8">
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <Phone className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</h4>
-                  <p className="text-base md:text-xl font-bold text-slate-900">9341749399, 7004138194</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <Mail className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email</h4>
-                  <p className="text-base md:text-xl font-bold text-slate-900">guruprintingp@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0">
-                  <MapPin className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Address</h4>
-                  <p className="text-base md:text-xl font-bold text-slate-900 leading-relaxed">
+              <CopyableItem 
+                icon={Phone} 
+                label="Phone" 
+                value="9341749399, 7004138194" 
+              />
+              
+              <CopyableItem 
+                icon={Mail} 
+                label="Email" 
+                value="guruprintingp@gmail.com" 
+                isEmail={true}
+              />
+              
+              <CopyableItem 
+                icon={MapPin} 
+                label="Address" 
+                value="Kazipur Road No. - 4, Near Arvind Mahila College, Patna, Bihar - 800004"
+                displayValue={<>
                     Kazipur Road No. - 4,<br className="md:hidden" /> Near Arvind Mahila College,<br />
                     Patna, Bihar - 800004.
-                  </p>
-                </div>
-              </div>
+                </>}
+              />
             </div>
 
             <div className="h-[300px] w-full bg-slate-100 rounded-[32px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">

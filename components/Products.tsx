@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCTS } from '../constants';
 import { X, ArrowRight } from 'lucide-react';
@@ -33,8 +33,8 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         </button>
 
         <div className="flex flex-col md:flex-row min-h-full">
-          <div className="w-full md:w-1/2 h-[160px] sm:h-[250px] md:h-auto relative shrink-0">
-            <img src={product.imageUrl} className="w-full h-full object-cover" alt={product.name} />
+          <div className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center">
+            <img src={product.imageUrl} className="w-full h-full object-contain md:object-cover" alt={product.name} />
           </div>
           
           <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center">
@@ -76,6 +76,22 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
 
 const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // Listen for custom event from Header to open specific product modal
+  useEffect(() => {
+    const handleOpenModal = (e: CustomEvent) => {
+      const productId = e.detail;
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (product) {
+        setSelectedProduct(product);
+      }
+    };
+
+    window.addEventListener('open-product-modal' as any, handleOpenModal as any);
+    return () => {
+      window.removeEventListener('open-product-modal' as any, handleOpenModal as any);
+    };
+  }, []);
 
   // Group products by category for better performance and structure
   const productsByCategory = PRODUCTS.reduce((acc, product) => {

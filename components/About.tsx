@@ -56,9 +56,9 @@ const About: React.FC = () => {
   }, [x, y]);
 
   const cards = [
-    { id: 1, title: 'Design', image: '/aboutcardimages/design.png', label: 'Step 01' },
-    { id: 2, title: 'Print', image: '/aboutcardimages/print.png', label: 'Step 02' },
-    { id: 3, title: 'Deliver', image: '/aboutcardimages/deliver.png', label: 'Step 03' }
+    { id: 1, title: 'Design', image: '/aboutcardimages/design.jpg', label: 'Step 01' },
+    { id: 2, title: 'Print', image: '/aboutcardimages/print.jpg', label: 'Step 02' },
+    { id: 3, title: 'Deliver', image: '/aboutcardimages/deliver.jpg', label: 'Step 03' }
   ];
 
   const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);

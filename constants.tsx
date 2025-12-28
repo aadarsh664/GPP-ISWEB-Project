@@ -493,10 +493,10 @@ export const SERVICES: ServiceItem[] = [
     description: 'Engineered for consistency at scale. From routine production runs to large-format volumes, our offset infrastructure delivers sharp, uniform results.',
     options: ['Multicolor', 'Double Color', 'Single Color'],
     images: {
-      'Heidelberg': '/serviceimage/service01/heidelberg.png',
-      'Manroland': '/serviceimage/service01/manroland.png',
-      'Dominant': '/serviceimage/service01/dominant.png',
-      'Ryobi': '/serviceimage/service01/ryobi.png'
+      'Heidelberg': '/serviceimage/service01/heidelberg.jpg',
+      'Manroland': '/serviceimage/service01/manroland.jpg',
+      'Dominant': '/serviceimage/service01/dominant.jpg',
+      'Ryobi': '/serviceimage/service01/ryobi.jpg'
     },
     brands: ['Heidelberg', 'Manroland', 'Dominant', 'Ryobi']
   },
@@ -507,8 +507,8 @@ export const SERVICES: ServiceItem[] = [
     description: 'Perfect for small batches and personalized prints. Our digital solutions offer quick turnaround without compromising on color fidelity.',
     options: ['Multicolor', 'Single Color', 'Quick Print'],
     images: {
-      'Konica Minolta Accurio': '/serviceimage/service02/konica-minolta-accurio.png',
-      'Xerox': '/serviceimage/service02/xerox.png'
+      'Konica Minolta Accurio': '/serviceimage/service02/konica-minolta-accurio.jpg',
+      'Xerox': '/serviceimage/service02/xerox.jpg'
     },
     brands: ['Konica Minolta Accurio', 'Xerox']
   },
@@ -519,9 +519,9 @@ export const SERVICES: ServiceItem[] = [
     description: 'Capture attention from afar with our high-impact large format solutions. Whether it\'s durable outdoor signage or sleek indoor vinyl, we ensure your brand looms large with vibrant colors.',
     options: ['Multicolor', 'Flex', 'Eco-Vinyl', 'Sunboard', 'One Way Vision'],
     images: {
-      'Allwin Konica 1024i': '/serviceimage/service03/allwin-konica-1024i.png',
-      'Allwin C8-1024I Pro': '/serviceimage/service03/allwin-C8-1024i-pro.png',
-      'MIMAGE M18S': '/serviceimage/service03/MIMAGE-M18S.png'
+      'Allwin Konica 1024i': '/serviceimage/service03/allwin-konica-1024i.jpg',
+      'Allwin C8-1024I Pro': '/serviceimage/service03/allwin-C8-1024i-pro.jpg',
+      'MIMAGE M18S': '/serviceimage/service03/MIMAGE-M18S.jpg'
     },
     brands: ['Allwin Konica 1024i', 'Allwin C8-1024I Pro', 'MIMAGE M18S']
   },
@@ -532,8 +532,8 @@ export const SERVICES: ServiceItem[] = [
     description: 'For textures and depth that other methods can\'t reach. Our screen printing service provides rich, opaque ink coverage on a variety of substrates, perfect for specialized corporate gifts.',
     options: ['Single Color', 'Double Color', 'Tri Color', 'Four Color'],
     images: {
-      '4-Color Manual Screen': '/serviceimage/service04/4-color-manual-screen.png',
-      '1-Color Manual Screen': '/serviceimage/service04/1-color-manual-screen.png'
+      '4-Color Manual Screen': '/serviceimage/service04/4-color-manual-screen.jpg',
+      '1-Color Manual Screen': '/serviceimage/service04/1-color-manual-screen.jpg'
     },
     brands: ['4-Color Manual Screen', '1-Color Manual Screen']
   },
@@ -544,10 +544,10 @@ export const SERVICES: ServiceItem[] = [
     description: 'A great print starts with a great file. Our design studio bridges the gap between your vision and technical print requirements, ensuring every curve and color is optimized for production.',
     options: ['Brand Design', 'Visual Design', 'Print Design'],
     images: {
-      'Illustrator': '/serviceimage/service05/illustrator.png',
-      'Photoshop': '/serviceimage/service05/photoshop.png',
-      'Coreldraw': '/serviceimage/service05/coreldraw.png',
-      'Web Design': '/serviceimage/service05/webdesign.png'
+      'Illustrator': '/serviceimage/service05/illustrator.jpg',
+      'Photoshop': '/serviceimage/service05/photoshop.jpg',
+      'Coreldraw': '/serviceimage/service05/coreldraw.jpg',
+      'Web Design': '/serviceimage/service05/webdesign.jpg'
     },
     brands: ['Illustrator', 'Photoshop', 'Coreldraw', 'Web Design']
   }
