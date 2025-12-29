@@ -74,7 +74,7 @@ const About: React.FC = () => {
   }, []); // Run only once on mount
 
   return (
-    <section ref={containerRef} id="about" className="py-32 bg-white overflow-hidden relative">
+    <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
           <motion.div 
@@ -123,15 +123,26 @@ const About: React.FC = () => {
                   width: hoveredCard === idx ? '60%' : hoveredCard === null ? '33.3%' : '20%',
                 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-                className="relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group shadow-2xl"
+                className="relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group"
               >
                 <img 
                   src={card.image} 
                   className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                   alt={card.title}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
-                <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
+                
+                {/* Premium Bottom Glass Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none">
+                  <div 
+                    className="w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700 group-hover:backdrop-blur-xl"
+                    style={{ 
+                      maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
+                      WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
+                    }} 
+                  />
+                </div>
+
+                <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 z-20">
                   <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
                       <ArrowRight className="text-white w-[14px] h-[14px] md:w-[18px] md:h-[18px]" />

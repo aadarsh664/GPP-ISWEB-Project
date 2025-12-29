@@ -17,7 +17,7 @@ const Contact: React.FC = () => {
     displayValue?: React.ReactNode;
     isEmail?: boolean;
   }> = ({ icon: Icon, label, value, displayValue, isEmail }) => {
-    const [tooltip, setTooltip] = useState(isEmail ? "Mail / Right Click Copy" : "Click to Copy");
+    const [tooltip, setTooltip] = useState("Click to Copy");
     const [showTooltip, setShowTooltip] = useState(false);
     const tooltipRef = useRef<HTMLDivElement>(null);
     
@@ -60,19 +60,14 @@ const Contact: React.FC = () => {
         setTooltip("Copied!");
         setShowTooltip(true); // Force show tooltip on mobile/click
         setTimeout(() => {
-          setTooltip(isEmail ? "Mail / Right Click Copy" : "Click to Copy");
+          setTooltip("Click to Copy");
           setShowTooltip(false);
         }, 2000);
       }
     };
 
     const handleClick = (e: React.MouseEvent) => {
-      if (isEmail) {
-        // Allow default mailto behavior
-        window.location.href = `mailto:${value}`;
-      } else {
-        handleCopy(e);
-      }
+      handleCopy(e);
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -87,7 +82,7 @@ const Contact: React.FC = () => {
 
     return (
       <div 
-        className="flex items-start gap-4 md:gap-6 group cursor-pointer relative"
+        className="flex items-start gap-4 md:gap-6 group cursor-pointer relative w-fit"
         onClick={handleClick}
         onContextMenu={handleCopy}
         onMouseMove={handleMouseMove}
@@ -153,14 +148,14 @@ const Contact: React.FC = () => {
           <p className="text-[#FF6600] font-bold uppercase tracking-widest text-sm">We'd love to hear from you</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 text-left">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="space-y-10"
+            className="flex flex-col h-full gap-10"
           >
-            <div className="space-y-8">
+            <div className="space-y-8 shrink-0">
               <CopyableItem 
                 icon={Phone} 
                 label="Phone" 
@@ -185,7 +180,7 @@ const Contact: React.FC = () => {
               />
             </div>
 
-            <div className="h-[300px] w-full bg-slate-100 rounded-[32px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">
+            <div className="h-[300px] lg:h-auto lg:flex-1 w-full bg-slate-100 rounded-[32px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3597.749667746408!2d85.1631596!3d25.6135371!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM2JzQ4LjciTiA4NcKwMDknNDcuNCJF!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin" 
                 width="100%" 

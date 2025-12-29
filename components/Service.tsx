@@ -58,7 +58,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
         </div>
 
         {/* Right Side: Image Display */}
-        <div className="relative h-[400px] md:h-[500px] lg:h-[650px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] order-2 mt-10 lg:mt-0">
+        <div className="relative h-[400px] md:h-[500px] lg:h-[650px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group order-2 mt-10 lg:mt-0">
           <motion.img
             key={activeBrand}
             src={service.images[activeBrand]}
@@ -68,8 +68,19 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2.5s]"
             alt={activeBrand}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none opacity-30" />
-          <div className="absolute bottom-8 left-8 lg:bottom-10 lg:left-10">
+          
+          {/* Premium Bottom Glass Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none">
+            <div 
+              className="w-full h-full backdrop-blur-md bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-all duration-700 group-hover:backdrop-blur-xl"
+              style={{ 
+                maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
+              }} 
+            />
+          </div>
+
+          <div className="absolute bottom-8 left-8 lg:bottom-10 lg:left-10 z-20">
             <p className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] mb-2">
               {isDesigning ? 'Creative Studio' : 'Industrial Precision'}
             </p>

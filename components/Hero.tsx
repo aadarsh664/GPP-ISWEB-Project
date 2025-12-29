@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
+import HeroCard from './HeroCard';
 
 const Hero: React.FC = () => {
   const containerVariants: Variants = {
@@ -28,7 +29,7 @@ const Hero: React.FC = () => {
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
 
   return (
-    <section id="home" className="relative h-screen min-h-[600px] w-full overflow-hidden flex items-start lg:items-center pt-32 md:pt-40 lg:pt-20">
+    <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-start lg:items-center pt-20 pb-24 md:pt-40 lg:py-20">
       <div className="absolute inset-0 z-0 bg-white">
         <div className="absolute inset-0 bg-white/10 z-10" />
         <video
@@ -44,52 +45,63 @@ const Hero: React.FC = () => {
         </video>
       </div>
 
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="relative z-20 container mx-auto px-6 md:px-12"
-      >
-        <div className="max-w-4xl lg:text-left text-center mx-auto lg:mx-0">
+      <div className="relative z-20 container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-4 lg:gap-20 h-full justify-start lg:justify-between pt-8 lg:pt-0">
+        {/* Left Content: Text & Buttons */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="w-full lg:w-1/2 text-center lg:text-left pt-0 lg:pt-0"
+        >
           <motion.h1 
             variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-8 text-black tracking-tighter"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-3 md:mb-8 text-black tracking-tighter"
           >
             <span className="block pb-2">
-              Your One-Stop <br className="hidden lg:block" />
-              <span className="text-[#FF6600]">Printing Solution</span>
+              <span className="whitespace-nowrap">Your One-Stop</span> <br />
+              <span className="text-[#FF6600] whitespace-nowrap">Printing Solution</span>
             </span>
           </motion.h1>
           
           <motion.p 
             variants={itemVariants}
-            className="text-base md:text-xl text-slate-600 mb-12 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold"
+            className="text-sm md:text-xl text-slate-600 mb-4 md:mb-12 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold line-clamp-2"
           >
             Partner with Patna’s most reliable press for seamless corporate printing and logistics.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-5">
+          <motion.div variants={itemVariants} className="flex flex-row flex-wrap justify-center lg:justify-start gap-3 md:gap-5 mb-4 lg:mb-0">
             <button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-black text-white px-10 py-5 rounded-full font-black flex items-center gap-2 hover:bg-[#FF6600] transition-all shadow-2xl group active:scale-95"
+              className="bg-black text-white px-6 py-3 md:px-10 md:py-5 rounded-full font-black flex items-center gap-2 hover:bg-[#FF6600] transition-all shadow-2xl group active:scale-95 text-xs md:text-base"
             >
               GET STARTED
-              <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="group-hover:translate-x-1 transition-transform w-4 h-4 md:w-auto md:h-auto" />
             </button>
             
             <a 
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] border-2 border-[#25D366] text-white px-10 py-5 rounded-full font-black flex items-center gap-3 hover:bg-black hover:border-black transition-all shadow-xl active:scale-95"
+              className="bg-[#25D366] border-2 border-[#25D366] text-white px-6 py-3 md:px-10 md:py-5 rounded-full font-black flex items-center gap-2 md:gap-3 hover:bg-black hover:border-black transition-all shadow-xl active:scale-95 text-xs md:text-base"
             >
-              <WhatsAppLogo size={20} />
+              <WhatsAppLogo size={16} className="md:w-5 md:h-5" />
               CHAT NOW
             </a>
           </motion.div>
-        </div>
-      </motion.div>
+        </motion.div>
+
+        {/* Right Content: 3D Hero Card */}
+        <motion.div 
+          initial={{ opacity: 0, x: 50, scale: 0.9 }}
+          whileInView={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="w-full lg:w-1/2 flex justify-center perspective-1000 relative z-30 scale-[0.65] md:scale-100 origin-top md:origin-center mt-2 md:mt-0"
+        >
+          <HeroCard />
+        </motion.div>
+      </div>
     </section>
   );
 };

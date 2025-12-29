@@ -5,14 +5,26 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const GALLERY_IMAGES = [
-  'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1517420980554-3e91d848123d?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1598501479159-408f652d536a?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1562654501-a0ccc0af3fb1?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1572044162444-ad60f128bde2?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800',
-  'https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&q=80&w=800'
+  '/ourwork/Our Work (1).jpg',
+  '/ourwork/Our Work (2).jpg',
+  '/ourwork/Our Work (3).jpg',
+  '/ourwork/Our Work (4).jpg',
+  '/ourwork/Our Work (5).jpg',
+  '/ourwork/Our Work (6).jpg',
+  '/ourwork/Our Work (7).jpg',
+  '/ourwork/Our Work (8).jpg',
+  '/ourwork/Our Work (9).jpg',
+  '/ourwork/Our Work (10).jpg',
+  '/ourwork/Our Work (11).jpg',
+  '/ourwork/Our Work (12).jpg',
+  '/ourwork/Our Work (13).jpg',
+  '/ourwork/Our Work (14).jpg',
+  '/ourwork/Our Work (15).jpg',
+  '/ourwork/Our Work (16).jpg',
+  '/ourwork/Our Work (17).jpg',
+  '/ourwork/Our Work (18).jpg',
+  '/ourwork/Our Work (19).jpg',
+  '/ourwork/Our Work (20).jpg'
 ];
 
 const PerspectiveCarousel = () => {
