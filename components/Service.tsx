@@ -9,7 +9,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
   const isDesigning = service.title.toLowerCase() === 'designing';
 
   return (
-    <div id={`service-0${index + 1}`} className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:min-h-screen lg:flex lg:items-center">
+    <div id={`service-0${index + 1}`} className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:h-screen lg:flex lg:items-center">
       <motion.div 
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -19,10 +19,10 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
       >
         {/* Left Side: Text and Buttons */}
         <div className="z-10 flex flex-col justify-center h-full lg:py-16 order-1">
-          <span className="text-[#FF6600] font-bold uppercase tracking-widest text-sm mb-6 block">Service 0{index + 1}</span>
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-none text-slate-900 tracking-tight">{service.title}</h2>
-          <h3 className="text-xl md:text-2xl font-bold mb-8 text-slate-400">{service.subtitle}</h3>
-          <p className="text-lg text-slate-600 leading-relaxed mb-8 max-w-md">
+          <span className="text-[#FF6600] font-bold uppercase tracking-widest text-sm mb-3 block">Service 0{index + 1}</span>
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black mb-3 leading-none text-slate-900 tracking-tight">{service.title}</h2>
+          <h3 className="text-xl md:text-2xl font-bold mb-4 text-slate-400">{service.subtitle}</h3>
+          <p className="text-lg text-slate-600 leading-relaxed mb-6 max-w-md">
             {service.description}
           </p>
 
@@ -58,7 +58,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
         </div>
 
         {/* Right Side: Image Display */}
-        <div className="relative h-[400px] md:h-[500px] lg:h-[650px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group order-2 mt-10 lg:mt-0">
+        <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group order-2 mt-10 lg:mt-0">
           <motion.img
             key={activeBrand}
             src={service.images[activeBrand]}
