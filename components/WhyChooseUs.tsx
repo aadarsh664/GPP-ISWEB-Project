@@ -5,22 +5,9 @@ import { WHY_CHOOSE_US, TESTIMONIALS } from '../constants';
 import * as LucideIcons from 'lucide-react';
 import { Star } from 'lucide-react';
 
-const WhyChooseUs: React.FC = () => {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
-
-  const getIcon = (iconName: string) => {
-    const formattedName = iconName
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join('');
-    
-    // @ts-ignore
-    const Icon = LucideIcons[formattedName];
-    return Icon ? <Icon size={24} /> : <LucideIcons.HelpCircle size={24} />;
-  };
-
+// Optimized Marquee Component to prevent re-renders
+const ClientsMarquee = React.memo(() => {
   const getStars = (idx: number) => {
-    // Generate variety of ratings, mostly 4.5
     const ratings = [5, 4.5, 5, 4.5, 4.5];
     const rating = ratings[idx % ratings.length];
     const stars = [];
@@ -42,6 +29,59 @@ const WhyChooseUs: React.FC = () => {
       }
     }
     return stars;
+  };
+
+  return (
+    <div className="flex overflow-hidden relative py-8">
+      <div className="flex gap-10 whitespace-nowrap animate-marquee will-change-transform" style={{ animationDuration: '60s', backfaceVisibility: 'hidden' }}>
+        {[...TESTIMONIALS, ...TESTIMONIALS].map((t, idx) => (
+          <div 
+            key={`${t.id}-${idx}`} 
+            className="inline-block w-[320px] sm:w-[400px] bg-white border border-slate-100 p-8 sm:p-10 rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu"
+          >
+            <div className="flex items-center gap-5 mb-8">
+              <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+                {t.avatarUrl ? (
+                  <img 
+                    src={t.avatarUrl} 
+                    alt={t.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <LucideIcons.User size={24} />
+                )}
+              </div>
+              <div>
+                <h5 className="font-black text-black text-lg">{t.name}</h5>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+              </div>
+            </div>
+            <p className="text-slate-600 leading-relaxed whitespace-normal text-base sm:text-lg mb-6">
+              "{t.content}"
+            </p>
+            <div className="flex gap-1 items-center">
+              {getStars(idx)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+const WhyChooseUs: React.FC = () => {
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  const getIcon = (iconName: string) => {
+    const formattedName = iconName
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('');
+    
+    // @ts-ignore
+    const Icon = LucideIcons[formattedName];
+    return Icon ? <Icon size={24} /> : <LucideIcons.HelpCircle size={24} />;
   };
 
   return (
@@ -111,40 +151,7 @@ const WhyChooseUs: React.FC = () => {
             </motion.div>
           </div>
           
-          <div className="flex overflow-hidden relative py-8">
-            <div className="flex gap-10 whitespace-nowrap animate-marquee" style={{ animationDuration: '60s' }}>
-              {[...TESTIMONIALS, ...TESTIMONIALS].map((t, idx) => (
-                <div 
-                  key={`${t.id}-${idx}`} 
-                  className="inline-block w-[320px] sm:w-[400px] bg-white border border-slate-100 p-8 sm:p-10 rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all"
-                >
-                  <div className="flex items-center gap-5 mb-8">
-                    <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
-                      {t.avatarUrl ? (
-                        <img 
-                          src={t.avatarUrl} 
-                          alt={t.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <LucideIcons.User size={24} />
-                      )}
-                    </div>
-                    <div>
-                      <h5 className="font-black text-black text-lg">{t.name}</h5>
-                      <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 leading-relaxed whitespace-normal text-base sm:text-lg mb-6">
-                    "{t.content}"
-                  </p>
-                  <div className="flex gap-1 items-center">
-                    {getStars(idx)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ClientsMarquee />
         </div>
       </div>
     </section>

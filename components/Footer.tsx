@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Instagram, Youtube, Linkedin, Facebook, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,10 +33,30 @@ const PerspectiveCarousel = () => {
   const handleNext = () => setActiveIndex((prev) => (prev + 1) % GALLERY_IMAGES.length);
   const handlePrev = () => setActiveIndex((prev) => (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
 
+  // Auto-play functionality
+  useEffect(() => {
+    const autoPlayInterval = setInterval(handleNext, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(autoPlayInterval); // Cleanup interval on component unmount
+  }, []); // Empty dependency array ensures this runs only once
+
   return (
     <div className="relative w-full py-20 flex flex-col items-center justify-center overflow-hidden">
-      <div 
-        className="relative w-full h-[450px] flex items-center justify-center"
+      <motion.div 
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        onDragEnd={(event, info) => {
+          const { offset, velocity } = info;
+          const swipeThreshold = 50; // pixels
+          const velocityThreshold = 300;
+
+          if (offset.x < -swipeThreshold || velocity.x < -velocityThreshold) {
+            handleNext();
+          } else if (offset.x > swipeThreshold || velocity.x > velocityThreshold) {
+            handlePrev();
+          }
+        }}
+        className="relative w-full h-[450px] flex items-center justify-center cursor-grab active:cursor-grabbing"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
       >
         <AnimatePresence mode="popLayout">
@@ -54,7 +74,6 @@ const PerspectiveCarousel = () => {
             return (
               <motion.div
                 key={src}
-                layout
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
                   x: offset * 260,
@@ -68,7 +87,7 @@ const PerspectiveCarousel = () => {
                   duration: 0.6,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="absolute top-1/2 left-1/2 w-[280px] h-[380px] md:w-[320px] md:h-[440px] bg-black rounded-[30px] shadow-2xl overflow-hidden cursor-pointer border border-white/10 -ml-[140px] -mt-[190px] md:-ml-[160px] md:-mt-[220px]"
+                className="absolute top-1/2 left-1/2 w-[280px] h-[380px] md:w-[320px] md:h-[440px] bg-black rounded-[30px] shadow-2xl overflow-hidden cursor-pointer -ml-[140px] -mt-[190px] md:-ml-[160px] md:-mt-[220px] will-change-transform"
                 onClick={() => {
                   if (offset === 0) return;
                   if (offset > 0) handleNext();
@@ -76,12 +95,11 @@ const PerspectiveCarousel = () => {
                 }}
               >
                 <img src={src} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
-                <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${isActive ? 'opacity-0' : 'opacity-40'}`} />
               </motion.div>
             );
           })}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
       {/* Navigation Controls */}
       <div className="flex gap-8 mt-10 z-20">
@@ -112,7 +130,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-white pt-32 overflow-hidden border-t border-slate-100">
-      <div id="our-work" className="container mx-auto px-6 md:px-12 mb-12 scroll-mt-24">
+      <div id="our-work" className="container mx-auto px-6 md:px-12 mb-12">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h3 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1] tracking-tighter text-black">
             Our Work

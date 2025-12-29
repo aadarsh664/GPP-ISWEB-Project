@@ -1,11 +1,17 @@
 
 import React, { useState } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
 import HeroCard from './HeroCard';
+import SmoothScroll from './SmoothScroll';
+import Loader from './Loader';
 
 const Hero: React.FC = () => {
+  const { scrollY } = useScroll();
+  // Parallax effect: Video moves slower than scroll (0px to 300px down as user scrolls 0 to 1000px)
+  const backgroundY = useTransform(scrollY, [0, 1000], [0, 300]);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -30,7 +36,10 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-start lg:items-center pt-20 pb-24 md:pt-40 lg:py-20">
-      <div className="absolute inset-0 z-0 bg-white">
+      <SmoothScroll />
+      <Loader />
+      
+      <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 bg-white will-change-transform">
         <div className="absolute inset-0 bg-white/10 z-10" />
         <video
           autoPlay
@@ -43,7 +52,7 @@ const Hero: React.FC = () => {
           <source src="https://v.fastcdn.co/u/6f554522/62497181-0-GPP-Intro.mp4" type="video/mp4" />
           <source src="https://assets.mixkit.co/videos/preview/mixkit-printing-machine-printing-on-paper-34444-large.mp4" type="video/mp4" />
         </video>
-      </div>
+      </motion.div>
 
       <div className="relative z-20 container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-4 lg:gap-20 h-full justify-start lg:justify-between pt-8 lg:pt-0">
         {/* Left Content: Text & Buttons */}

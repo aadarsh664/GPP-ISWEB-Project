@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Search as SearchIcon } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
 import BrandLogo from './BrandLogo';
 import { PRODUCTS } from '../constants';
+import Search from './Search';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,6 +50,7 @@ const Header: React.FC = () => {
 
   const navItems = ['Home', 'About', 'Service', 'Products', 'Contact', 'Our Work'];
   const headerWhatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <>
@@ -57,7 +59,7 @@ const Header: React.FC = () => {
         animate={{ y: 0 }}
         onAnimationComplete={() => setAnimationComplete(true)}
         style={animationComplete ? { transform: 'none' } : undefined}
-        className="fixed top-0 left-0 right-0 z-[110] bg-white/95 backdrop-blur-md border-b border-slate-100 h-20 flex items-center shadow-sm"
+        className="sticky top-0 left-0 right-0 z-[110] bg-white/95 backdrop-blur-md border-b border-slate-100 h-20 flex items-center shadow-sm"
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
@@ -125,6 +127,18 @@ const Header: React.FC = () => {
 
           {/* Action Button & Toggle */}
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="hidden lg:flex items-center gap-2 group cursor-pointer"
+            >
+              <SearchIcon className="text-slate-500 group-hover:text-black transition-colors" size={22} />
+              <span className="text-sm font-bold text-slate-500 w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">
+                Search
+              </span>
+            </button>
+
+            <div className="hidden lg:block w-px h-6 bg-slate-200" />
+
             <a
               href={headerWhatsappLink}
               target="_blank"
@@ -155,6 +169,21 @@ const Header: React.FC = () => {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-[105] bg-black text-white flex flex-col items-center justify-center gap-8 lg:hidden"
           >
+            {/* Mobile Search Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsSearchOpen(true);
+              }}
+              className="flex items-center gap-4 text-2xl font-black text-slate-400 hover:text-white transition-colors mb-4"
+            >
+              <SearchIcon size={24} />
+              <span>Search Products</span>
+            </motion.button>
+
             {navItems.map((item, idx) => (
               <motion.button
                 key={item}
@@ -170,6 +199,8 @@ const Header: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <Search isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 };

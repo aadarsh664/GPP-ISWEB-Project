@@ -3,6 +3,36 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, MoveRight } from 'lucide-react';
 
+const ScrollRevealText = ({ content, className }: { content: string, className?: string }) => {
+  const element = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: element,
+    offset: ['start 0.9', 'start 0.25']
+  });
+
+  const words = content.split(" ");
+
+  return (
+    <p ref={element} className={`${className} flex flex-wrap justify-center md:justify-start`}>
+      {words.map((word, i) => {
+        const start = i / words.length;
+        const end = start + (1 / words.length);
+        const opacity = useTransform(scrollYProgress, [start, end], [0.15, 1]);
+        
+        return (
+          <motion.span 
+            key={i} 
+            style={{ opacity }} 
+            className={i === words.length - 1 ? "" : "mr-1.5"}
+          >
+            {word}
+          </motion.span>
+        );
+      })}
+    </p>
+  );
+};
+
 const About: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const containerRef = useRef<HTMLElement>(null);
@@ -13,6 +43,10 @@ const About: React.FC = () => {
     target: containerRef,
     offset: ["start end", "end start"]
   });
+
+  // Parallax for the right side cards (moves slightly faster/slower than text)
+  const cardsY = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   // Rotates the arrow based on scroll progress
   const rotation = useTransform(scrollYProgress, [0.1, 0.6], [0, 360]);
@@ -82,6 +116,7 @@ const About: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            style={{ y: textY }}
             className="lg:w-1/2 text-center md:text-left flex flex-col items-center md:items-start"
           >
             <span className="text-[#FF6600] font-black uppercase tracking-[0.3em] text-xs mb-6 block">Our Vision</span>
@@ -90,9 +125,10 @@ const About: React.FC = () => {
               <span className="text-[#4F46E5]">Ink on Paper.</span>
             </h2>
             <h3 className="text-2xl md:text-3xl font-black mb-8 text-black">Your Reliable Printing Partner.</h3>
-            <p className="text-slate-600 text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0">
-              At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind.
-            </p>
+            <ScrollRevealText 
+              content="At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind."
+              className="text-slate-900 text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 font-medium"
+            />
 
             {/* Sticky/Pinned Rotating Arrow aligned left */}
             <div className="relative w-full h-24 hidden md:flex items-center justify-start">
@@ -111,6 +147,7 @@ const About: React.FC = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            style={{ y: cardsY }}
             className="lg:w-1/2 w-full flex gap-4 h-[500px] md:h-[650px]"
           >
             {cards.map((card, idx) => (
