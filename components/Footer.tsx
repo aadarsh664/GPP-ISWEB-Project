@@ -29,6 +29,20 @@ const GALLERY_IMAGES = [
 
 const PerspectiveCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [xOffset, setXOffset] = useState(260);
+
+  useEffect(() => {
+    const updateOffset = () => {
+      if (window.innerWidth < 768) {
+        setXOffset(160); // Smaller offset for mobile
+      } else {
+        setXOffset(260); // Default offset for desktop
+      }
+    };
+    updateOffset();
+    window.addEventListener('resize', updateOffset);
+    return () => window.removeEventListener('resize', updateOffset);
+  }, []);
 
   const handleNext = () => setActiveIndex((prev) => (prev + 1) % GALLERY_IMAGES.length);
   const handlePrev = () => setActiveIndex((prev) => (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
@@ -41,7 +55,7 @@ const PerspectiveCarousel = () => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <div className="relative w-full py-20 flex flex-col items-center justify-center overflow-hidden">
+    <div className="relative w-full py-10 md:py-20 flex flex-col items-center justify-center overflow-hidden">
       <motion.div 
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
@@ -56,7 +70,7 @@ const PerspectiveCarousel = () => {
             handlePrev();
           }
         }}
-        className="relative w-full h-[450px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[350px] md:h-[450px] flex items-center justify-center cursor-grab active:cursor-grabbing"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
       >
         <AnimatePresence mode="popLayout">
@@ -76,7 +90,7 @@ const PerspectiveCarousel = () => {
                 key={src}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
-                  x: offset * 260,
+                  x: offset * xOffset,
                   z: isActive ? 0 : -300 - (absOffset * 150),
                   rotateY: isActive ? 0 : offset * -30,
                   scale: isActive ? 1 : 0.8,
@@ -87,7 +101,7 @@ const PerspectiveCarousel = () => {
                   duration: 0.6,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="absolute top-1/2 left-1/2 w-[280px] h-[380px] md:w-[320px] md:h-[440px] bg-black rounded-[30px] shadow-2xl overflow-hidden cursor-pointer -ml-[140px] -mt-[190px] md:-ml-[160px] md:-mt-[220px] will-change-transform"
+                className="absolute top-1/2 left-1/2 w-[220px] h-[310px] md:w-[320px] md:h-[440px] bg-black rounded-[24px] md:rounded-[30px] shadow-2xl overflow-hidden cursor-pointer -ml-[110px] -mt-[155px] md:-ml-[160px] md:-mt-[220px] will-change-transform"
                 onClick={() => {
                   if (offset === 0) return;
                   if (offset > 0) handleNext();
@@ -129,7 +143,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-white pt-32 overflow-hidden border-t border-slate-100">
+    <footer className="bg-white pt-16 md:pt-32 overflow-hidden border-t border-slate-100">
       <div id="our-work" className="container mx-auto px-6 md:px-12 mb-12">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h3 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1] tracking-tighter text-black">

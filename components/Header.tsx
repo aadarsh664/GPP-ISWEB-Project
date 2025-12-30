@@ -82,7 +82,7 @@ const Header: React.FC = () => {
                     </button>
                     
                     {/* Products Dropdown */}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-[600px]">
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-[600px] -z-10 group-hover:z-50 transform origin-top scale-95 group-hover:scale-100">
                       <div 
                         className="bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 max-h-[60vh] overflow-y-auto overscroll-contain"
                         data-lenis-prevent
@@ -146,7 +146,7 @@ const Header: React.FC = () => {
               href={headerWhatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] text-white border-2 border-[#25D366] px-6 py-3 rounded-full hover:bg-white hover:text-[#25D366] transition-all flex items-center gap-2 group active:scale-95"
+              className="bg-[#25D366] text-white border-2 border-[#25D366] w-10 h-10 sm:w-auto sm:h-auto p-0 sm:px-6 sm:py-3 rounded-full hover:bg-white hover:text-[#25D366] transition-all flex items-center justify-center sm:justify-start gap-0 sm:gap-2 group active:scale-95"
             >
               <WhatsAppLogo size={18} />
               <span className="text-sm font-black hidden sm:block">WHATSAPP US</span>

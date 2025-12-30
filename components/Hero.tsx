@@ -7,6 +7,43 @@ import HeroCard from './HeroCard';
 import SmoothScroll from './SmoothScroll';
 import Loader from './Loader';
 
+const TypingText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
+  const letters = Array.from(text);
+
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.03, delayChildren: delay }
+    }
+  };
+
+  const child: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", damping: 12, stiffness: 200 }
+    }
+  };
+
+  return (
+    <motion.span
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      className={`inline-block whitespace-nowrap ${className}`}
+    >
+      {letters.map((letter, index) => (
+        <motion.span key={index} variants={child} className="inline-block">
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+};
+
 const Hero: React.FC = () => {
   const { scrollY } = useScroll();
   // Parallax effect: Video moves slower than scroll (0px to 300px down as user scrolls 0 to 1000px)
@@ -35,11 +72,11 @@ const Hero: React.FC = () => {
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-start lg:items-center pt-20 pb-24 md:pt-40 lg:py-20">
+    <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-start lg:items-center pt-4 pb-12 md:pt-20 lg:py-20">
       <SmoothScroll />
       <Loader />
       
-      <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 bg-white will-change-transform">
+      <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 bg-[#F0FBFF] will-change-transform">
         <div className="absolute inset-0 bg-white/10 z-10" />
         <video
           autoPlay
@@ -54,7 +91,7 @@ const Hero: React.FC = () => {
         </video>
       </motion.div>
 
-      <div className="relative z-20 container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-4 lg:gap-20 h-full justify-start lg:justify-between pt-8 lg:pt-0">
+      <div className="relative z-20 container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-4 lg:gap-20 h-full justify-start lg:justify-between pt-0 lg:pt-0">
         {/* Left Content: Text & Buttons */}
         <motion.div 
           variants={containerVariants}
@@ -63,15 +100,12 @@ const Hero: React.FC = () => {
           viewport={{ once: true }}
           className="w-full lg:w-1/2 text-center lg:text-left pt-0 lg:pt-0"
         >
-          <motion.h1 
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-3 md:mb-8 text-black tracking-tighter"
-          >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-3 md:mb-8 text-black tracking-tighter">
             <span className="block pb-2">
-              <span className="whitespace-nowrap">Your One-Stop</span> <br />
-              <span className="text-[#FF6600] whitespace-nowrap">Printing Solution</span>
+              <TypingText text="Your One-Stop" delay={0.2} /> <br />
+              <TypingText text="Printing Solution" className="text-[#FF6600]" delay={0.6} />
             </span>
-          </motion.h1>
+          </h1>
           
           <motion.p 
             variants={itemVariants}

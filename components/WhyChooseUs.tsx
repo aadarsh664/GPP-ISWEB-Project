@@ -41,10 +41,10 @@ const ClientsMarquee = React.memo(() => {
         {TESTIMONIALS.map((t, idx) => (
           <div 
             key={`${t.id}-${idx}`} 
-            className="w-[320px] sm:w-[400px] bg-white border border-slate-100 p-8 sm:p-10 rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-10"
+            className="w-[280px] sm:w-[400px] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
           >
-            <div className="flex items-center gap-5 mb-8">
-              <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+            <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
                 {t.avatarUrl ? (
                   <img 
                     src={t.avatarUrl} 
@@ -53,18 +53,18 @@ const ClientsMarquee = React.memo(() => {
                     loading="lazy"
                   />
                 ) : (
-                  <LucideIcons.User size={24} />
+                  <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </div>
               <div>
-                <h5 className="font-black text-black text-lg">{t.name}</h5>
-                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+                <h5 className="font-black text-black text-base sm:text-lg">{t.name}</h5>
+                <p className="text-[8px] sm:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
               </div>
             </div>
-            <p className="text-slate-600 leading-relaxed whitespace-normal text-base sm:text-lg mb-6">
+            <p className="text-slate-600 leading-relaxed whitespace-normal text-sm sm:text-lg mb-4 sm:mb-6">
               "{t.content}"
             </p>
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center scale-90 origin-left sm:scale-100">
               {getStars(idx)}
             </div>
           </div>
@@ -78,10 +78,10 @@ const ClientsMarquee = React.memo(() => {
         {TESTIMONIALS.map((t, idx) => (
           <div 
             key={`${t.id}-${idx}-dup`} 
-            className="w-[320px] sm:w-[400px] bg-white border border-slate-100 p-8 sm:p-10 rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-10"
+            className="w-[280px] sm:w-[400px] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
           >
-            <div className="flex items-center gap-5 mb-8">
-              <div className="w-14 h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+            <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
                 {t.avatarUrl ? (
                   <img 
                     src={t.avatarUrl} 
@@ -90,18 +90,18 @@ const ClientsMarquee = React.memo(() => {
                     loading="lazy"
                   />
                 ) : (
-                  <LucideIcons.User size={24} />
+                  <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </div>
               <div>
-                <h5 className="font-black text-black text-lg">{t.name}</h5>
-                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+                <h5 className="font-black text-black text-base sm:text-lg">{t.name}</h5>
+                <p className="text-[8px] sm:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
               </div>
             </div>
-            <p className="text-slate-600 leading-relaxed whitespace-normal text-base sm:text-lg mb-6">
+            <p className="text-slate-600 leading-relaxed whitespace-normal text-sm sm:text-lg mb-4 sm:mb-6">
               "{t.content}"
             </p>
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center scale-90 origin-left sm:scale-100">
               {getStars(idx)}
             </div>
           </div>
@@ -126,22 +126,22 @@ const WhyChooseUs: React.FC = () => {
   };
 
   return (
-    <section id="why-choose-us" className="py-32 bg-white overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
+    <section id="why-choose-us" className="py-12 md:py-32 bg-white overflow-hidden">
+      <div className="container mx-auto px-4 md:px-12">
         {/* Why Choose GPP Header */}
-        <div className="text-center mb-24 relative">
-          <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-4 text-black tracking-tighter whitespace-nowrap">Why Choose GPP?</h3>
-          <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-8">Unmatched Printing Excellence</p>
+        <div className="text-center mb-10 md:mb-24 relative">
+          <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-2 md:mb-4 text-black tracking-tighter whitespace-nowrap">Why Choose GPP?</h3>
+          <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-4 md:mb-8">Unmatched Printing Excellence</p>
           <motion.div 
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5 }}
           >
-            <LucideIcons.ArrowDown className="mx-auto text-black" />
+            <LucideIcons.ArrowDown className="mx-auto text-black w-4 h-4 md:w-6 md:h-6" />
           </motion.div>
         </div>
 
         {/* Feature Cards Grid - Refactored to 3 columns on large screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-40 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20 md:mb-40 max-w-7xl mx-auto">
           {WHY_CHOOSE_US.map((card) => (
             <motion.div
               key={card.id}
@@ -150,20 +150,20 @@ const WhyChooseUs: React.FC = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`relative p-8 rounded-[40px] border transition-all duration-500 cursor-pointer overflow-hidden ${
+              className={`relative p-4 md:p-8 rounded-[24px] md:rounded-[40px] border transition-all duration-500 cursor-pointer overflow-hidden [&:nth-child(odd):last-child]:col-span-2 [&:nth-child(odd):last-child]:justify-self-center [&:nth-child(odd):last-child]:w-[calc(50%-0.375rem)] md:[&:nth-child(odd):last-child]:w-[calc(50%-0.75rem)] lg:[&:nth-child(odd):last-child]:col-span-1 lg:[&:nth-child(odd):last-child]:w-auto lg:[&:nth-child(odd):last-child]:justify-self-auto ${
                 activeCard === card.id 
                   ? 'bg-black text-white shadow-2xl scale-[1.03] border-transparent' 
                   : 'bg-slate-50 text-slate-900 border-slate-100'
               }`}
             >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${
+              <div className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-colors ${
                 activeCard === card.id ? 'bg-[#FF6600]/20' : 'bg-white shadow-sm'
               }`}>
-                <div className={activeCard === card.id ? 'text-[#FF6600]' : 'text-[#4F46E5]'}>
+                <div className={`${activeCard === card.id ? 'text-[#FF6600]' : 'text-[#4F46E5]'} scale-75 md:scale-100`}>
                   {getIcon(card.icon)}
                 </div>
               </div>
-              <h4 className="text-xl font-black mb-4 tracking-tight leading-tight">{card.title}</h4>
+              <h4 className="text-sm md:text-xl font-black mb-2 md:mb-4 tracking-tight leading-tight">{card.title}</h4>
               
               <motion.p
                 initial={{ height: 0, opacity: 0 }}
@@ -171,7 +171,7 @@ const WhyChooseUs: React.FC = () => {
                   height: activeCard === card.id ? 'auto' : 0,
                   opacity: activeCard === card.id ? 1 : 0
                 }}
-                className="text-slate-400 leading-relaxed overflow-hidden text-sm md:text-base"
+                className="text-slate-400 leading-relaxed overflow-hidden text-[10px] md:text-base"
               >
                 {card.content}
               </motion.p>
@@ -181,9 +181,9 @@ const WhyChooseUs: React.FC = () => {
 
         {/* Our Clients Say Header */}
         <div className="relative">
-          <div className="text-center mb-20 relative">
-            <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-4 text-black tracking-tighter whitespace-nowrap">Our Clients Say</h3>
-            <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-8">Voices of Satisfaction</p>
+          <div className="text-center mb-10 md:mb-20 relative">
+            <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-2 md:mb-4 text-black tracking-tighter whitespace-nowrap">Our Clients Say</h3>
+            <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-4 md:mb-8">Voices of Satisfaction</p>
             <motion.div 
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}

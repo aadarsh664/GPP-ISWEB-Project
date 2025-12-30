@@ -2,6 +2,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import WhatsAppLogo from './WhatsAppLogo';
+import { ChevronUp } from 'lucide-react';
 
 const CTA: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,7 +19,7 @@ const CTA: React.FC = () => {
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I am ready to start my printing project. Please assist me.")}`;
 
   return (
-    <div ref={containerRef} className="relative h-[300vh] bg-black">
+    <div ref={containerRef} className="relative h-[200vh] md:h-[300vh] bg-black">
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#4F46E5]">
         
         {/* Background Decorative Lines */}
@@ -64,6 +65,25 @@ const CTA: React.FC = () => {
             <span>Start Your Project</span>
           </motion.a>
         </div>
+
+        {/* Scroll Up Indicator - Mobile Only */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="md:hidden absolute bottom-24 left-0 right-0 flex flex-col items-center gap-2 pointer-events-none z-20"
+        >
+          <motion.div 
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+            className="flex flex-col items-center"
+          >
+            <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">
+              Scroll Up
+            </p>
+            <ChevronUp className="text-white/60 mt-1" size={16} />
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

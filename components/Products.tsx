@@ -1,10 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { PRODUCTS } from '../constants';
 import { X, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 import WhatsAppLogo from './WhatsAppLogo';
+
+// Helper to generate low-res URL (assumes _small suffix exists)
+const getThumbnailUrl = (url: string) => {
+  // Example: /images/product.jpg -> /images/product_small.jpg
+  return url.replace(/(\.[\w\d_-]+)$/i, '_small$1');
+};
 
 const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ product, onClose }) => {
   const whatsappMessage = `Hello GPP Team, I have a requirement for ${product.name}. Please share the best quote.`;
@@ -34,7 +40,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
 
         <div className="flex flex-col md:flex-row min-h-full">
           <div className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center">
-            <img src={product.imageUrl} className="w-full h-full object-contain md:object-cover" alt={product.name} />
+            <img src={product.imageUrl} className="w-full h-full object-contain md:object-cover" alt={product.name} loading="eager" />
           </div>
           
           <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center">
@@ -76,6 +82,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
 
 const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const productListRef = useRef<HTMLDivElement>(null);
 
   // Listen for custom event from Header to open specific product modal
   useEffect(() => {
@@ -111,34 +118,50 @@ const Products: React.FC = () => {
           <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-xs md:text-sm">Premium Corporate Branding Assets</p>
         </div>
 
-        {/* Masonry Layout using CSS Columns */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-12 [column-fill:_balance]">
-          {Object.entries(productsByCategory).map(([category, products]) => (
-            <div key={category} className="break-inside-avoid mb-12 space-y-8 w-full">
-              <h4 className="text-3xl font-black mb-8 pb-4 border-b-4 border-black text-black uppercase tracking-tight text-left">
-                {category}
-              </h4>
-              <div className="flex flex-col gap-4">
-                {products.map(product => (
-                  <motion.button
-                    key={product.id}
-                    onClick={() => setSelectedProduct(product)}
-                    whileHover={{ 
-                      x: 12, 
-                      backgroundColor: "rgba(255, 255, 255, 0.4)",
-                      backdropFilter: "blur(12px)"
-                    }}
-                    className="flex items-center justify-between group p-6 bg-white/50 backdrop-blur-sm rounded-3xl hover:shadow-2xl hover:shadow-black/5 transition-all border border-slate-200 text-left w-full"
-                  >
-                    <span className="font-black text-slate-800 group-hover:text-black transition-colors text-xl leading-tight">
-                      {product.name}
-                    </span>
-                    <ArrowRight size={24} className="text-[#FF6600] shrink-0 group-hover:translate-x-2 transition-all" />
-                  </motion.button>
-                ))}
+        <div 
+          ref={productListRef}
+          className="relative"
+        >
+          {/* Masonry Layout using CSS Columns */}
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-12 [column-fill:_balance]">
+            {Object.entries(productsByCategory).map(([category, products]) => (
+              <div key={category} className="break-inside-avoid mb-12 space-y-8 w-full">
+                <h4 className="text-2xl md:text-3xl font-black mb-8 pb-4 border-b-4 border-black text-black uppercase tracking-tight text-left">
+                  {category}
+                </h4>
+                <div className="flex flex-col gap-4">
+                  {products.map(product => (
+                    <motion.button
+                      key={product.id}
+                      onClick={() => setSelectedProduct(product)}
+                      whileHover={{ x: 12, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                      className="flex items-center justify-between group p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl hover:shadow-2xl hover:shadow-black/5 transition-all border border-slate-200 text-left w-full"
+                    >
+                      <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
+                        <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-2xl shadow-inner border border-slate-200/50 overflow-hidden shrink-0">
+                          <img 
+                            src={getThumbnailUrl(product.imageUrl)} 
+                            alt={product.name} 
+                            className="w-full h-full object-cover" 
+                            loading="lazy" 
+                            decoding="async"
+                            onError={(e) => {
+                              e.currentTarget.onerror = null; // Prevent infinite loop
+                              e.currentTarget.src = product.imageUrl; // Fallback to original if small not found
+                            }}
+                          />
+                        </div>
+                        <span className="font-black text-slate-800 group-hover:text-black transition-colors text-base md:text-xl leading-tight">
+                          {product.name}
+                        </span>
+                      </div>
+                      <ArrowRight size={24} className="text-[#FF6600] shrink-0 group-hover:translate-x-2 transition-all ml-2" />
+                    </motion.button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

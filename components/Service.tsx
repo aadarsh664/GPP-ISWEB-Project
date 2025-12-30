@@ -1,32 +1,47 @@
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { SERVICES } from '../constants';
 import { Circle } from 'lucide-react';
 
 const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({ service, index }) => {
   const [activeBrand, setActiveBrand] = useState(service.brands[0]);
+  const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { margin: "-40% 0px -40% 0px" });
   const isDesigning = service.title.toLowerCase() === 'designing';
 
+  useEffect(() => {
+    if (isHovered || !isInView) return;
+
+    const interval = setInterval(() => {
+      const currentIndex = service.brands.indexOf(activeBrand);
+      const nextIndex = (currentIndex + 1) % service.brands.length;
+      setActiveBrand(service.brands[nextIndex]);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [activeBrand, isHovered, isInView, service.brands]);
+
   return (
-    <div id={`service-0${index + 1}`} className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-20 lg:py-0 lg:sticky lg:top-0 lg:h-screen lg:flex lg:items-center">
+    <div ref={containerRef} id={`service-0${index + 1}`} className="relative w-full bg-white border-t border-slate-100 shadow-sm overflow-hidden py-12 md:py-20 lg:py-0 lg:sticky lg:top-0 lg:h-screen lg:flex lg:items-center">
       <motion.div 
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, margin: "-10%" }}
-        className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center"
+        className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 items-center"
       >
         {/* Left Side: Text and Buttons */}
         <div className="z-10 flex flex-col justify-center h-full lg:py-16 order-1">
-          <span className="text-[#FF6600] font-bold uppercase tracking-widest text-sm mb-3 block">Service 0{index + 1}</span>
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black mb-3 leading-none text-slate-900 tracking-tight">{service.title}</h2>
-          <h3 className="text-xl md:text-2xl font-bold mb-4 text-slate-400">{service.subtitle}</h3>
-          <p className="text-lg text-slate-600 leading-relaxed mb-6 max-w-md">
+          <span className="text-[#FF6600] font-bold uppercase tracking-widest text-xs md:text-sm mb-2 md:mb-3 block">Service 0{index + 1}</span>
+          <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-2 md:mb-3 leading-none text-slate-900 tracking-tight">{service.title}</h2>
+          <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4 text-slate-400">{service.subtitle}</h3>
+          <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-4 md:mb-6 max-w-x1.2">
             {service.description}
           </p>
 
-          <div className="space-y-4 mb-8">
+          <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
              <p className="font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Specifications</p>
              <div className="flex flex-wrap gap-2">
                 {service.options.map(opt => (
@@ -40,7 +55,11 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
           <p className="font-bold text-xs uppercase tracking-widest text-slate-900 mb-4">
             {isDesigning ? 'Select Software (Hover to preview)' : 'Select Machine (Hover to preview)'}
           </p>
-          <div className="grid grid-cols-2 gap-3 max-w-md">
+          <div 
+            className="grid grid-cols-2 gap-3 max-w-md"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {service.brands.map((brand) => (
               <button
                 key={brand}
@@ -58,7 +77,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
         </div>
 
         {/* Right Side: Image Display */}
-        <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-[40px] lg:rounded-[48px] overflow-hidden group order-2 mt-10 lg:mt-0">
+        <div className="relative h-[350px] md:h-[500px] lg:h-[600px] w-full rounded-[32px] md:rounded-[40px] lg:rounded-[48px] overflow-hidden group order-2 mt-6 lg:mt-0">
           <motion.img
             key={activeBrand}
             src={service.images[activeBrand]}
@@ -80,11 +99,11 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
             />
           </div>
 
-          <div className="absolute bottom-8 left-8 lg:bottom-10 lg:left-10 z-20">
-            <p className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] mb-2">
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 lg:bottom-10 lg:left-10 z-20">
+            <p className="text-[#FF6600] font-black uppercase tracking-widest text-[8px] md:text-[10px] mb-1 md:mb-2">
               {isDesigning ? 'Creative Studio' : 'Industrial Precision'}
             </p>
-            <p className="text-white text-3xl lg:text-4xl font-black uppercase tracking-tighter">{activeBrand}</p>
+            <p className="text-white text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter">{activeBrand}</p>
           </div>
         </div>
       </motion.div>

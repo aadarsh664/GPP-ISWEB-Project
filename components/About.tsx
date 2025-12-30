@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 import { ArrowRight, MoveRight } from 'lucide-react';
 
 const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
@@ -9,7 +9,7 @@ const ScrollRevealText = ({ content, className }: { content: string, className?:
   const element = useRef(null);
   const { scrollYProgress } = useScroll({
     target: element,
-    offset: ['start 0.9', 'start 0.25']
+    offset: ['start 0.9', 'start 0.5']
   });
 
   const words = content.split(" ");
@@ -37,6 +37,8 @@ const ScrollRevealText = ({ content, className }: { content: string, className?:
 
 const About: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [scrollActiveCard, setScrollActiveCard] = useState<number | null>(null);
+  const [sequenceStarted, setSequenceStarted] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
 
@@ -45,6 +47,41 @@ const About: React.FC = () => {
     target: containerRef,
     offset: ["start end", "end start"]
   });
+
+  // Automatically trigger sequence when scrolled into view
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.2 && !sequenceStarted) {
+      setSequenceStarted(true);
+    } else if (latest < 0.1 && sequenceStarted) {
+      setSequenceStarted(false);
+      setScrollActiveCard(null);
+    }
+  });
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let step = 0;
+
+    const sequence = [
+      { card: 0, delay: 2000 },
+      { card: 1, delay: 1800 },
+      { card: 2, delay: 2000 },
+      { card: 1, delay: 1800 }
+    ];
+
+    const runStep = () => {
+      const current = sequence[step % sequence.length];
+      setScrollActiveCard(current.card);
+      step++;
+      timeoutId = setTimeout(runStep, current.delay);
+    };
+
+    if (sequenceStarted) {
+      runStep();
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [sequenceStarted]);
 
   // Parallax for the right side cards (moves slightly faster/slower than text)
   const cardsY = useTransform(scrollYProgress, [0, 1], [100, -100]);
@@ -100,7 +137,7 @@ const About: React.FC = () => {
   return (
     <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-16 md:mb-32">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -109,15 +146,15 @@ const About: React.FC = () => {
             style={{ y: textY }}
             className="lg:w-1/2 text-center md:text-left flex flex-col items-center md:items-start"
           >
-            <span className="text-[#FF6600] font-black uppercase tracking-[0.3em] text-xs mb-6 block">Our Vision</span>
-            <h2 className="text-5xl md:text-7xl font-black mb-10 leading-[1.1] text-black tracking-tighter">
+            <span className="text-[#FF6600] font-black uppercase tracking-[0.3em] text-[10px] md:text-xs mb-3 md:mb-6 block">Our Vision</span>
+            <h2 className="text-3xl sm:text-4xl md:text-7xl font-black mb-4 md:mb-10 leading-[1.1] text-black tracking-tighter">
               More Than Just <br />
               <span className="text-[#4F46E5]">Ink on Paper.</span>
             </h2>
-            <h3 className="text-2xl md:text-3xl font-black mb-8 text-black">Your Reliable Printing Partner.</h3>
+            <h3 className="text-lg md:text-3xl font-black mb-4 md:mb-8 text-black">Your Reliable Printing Partner.</h3>
             <ScrollRevealText 
               content="At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind."
-              className="text-slate-900 text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 font-medium"
+              className="text-slate-900 text-sm md:text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 font-medium"
             />
 
             {/* Sticky/Pinned Rotating Arrow aligned left */}
@@ -138,7 +175,7 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             style={{ y: cardsY }}
-            className="lg:w-1/2 w-full flex gap-4 h-[500px] md:h-[650px]"
+            className="lg:w-1/2 w-full flex gap-2 md:gap-4 h-[350px] md:h-[650px]"
           >
             {cards.map((card, idx) => (
               <motion.div
@@ -147,7 +184,12 @@ const About: React.FC = () => {
                 onHoverEnd={() => setHoveredCard(null)}
                 onClick={() => setHoveredCard(hoveredCard === idx ? null : idx)}
                 animate={{ 
-                  width: hoveredCard === idx ? '60%' : hoveredCard === null ? '33.3%' : '20%',
+                  width: hoveredCard !== null 
+                    ? (hoveredCard === idx ? '60%' : '20%') // Hover priority
+                    : (scrollActiveCard !== null 
+                        ? (scrollActiveCard === idx ? '60%' : '20%') // Scroll auto-expand
+                        : '33.3%' // Default state
+                      )
                 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 25 }}
                 className="relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group"
@@ -169,14 +211,14 @@ const About: React.FC = () => {
                   />
                 </div>
 
-                <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 z-20">
-                  <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
-                      <ArrowRight className="text-white w-[14px] h-[14px] md:w-[18px] md:h-[18px]" />
+                <div className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-10 z-20">
+                  <div className="flex items-center gap-1.5 md:gap-3 mb-2 md:mb-4">
+                    <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
+                      <ArrowRight className="text-white w-3 h-3 md:w-[18px] md:h-[18px]" />
                     </div>
-                    <span className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest">{card.label}</span>
+                    <span className="text-white/80 text-[8px] md:text-xs font-black uppercase tracking-widest">{card.label}</span>
                   </div>
-                  <h4 className="text-white font-black text-xl sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap tracking-tighter leading-tight pb-1">
+                  <h4 className="text-white font-black text-base sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap tracking-tighter leading-tight pb-1">
                     {card.title}
                   </h4>
                 </div>
