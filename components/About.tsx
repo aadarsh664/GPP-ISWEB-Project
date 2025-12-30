@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, MoveRight } from 'lucide-react';
 
+const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
+
 const ScrollRevealText = ({ content, className }: { content: string, className?: string }) => {
   const element = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -95,8 +97,6 @@ const About: React.FC = () => {
     { id: 3, title: 'Deliver', image: '/aboutcardimages/deliver.jpg', label: 'Step 03' }
   ];
 
-  const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
-
   return (
     <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 md:px-12">
@@ -188,21 +188,30 @@ const About: React.FC = () => {
         {/* Marquee */}
         <div className="relative pt-16 border-t border-slate-100">
           <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
-          <div className="w-full overflow-hidden">
-            <div
-              className="flex gap-20 whitespace-nowrap animate-marquee will-change-transform"
-              style={{ animationDuration: '3s' }}
+          <div className="w-full overflow-hidden flex">
+            <motion.div
+              className="flex-shrink-0 flex whitespace-nowrap"
+              animate={{ x: ['0%', '-100%'] }}
+              transition={{ ease: 'linear', duration: 20, repeat: Infinity }}
             >
-              {[...brandLogos, ...brandLogos].map((logo, i) => (
-                <div key={i} className="flex-shrink-0 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer flex items-center justify-center">
-                  <img 
-                    src={logo} 
-                    alt={`Client Logo ${i}`}
-                    className="h-20 md:h-24 w-auto object-contain"
-                  />
+              {brandLogos.map((logo, i) => (
+                <div key={i} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
+                  <img src={logo} alt={`Client Logo ${i}`} className="h-20 md:h-24 w-auto object-contain" loading="eager" />
                 </div>
               ))}
-            </div>
+            </motion.div>
+            <motion.div
+              className="flex-shrink-0 flex whitespace-nowrap"
+              animate={{ x: ['0%', '-100%'] }}
+              transition={{ ease: 'linear', duration: 20, repeat: Infinity }}
+              aria-hidden="true"
+            >
+              {brandLogos.map((logo, i) => (
+                <div key={`dup-${i}`} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
+                  <img src={logo} alt={`Client Logo ${i}`} className="h-20 md:h-24 w-auto object-contain" loading="eager" />
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>
