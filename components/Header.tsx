@@ -83,7 +83,10 @@ const Header: React.FC = () => {
                     
                     {/* Products Dropdown */}
                     <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-[600px]">
-                      <div className="bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 max-h-[60vh] overflow-y-auto">
+                      <div 
+                        className="bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 max-h-[60vh] overflow-y-auto overscroll-contain"
+                        data-lenis-prevent
+                      >
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {Object.entries(productsByCategory).map(([category, products]) => (
                             <div key={category}>
