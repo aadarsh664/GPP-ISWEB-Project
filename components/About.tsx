@@ -96,16 +96,6 @@ const About: React.FC = () => {
   ];
 
   const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const [marqueeWidth, setMarqueeWidth] = useState(0);
-
-  useEffect(() => {
-    if (marqueeRef.current) {
-      // We only need the width of the first half of the logos for a seamless loop
-      const halfWidth = marqueeRef.current.scrollWidth / 2;
-      setMarqueeWidth(halfWidth);
-    }
-  }, []); // Run only once on mount
 
   return (
     <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
@@ -199,11 +189,9 @@ const About: React.FC = () => {
         <div className="relative pt-16 border-t border-slate-100">
           <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
           <div className="w-full overflow-hidden">
-            <motion.div
-              ref={marqueeRef}
-              className="flex gap-20 whitespace-nowrap"
-              animate={{ x: [0, -marqueeWidth] }}
-              transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
+            <div
+              className="flex gap-20 whitespace-nowrap animate-marquee will-change-transform"
+              style={{ animationDuration: '3s' }}
             >
               {[...brandLogos, ...brandLogos].map((logo, i) => (
                 <div key={i} className="flex-shrink-0 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer flex items-center justify-center">
@@ -214,7 +202,7 @@ const About: React.FC = () => {
                   />
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
