@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, Variants, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
 import HeroCard from './HeroCard';
-import SmoothScroll from './SmoothScroll';
 import Loader from './Loader';
+import Lenis from 'lenis';
 
 const TypingText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
   const letters = Array.from(text);
@@ -46,6 +46,17 @@ const TypingText = ({ text, className, delay = 0 }: { text: string, className?: 
 
 const Hero: React.FC = () => {
   const { scrollY } = useScroll();
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.07,
+      wheelMultiplier: 1,
+      smoothWheel: true,
+      autoRaf: true,
+    });
+    return () => lenis.destroy();
+  }, []);
+
   // Parallax effect: Video moves slower than scroll (0px to 300px down as user scrolls 0 to 1000px)
   const backgroundY = useTransform(scrollY, [0, 1000], [0, 300]);
 
@@ -73,7 +84,6 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-start lg:items-center pt-4 pb-12 md:pt-20 lg:py-20">
-      <SmoothScroll />
       <Loader />
       
       <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 bg-[#F0FBFF] will-change-transform">

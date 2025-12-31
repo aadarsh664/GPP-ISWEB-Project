@@ -41,7 +41,7 @@ const ClientsMarquee = React.memo(() => {
         {TESTIMONIALS.map((t, idx) => (
           <div 
             key={`${t.id}-${idx}`} 
-            className="w-[280px] sm:w-[400px] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
+            className="w-[17.5rem] sm:w-[25rem] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
           >
             <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
               <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
@@ -78,7 +78,7 @@ const ClientsMarquee = React.memo(() => {
         {TESTIMONIALS.map((t, idx) => (
           <div 
             key={`${t.id}-${idx}-dup`} 
-            className="w-[280px] sm:w-[400px] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
+            className="w-[17.5rem] sm:w-[25rem] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
           >
             <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
               <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">

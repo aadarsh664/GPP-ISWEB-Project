@@ -16,6 +16,34 @@
     <title>Guru Printing Press | Your One-Stop Printing Solution</title>
     <link rel="icon" type="image/svg+xml" href="/favicon/Logo.svg" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            screens: {
+              '3xl': '1920px',
+              '4k': '2560px',
+            },
+            maxWidth: {
+              '8xl': '88rem',
+              '9xl': '96rem',
+            }
+          },
+          container: {
+            center: true,
+            padding: {
+              DEFAULT: '1rem',
+              sm: '2rem',
+              lg: '4rem',
+              xl: '5rem',
+              '2xl': '6rem',
+              '3xl': '8rem',
+              '4k': '10rem',
+            },
+          }
+        }
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
       body {
@@ -23,6 +51,14 @@
         background-color: #ffffff;
         color: #0f172a;
         overflow-x: hidden;
+      }
+      
+      /* Fluid Typography & Scaling System for Large Screens */
+      @media (min-width: 1536px) {
+        html {
+          /* Scales root font size from 16px (at 2xl) up to 24px (at 4k+) */
+          font-size: clamp(16px, 0.5vw + 8px, 24px);
+        }
       }
       .perspective-3d {
         perspective: 1200px;

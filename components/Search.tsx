@@ -67,77 +67,84 @@ const Search: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, on
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-lg flex flex-col items-center p-4"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex flex-col items-center p-4"
           onClick={onClose}
         >
           <motion.div
-            initial={{ y: -50, scale: 0.95, opacity: 0 }}
-            animate={{ y: 0, scale: 1, opacity: 1 }}
-            exit={{ y: -30, scale: 0.95, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-3xl mt-16 md:mt-24"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="w-full max-w-3xl mt-16 md:mt-24 bg-transparent"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Search Input */}
-            <div className="relative">
-              <SearchIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={24} />
-              <input
-                type="text"
-                autoFocus
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for products, services..."
-                className="w-full bg-white/10 border border-slate-700 text-white rounded-full py-5 pl-16 pr-8 text-lg focus:ring-2 focus:ring-[#FF6600] outline-none transition-all"
-              />
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              {/* Search Input */}
+              <div className="relative">
+                <SearchIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={24} />
+                <input
+                  type="text"
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search for products, services..."
+                  className="w-full bg-black/80 border border-slate-700 text-white rounded-full py-5 pl-16 pr-8 text-lg focus:ring-2 focus:ring-[#FF6600] outline-none transition-all shadow-2xl backdrop-blur-xl"
+                />
+              </div>
 
-            {/* Search Results */}
-            {query && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-6 bg-white/5 rounded-2xl max-h-[60vh] overflow-y-auto"
-              >
-                {searchResults.length > 0 ? (
-                  <ul className="p-4 space-y-2">
-                    {searchResults.map((result, idx) => (
-                      <motion.li
-                        key={result.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                      >
-                        <a 
-                          href="#" 
-                          onClick={(e) => { 
-                            e.preventDefault(); 
-                            onClose(); 
-                            const element = document.getElementById('products');
-                            if (element) element.scrollIntoView({ behavior: 'smooth' });
-                            setTimeout(() => {
-                              window.dispatchEvent(new CustomEvent('open-product-modal', { detail: result.id }));
-                            }, 600);
-                          }} 
-                          className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors"
+              {/* Search Results */}
+              {query && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  data-lenis-prevent
+                  className="mt-6 bg-black/90 border border-white/10 rounded-2xl max-h-[60vh] overflow-y-auto overscroll-contain shadow-2xl backdrop-blur-xl"
+                >
+                  {searchResults.length > 0 ? (
+                    <ul className="p-4 space-y-2">
+                      {searchResults.map((result, idx) => (
+                        <motion.li
+                          key={result.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.05 }}
                         >
-                          <img src={result.imageUrl} alt={result.name} className="w-16 h-16 rounded-md object-cover bg-slate-700" />
-                          <div>
-                            <p className="font-bold text-white text-lg">{highlightMatch(result.name)}</p>
-                            <p className="text-slate-400 text-sm">{highlightMatch(result.category)}</p>
-                          </div>
-                        </a>
-                      </motion.li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="p-10 text-center text-slate-400">
-                    <p className="font-bold">No results found for "{query}"</p>
-                    <p className="text-sm mt-2">Try searching for something else.</p>
-                  </div>
-                )}
-              </motion.div>
-            )}
+                          <a 
+                            href="#" 
+                            onClick={(e) => { 
+                              e.preventDefault(); 
+                              onClose(); 
+                              const element = document.getElementById('products');
+                              if (element) element.scrollIntoView({ behavior: 'smooth' });
+                              setTimeout(() => {
+                                window.dispatchEvent(new CustomEvent('open-product-modal', { detail: result.id }));
+                              }, 600);
+                            }} 
+                            className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors"
+                          >
+                            <img src={result.imageUrl} alt={result.name} className="w-16 h-16 rounded-md object-cover bg-slate-700" />
+                            <div>
+                              <p className="font-bold text-white text-lg">{highlightMatch(result.name)}</p>
+                              <p className="text-slate-400 text-sm">{highlightMatch(result.category)}</p>
+                            </div>
+                          </a>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="p-10 text-center text-slate-400">
+                      <p className="font-bold">No results found for "{query}"</p>
+                      <p className="text-sm mt-2">Try searching for something else.</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </motion.div>
           </motion.div>
         </motion.div>
       )}

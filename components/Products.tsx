@@ -17,18 +17,20 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
   const whatsappUrl = `https://wa.me/919341749399?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-xl"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 pointer-events-none">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-auto"
+        onClick={onClose}
+      />
       <motion.div
         initial={{ scale: 0.95, y: 20, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.95, y: 20, opacity: 0 }}
-        className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-y-auto shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative"
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative z-10 pointer-events-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
@@ -38,12 +40,16 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
           <X size={18} className="md:w-5 md:h-5" />
         </button>
 
-        <div className="flex flex-col md:flex-row min-h-full">
-          <div className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center">
+        <div className="flex flex-col md:flex-row min-h-full h-full overflow-y-auto">
+          <div 
+            className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center overflow-hidden"
+          >
             <img src={product.imageUrl} className="w-full h-full object-contain md:object-cover" alt={product.name} loading="eager" />
           </div>
           
-          <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center">
+          <div 
+            className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center"
+          >
             <span className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] md:text-xs mb-3 md:mb-4 block">
               {product.category}
             </span>
@@ -76,7 +82,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -138,7 +144,9 @@ const Products: React.FC = () => {
                       className="flex items-center justify-between group p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl hover:shadow-2xl hover:shadow-black/5 transition-all border border-slate-200 text-left w-full"
                     >
                       <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
-                        <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-2xl shadow-inner border border-slate-200/50 overflow-hidden shrink-0">
+                        <div 
+                          className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-2xl shadow-inner border border-slate-200/50 overflow-hidden shrink-0"
+                        >
                           <img 
                             src={getThumbnailUrl(product.imageUrl)} 
                             alt={product.name} 

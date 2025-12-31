@@ -3,25 +3,12 @@ import Lenis from 'lenis';
 
 const SmoothScroll = () => {
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
-      duration: 1.2, // Control the smoothness (higher = smoother/slower)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-style easing
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false, // Mobile falls back to native scroll for better UX
-      touchMultiplier: 2,
+      lerp: 0.07,             // Smoothness (0.1 default hai, 0.07 thoda aur smooth hai)
+      wheelMultiplier: 1,     // Mouse speed ke saath 1:1 match karega
+      smoothWheel: true,
+      autoRaf: true,          // Animation loop automatically handle karega
     });
-
-    // Animation Frame Loop
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
 
     return () => {
       lenis.destroy();

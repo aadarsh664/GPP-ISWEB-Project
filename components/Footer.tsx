@@ -157,7 +157,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="bg-slate-50 py-32 px-6 text-center relative z-10">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-12 leading-[1.1] tracking-tighter">
             Your company deserves the <br />
             <span className="text-indigo-600">right printing partner.</span>
