@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Search as SearchIcon } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
@@ -9,7 +8,16 @@ import Search from './Search';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Trigger change ONLY after scrolling past the hero video (approx 100vh)
+      setIsScrolled(window.scrollY > window.innerHeight - 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -54,28 +62,26 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        onAnimationComplete={() => setAnimationComplete(true)}
-        style={animationComplete ? { transform: 'none' } : undefined}
-        className="sticky top-0 left-0 right-0 z-[110] bg-white/95 backdrop-blur-md border-b border-slate-100 h-20 flex items-center shadow-sm"
+      <header
+        className={`fixed top-0 w-full max-w-[100vw] z-[1000] transition-all duration-300 h-20 flex items-center ${
+          isScrolled ? 'bg-white border-b border-slate-100 shadow-sm' : 'bg-transparent border-transparent'
+        }`}
       >
-        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
+        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between relative">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => scrollTo('home')}>
-             <BrandLogo className="h-14 w-auto group-hover:scale-105 transition-transform" />
+          <div className={`flex items-center gap-3 cursor-pointer group px-3 py-2 rounded-2xl transition-all relative z-20 ${isScrolled ? 'bg-transparent' : ''}`} onClick={() => scrollTo('home')}>
+             <BrandLogo isWhite={!isScrolled} className="h-10 md:h-12 w-auto group-hover:scale-105 transition-transform" />
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-10">
+          <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {navItems.map((item) => {
               if (item === 'Products') {
                 return (
                   <div key={item} className="relative group">
                     <button
                       onClick={() => scrollTo('products')}
-                      className="text-sm font-bold text-slate-500 hover:text-black transition-colors relative py-4"
+                      className={`text-sm font-bold hover:text-[#FF6600] transition-colors relative py-4 ${isScrolled ? 'text-slate-500' : 'text-white'}`}
                     >
                       {item}
                       <span className="absolute bottom-2 left-0 w-0 h-0.5 bg-[#FF6600] transition-all group-hover:w-full" />
@@ -84,13 +90,19 @@ const Header: React.FC = () => {
                     {/* Products Dropdown */}
                     <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-[600px] -z-10 group-hover:z-50 transform origin-top scale-95 group-hover:scale-100">
                       <div 
-                        className="bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 max-h-[60vh] overflow-y-auto overscroll-contain"
+                        className={`rounded-2xl shadow-2xl p-6 border backdrop-blur-md max-h-[60vh] overflow-y-auto overscroll-contain transition-all duration-300 ${
+                          isScrolled 
+                            ? 'bg-white/80 border-black/5' 
+                            : 'bg-black/70 border-white/10'
+                        }`}
                         data-lenis-prevent
                       >
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {Object.entries(productsByCategory).map(([category, products]) => (
                             <div key={category}>
-                              <h4 className="font-black text-black text-[10px] uppercase tracking-widest mb-3 border-b border-slate-100 pb-2 text-left">{category}</h4>
+                              <h4 className={`font-black text-[10px] uppercase tracking-widest mb-3 border-b pb-2 text-left ${
+                                isScrolled ? 'text-black border-slate-100' : 'text-white border-white/20'
+                              }`}>{category}</h4>
                               <ul className="space-y-2 text-left">
                                 {products.map(product => (
                                   <li key={product.id}>
@@ -99,7 +111,11 @@ const Header: React.FC = () => {
                                         e.stopPropagation();
                                         handleProductClick(product.id);
                                       }}
-                                      className="text-sm text-slate-500 hover:text-[#FF6600] hover:font-bold transition-all w-full text-left block"
+                                      className={`text-sm font-bold transition-all w-full text-left block ${
+                                        isScrolled 
+                                          ? 'text-slate-500 hover:text-[#FF6600]' 
+                                          : 'text-white/70 hover:text-white'
+                                      }`}
                                     >
                                       {product.name}
                                     </button>
@@ -119,7 +135,7 @@ const Header: React.FC = () => {
                 <button
                   key={item}
                   onClick={() => scrollTo(item.toLowerCase().replace(/ /g, '-'))}
-                  className="text-sm font-bold text-slate-500 hover:text-black transition-colors relative group"
+                  className={`text-sm font-bold hover:text-[#FF6600] transition-colors relative group ${isScrolled ? 'text-slate-500' : 'text-white'}`}
                 >
                   {item}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FF6600] transition-all group-hover:w-full" />
@@ -129,38 +145,52 @@ const Header: React.FC = () => {
           </nav>
 
           {/* Action Button & Toggle */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 relative z-20">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="hidden lg:flex items-center gap-2 group cursor-pointer"
+              className={`hidden lg:flex h-10 items-center rounded-full transition-all duration-300 group overflow-hidden ${
+                isScrolled 
+                  ? 'text-slate-500 hover:bg-black hover:text-white' 
+                  : 'text-white hover:bg-white hover:text-black'
+              }`}
             >
-              <SearchIcon className="text-slate-500 group-hover:text-black transition-colors" size={22} />
-              <span className="text-sm font-bold text-slate-500 w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">
-                Search
+              <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                <SearchIcon size={22} />
+              </div>
+              <span className="max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100 transition-all duration-500 ease-in-out whitespace-nowrap font-bold text-sm pr-0 group-hover:pr-4">
+                SEARCH
               </span>
             </button>
 
-            <div className="hidden lg:block w-px h-6 bg-slate-200" />
+            <div className={`hidden lg:block w-px h-6 ${isScrolled ? 'bg-slate-200' : 'bg-white/30'}`} />
 
             <a
               href={headerWhatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#25D366] text-white border-2 border-[#25D366] w-10 h-10 sm:w-auto sm:h-auto p-0 sm:px-6 sm:py-3 rounded-full hover:bg-white hover:text-[#25D366] transition-all flex items-center justify-center sm:justify-start gap-0 sm:gap-2 group active:scale-95"
+              className={`h-10 flex items-center rounded-full transition-all duration-300 group overflow-hidden ${
+                isScrolled 
+                  ? 'text-slate-500 hover:bg-[#25D366] hover:text-white' 
+                  : 'text-white hover:bg-[#25D366] hover:text-white'
+              }`}
             >
-              <WhatsAppLogo size={18} />
-              <span className="text-sm font-black hidden sm:block">WHATSAPP US</span>
+              <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                <WhatsAppLogo size={22} />
+              </div>
+              <span className="max-w-0 opacity-0 group-hover:max-w-[140px] group-hover:opacity-100 transition-all duration-500 ease-in-out whitespace-nowrap font-bold text-sm pr-0 group-hover:pr-4">
+                WHATSAPP US
+              </span>
             </a>
 
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden w-12 h-12 flex items-center justify-center text-black hover:bg-slate-50 rounded-full transition-colors"
+              className={`lg:hidden w-12 h-12 flex items-center justify-center rounded-full transition-colors ${isScrolled ? 'text-black hover:bg-slate-50' : 'text-white hover:bg-white/10'}`}
             >
               {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>

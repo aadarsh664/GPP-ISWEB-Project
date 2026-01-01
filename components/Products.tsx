@@ -117,7 +117,7 @@ const Products: React.FC = () => {
   }, {} as Record<string, Product[]>);
 
   return (
-    <section id="products" className="py-32 bg-slate-50">
+    <section id="products" className="py-32 bg-slate-50 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 text-center">
         <div className="mb-20">
           <h3 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-black">Our Products</h3>

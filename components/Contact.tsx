@@ -141,7 +141,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-white relative">
+    <section id="contact" className="py-16 md:py-24 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 text-center">
         <div className="mb-12 md:mb-16">
           <h3 className="text-3xl md:text-5xl font-black mb-3 md:mb-4 tracking-tighter">Get in Touch</h3>
