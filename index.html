@@ -14,6 +14,16 @@
       gtag('config', 'G-W7CW31JD4P');
     </script>
     <title>Guru Printing Press | Your One-Stop Printing Solution</title>
+    <!-- GSAP Animation Platform -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+      // 1. ACTIVATE GSAP SCROLL NORMALIZATION & LAG SMOOTHING
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.normalizeScroll(true); // Creates smooth "app-like" scroll feel
+      ScrollTrigger.config({ ignoreMobileResize: true }); // Prevents jitter on mobile
+      gsap.ticker.lagSmoothing(1000, 16); // Handles CPU spikes gracefully
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon/Logo.svg" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -21,8 +31,16 @@
         theme: {
           extend: {
             screens: {
+              'laptop': '1024px',
+              'desktop': '1440px',
               '3xl': '1920px',
               '4k': '2560px',
+            },
+            fontSize: {
+              'fluid-hero': 'clamp(3.5rem, 8vw + 1rem, 9rem)',
+              'fluid-h1': 'clamp(2.5rem, 5vw + 1rem, 5rem)',
+              'fluid-h2': 'clamp(2rem, 4vw + 1rem, 3.5rem)',
+              'fluid-body': 'clamp(1rem, 1vw + 0.5rem, 1.25rem)',
             },
             maxWidth: {
               '8xl': '88rem',
@@ -46,6 +64,18 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+      @font-face {
+        font-family: 'Dharma Gothic E';
+        src: url('/font/DharmaGothicE_Bold_R.otf') format('opentype');
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      .font-dharma {
+        font-family: 'Dharma Gothic E', sans-serif;
+      }
+
       body {
         font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
         background-color: #ffffff;
@@ -58,6 +88,11 @@
         html, body {
           overflow-x: hidden;
         }
+      }
+      
+      /* Utility for balanced text wrapping */
+      .text-balance {
+        text-wrap: balance;
       }
 
       /* Fluid Typography & Scaling System for Large Screens */
@@ -102,6 +137,47 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
+      }
+
+      /* 
+       * SERVICE & CTA SECTION FIXES 
+       * Apply these classes to your Service/CTA containers if they aren't in the provided files.
+       */
+      .sticky-wrapper {
+        /* Ensures sticky works by preventing overflow clipping on parents */
+        overflow: visible !important; 
+        height: auto !important;
+      }
+      
+      .cta-responsive {
+        /* Logic: Hidden below 1024px, Visible above */
+        display: none;
+      }
+      @media (min-width: 1024px) {
+        .cta-responsive {
+          display: flex; /* or block */
+        }
+      }
+
+      /* --- INDUSTRIAL-GRADE PERFORMANCE OPTIMIZATIONS --- */
+      
+      /* 2. FORCE GPU ACCELERATION */
+      .gpu-accelerate {
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
+
+      /* 3. OPTIMIZE GLASSMORPHISM */
+      .glass-optimized {
+        /* Hardware acceleration for glass effects */
+        backface-visibility: hidden;
+        transform: translateZ(0);
+      }
+
+      /* 4. CSS CONTAINMENT (Isolate Reflows) */
+      .contain-section {
+        contain: paint layout;
       }
     </style>
 <script type="importmap">

@@ -17,7 +17,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
   const whatsappUrl = `https://wa.me/919341749399?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 pointer-events-none">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 h-[100dvh] w-full pointer-events-none">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -30,7 +30,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.95, y: 20, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative z-10 pointer-events-auto"
+        className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-[90%] md:w-full max-h-[85vh] md:max-h-[90vh] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative z-10 pointer-events-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
@@ -40,7 +40,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
           <X size={18} className="md:w-5 md:h-5" />
         </button>
 
-        <div className="flex flex-col md:flex-row min-h-full h-full overflow-y-auto">
+        <div className="flex flex-col md:flex-row h-full overflow-y-auto overscroll-contain">
           <div 
             className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center overflow-hidden"
           >
@@ -90,6 +90,25 @@ const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const productListRef = useRef<HTMLDivElement>(null);
 
+  // History API Logic for Back Button Support
+  useEffect(() => {
+    if (selectedProduct) {
+      // Push new state when modal opens
+      window.history.pushState({ popupOpen: true }, "", "#product-preview");
+
+      const handlePopState = () => {
+        // Close modal when back button is pressed
+        setSelectedProduct(null);
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+      };
+    }
+  }, [selectedProduct]);
+
   // Listen for custom event from Header to open specific product modal
   useEffect(() => {
     const handleOpenModal = (e: CustomEvent) => {
@@ -105,6 +124,15 @@ const Products: React.FC = () => {
       window.removeEventListener('open-product-modal' as any, handleOpenModal as any);
     };
   }, []);
+
+  const handleCloseModal = () => {
+    // Check if we have a history state to go back to
+    if (window.history.state?.popupOpen) {
+      window.history.back();
+    } else {
+      setSelectedProduct(null);
+    }
+  };
 
   // Group products by category for better performance and structure
   const productsByCategory = PRODUCTS.reduce((acc, product) => {
@@ -177,7 +205,7 @@ const Products: React.FC = () => {
         {selectedProduct && (
           <ProductModal 
             product={selectedProduct} 
-            onClose={() => setSelectedProduct(null)} 
+            onClose={handleCloseModal} 
           />
         )}
       </AnimatePresence>

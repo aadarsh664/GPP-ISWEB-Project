@@ -9,7 +9,7 @@ const ScrollRevealText = ({ content, className }: { content: string, className?:
   const element = useRef(null);
   const { scrollYProgress } = useScroll({
     target: element,
-    offset: ['start 0.9', 'start 0.5']
+    offset: ['start 0.95', 'start 0.7']
   });
 
   const words = content.split(" ");
@@ -203,7 +203,7 @@ const About: React.FC = () => {
                 {/* Premium Bottom Glass Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none">
                   <div 
-                    className="w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700 group-hover:backdrop-blur-xl"
+                    className="glass-optimized w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700 group-hover:backdrop-blur-xl"
                     style={{ 
                       maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
                       WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
