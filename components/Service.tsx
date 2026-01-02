@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { SERVICES } from '../constants';
 import { Circle } from 'lucide-react';
 
@@ -10,6 +10,14 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { margin: "-40% 0px -40% 0px" });
   const isDesigning = service.title.toLowerCase() === 'designing';
+
+  // Scroll Progress for Scaling Effect
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "start start"]
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
 
   useEffect(() => {
     if (isHovered || !isInView) return;
@@ -24,13 +32,14 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
   }, [activeBrand, isHovered, isInView, service.brands]);
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
+      style={{ scale }}
       id={`service-0${index + 1}`}
-      className="gpu-accelerate relative w-[95%] md:w-full max-w-7xl mx-auto bg-white border border-slate-200 rounded-[2.5rem] shadow-sm overflow-hidden px-4 py-8 md:p-12 mb-8 md:mb-12 last:mb-0"
+      className="gpu-accelerate sticky-card relative w-[95%] md:w-full max-w-7xl mx-auto bg-white border border-slate-200 rounded-[2.5rem] shadow-sm overflow-hidden px-4 py-8 md:p-12 mb-8 md:mb-12 last:mb-0 md:sticky md:top-[var(--desktop-offset)]"
     >
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, margin: "-10%" }}
@@ -118,7 +127,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
           </div>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
