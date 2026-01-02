@@ -65,6 +65,12 @@
             'fluid-h2': 'clamp(2rem, 4vw + 1rem, 3.5rem)',
             'fluid-body': 'clamp(1rem, 1vw + 0.5rem, 1.25rem)',
           },
+          fontFamily: {
+            sans: ['General Sans', 'Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Gilroy-Bold', 'sans-serif'],
+            jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+            dharma: ['Dharma Gothic E', 'sans-serif'],
+          },
           maxWidth: {
             '8xl': '88rem',
             '9xl': '96rem',
@@ -97,15 +103,50 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: 'Gilroy-Bold';
+      src: url('/font/gilroy/Gilroy-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'General Sans';
+      src: url('/font/General Sans/GeneralSans-Regular.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     .font-dharma {
       font-family: 'Dharma Gothic E', sans-serif;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-family: 'General Sans', 'Plus Jakarta Sans', 'Inter', sans-serif;
       background-color: #ffffff;
       color: #0f172a;
       width: 100%;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Gilroy-Bold', sans-serif;
+    }
+
+    /* Exception for Hero Section Heading */
+    #home h1 {
+      font-family: 'Dharma Gothic E', sans-serif;
+    }
+
+    /* Orange text exception (Plus Jakarta Sans) */
+    .text-\[\#FF6600\] {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
 
     /* Mobile-only overflow fix to prevent horizontal sliding */
@@ -219,6 +260,24 @@
     /* 4. CSS CONTAINMENT (Isolate Reflows) */
     .contain-section {
       contain: paint layout;
+      content-visibility: auto;
+      contain-intrinsic-size: 1000px;
+    }
+
+    /* Pure CSS Marquee Animation */
+    @keyframes marquee {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      100% {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+
+    .animate-marquee {
+      animation: marquee 40s linear infinite;
+      will-change: transform;
     }
   </style>
   <script type="importmap">

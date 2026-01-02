@@ -56,7 +56,7 @@ const PerspectiveCarousel = () => {
 
   return (
     <div className="relative w-full py-10 md:py-20 flex flex-col items-center justify-center overflow-hidden">
-      <motion.div 
+      <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         onDragEnd={(event, info) => {
@@ -117,13 +117,13 @@ const PerspectiveCarousel = () => {
 
       {/* Navigation Controls */}
       <div className="flex gap-8 mt-10 z-20">
-        <button 
+        <button
           onClick={handlePrev}
           className="w-14 h-14 rounded-full bg-black/90 text-white flex items-center justify-center hover:bg-[#FF6600] transition-all shadow-xl active:scale-90 backdrop-blur-md"
         >
           <ChevronLeft size={28} />
         </button>
-        <button 
+        <button
           onClick={handleNext}
           className="w-14 h-14 rounded-full bg-black/90 text-white flex items-center justify-center hover:bg-[#FF6600] transition-all shadow-xl active:scale-90 backdrop-blur-md"
         >
@@ -162,7 +162,7 @@ const Footer: React.FC = () => {
             Your company deserves the <br />
             <span className="text-indigo-600">right printing partner.</span>
           </h2>
-          <button 
+          <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="bg-black text-white px-6 py-3 md:px-14 md:py-6 rounded-xl md:rounded-2xl font-black text-xs md:text-xl hover:bg-indigo-600 transition-all shadow-2xl flex items-center gap-3 mx-auto group active:scale-95 whitespace-nowrap"
           >
@@ -176,8 +176,8 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-t border-slate-100 pt-12">
           <div className="flex items-center gap-4">
             {socialLinks.map(({ Icon, href }, i) => (
-              <a 
-                key={href} 
+              <a
+                key={href}
                 href={href}
                 target={href === '#' ? undefined : "_blank"}
                 rel={href === '#' ? undefined : "noopener noreferrer"}

@@ -33,7 +33,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         className="bg-white rounded-[24px] md:rounded-[40px] max-w-5xl w-[90%] md:w-full max-h-[85vh] md:max-h-[90vh] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col relative z-10 pointer-events-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-3 right-3 md:top-6 md:right-6 z-30 w-8 h-8 md:w-12 md:h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-[#FF6600] transition-colors shadow-lg"
         >
@@ -41,13 +41,13 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         </button>
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto overscroll-contain">
-          <div 
+          <div
             className="w-full h-[250px] md:h-auto md:w-1/2 relative shrink-0 bg-slate-50 flex items-center justify-center overflow-hidden"
           >
             <img src={product.imageUrl} className="w-full h-full object-contain md:object-cover" alt={product.name} loading="eager" />
           </div>
-          
-          <div 
+
+          <div
             className="w-full md:w-1/2 p-5 sm:p-8 md:p-16 flex flex-col justify-center"
           >
             <span className="text-[#FF6600] font-black uppercase tracking-widest text-[10px] md:text-xs mb-3 md:mb-4 block">
@@ -70,7 +70,7 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
               </ul>
             </div>
 
-            <a 
+            <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -152,7 +152,7 @@ const Products: React.FC = () => {
           <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-xs md:text-sm">Premium Corporate Branding Assets</p>
         </div>
 
-        <div 
+        <div
           ref={productListRef}
           className="relative"
         >
@@ -172,14 +172,14 @@ const Products: React.FC = () => {
                       className="flex items-center justify-between group p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl hover:shadow-2xl hover:shadow-black/5 transition-all border border-slate-200 text-left w-full"
                     >
                       <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
-                        <div 
+                        <div
                           className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-2xl shadow-inner border border-slate-200/50 overflow-hidden shrink-0"
                         >
-                          <img 
-                            src={getThumbnailUrl(product.imageUrl)} 
-                            alt={product.name} 
-                            className="w-full h-full object-cover" 
-                            loading="lazy" 
+                          <img
+                            src={getThumbnailUrl(product.imageUrl)}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
                             decoding="async"
                             onError={(e) => {
                               e.currentTarget.onerror = null; // Prevent infinite loop
@@ -203,9 +203,9 @@ const Products: React.FC = () => {
 
       <AnimatePresence>
         {selectedProduct && (
-          <ProductModal 
-            product={selectedProduct} 
-            onClose={handleCloseModal} 
+          <ProductModal
+            product={selectedProduct}
+            onClose={handleCloseModal}
           />
         )}
       </AnimatePresence>

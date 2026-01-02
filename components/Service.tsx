@@ -26,7 +26,7 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0], index: number }> = ({
       const currentIndex = service.brands.indexOf(activeBrand);
       const nextIndex = (currentIndex + 1) % service.brands.length;
       setActiveBrand(service.brands[nextIndex]);
-    }, 2500);
+    }, 6500);
 
     return () => clearInterval(interval);
   }, [activeBrand, isHovered, isInView, service.brands]);

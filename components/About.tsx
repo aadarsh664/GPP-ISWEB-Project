@@ -20,11 +20,11 @@ const ScrollRevealText = ({ content, className }: { content: string, className?:
         const start = i / words.length;
         const end = start + (1 / words.length);
         const opacity = useTransform(scrollYProgress, [start, end], [0.15, 1]);
-        
+
         return (
-          <motion.span 
-            key={i} 
-            style={{ opacity }} 
+          <motion.span
+            key={i}
+            style={{ opacity }}
             className={i === words.length - 1 ? "" : "mr-1.5"}
           >
             {word}
@@ -99,11 +99,11 @@ const About: React.FC = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!arrowRef.current) return;
-      
+
       const rect = arrowRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       const dx = e.clientX - centerX;
       const dy = e.clientY - centerY;
       const distance = Math.sqrt(dx * dx + dy * dy);
@@ -113,7 +113,7 @@ const About: React.FC = () => {
         // Calculate repulsion force (stronger when closer)
         const force = (triggerDistance - distance) / triggerDistance;
         const moveDistance = force * 120; // Max movement range
-        
+
         // Move opposite to mouse direction
         const angle = Math.atan2(dy, dx);
         x.set(-Math.cos(angle) * moveDistance);
@@ -138,7 +138,7 @@ const About: React.FC = () => {
     <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-16 md:mb-32">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -152,14 +152,14 @@ const About: React.FC = () => {
               <span className="text-[#4F46E5]">Ink on Paper.</span>
             </h2>
             <h3 className="text-lg md:text-3xl font-black mb-4 md:mb-8 text-black">Your Reliable Printing Partner.</h3>
-            <ScrollRevealText 
+            <ScrollRevealText
               content="At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind."
               className="text-slate-900 text-sm md:text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 font-medium"
             />
 
             {/* Sticky/Pinned Rotating Arrow aligned left */}
             <div className="relative w-full h-24 hidden md:flex items-center justify-start">
-              <motion.div 
+              <motion.div
                 ref={arrowRef}
                 style={{ rotate: rotation, opacity: arrowOpacity, x, y }}
                 className="text-[#FF6600] flex items-center justify-center"
@@ -169,91 +169,104 @@ const About: React.FC = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             style={{ y: cardsY }}
-            className="lg:w-1/2 w-full flex gap-2 md:gap-4 h-[350px] md:h-[650px]"
+            className="lg:w-1/2 w-full flex gap-2 md:gap-4 h-[350px] md:h-[650px] layout-root"
           >
-            {cards.map((card, idx) => (
-              <motion.div
-                key={card.id}
-                onHoverStart={() => setHoveredCard(idx)}
-                onHoverEnd={() => setHoveredCard(null)}
-                onClick={() => setHoveredCard(hoveredCard === idx ? null : idx)}
-                animate={{ 
-                  width: hoveredCard !== null 
-                    ? (hoveredCard === idx ? '60%' : '20%') // Hover priority
-                    : (scrollActiveCard !== null 
-                        ? (scrollActiveCard === idx ? '60%' : '20%') // Scroll auto-expand
-                        : '33.3%' // Default state
-                      )
-                }}
-                transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-                className="relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group"
-              >
-                <img 
-                  src={card.image} 
-                  className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                  alt={card.title}
-                />
-                
-                {/* Premium Bottom Glass Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none">
-                  <div 
-                    className="glass-optimized w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700 group-hover:backdrop-blur-xl"
-                    style={{ 
-                      maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
-                      WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
-                    }} 
-                  />
-                </div>
+            <React.Fragment>
+              {cards.map((card, idx) => {
+                const isHovered = hoveredCard === idx;
+                const isScrollActive = scrollActiveCard === idx;
+                const isActive = isHovered || isScrollActive;
 
-                <div className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-10 z-20">
-                  <div className="flex items-center gap-1.5 md:gap-3 mb-2 md:mb-4">
-                    <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
-                      <ArrowRight className="text-white w-3 h-3 md:w-[18px] md:h-[18px]" />
+                return (
+                  <div
+                    key={card.id}
+                    onMouseEnter={() => setHoveredCard(idx)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                    onClick={() => setHoveredCard(hoveredCard === idx ? null : idx)}
+                    style={{ willChange: 'flex-grow' }}
+                    className={`relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group gpu-accelerate transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${hoveredCard !== null
+                      ? (hoveredCard === idx ? 'flex-[3]' : 'flex-[1]')
+                      : (scrollActiveCard !== null
+                        ? (scrollActiveCard === idx ? 'flex-[3]' : 'flex-[1]')
+                        : 'flex-[1]')
+                      }`}
+                  >
+                    <img
+                      src={card.image}
+                      className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 will-change-transform"
+                      alt={card.title}
+                    />
+
+                    {/* Premium Bottom Glass Overlay - Optimized */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none transform-gpu">
+                      <div
+                        className="w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700"
+                        style={{
+                          maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
+                          WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
+                        }}
+                      />
                     </div>
-                    <span className="text-white/80 text-[8px] md:text-xs font-black uppercase tracking-widest">{card.label}</span>
+
+                    <div className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-10 z-20">
+                      <div className="flex items-center gap-1.5 md:gap-3 mb-2 md:mb-4">
+                        <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
+                          <ArrowRight className="text-white w-3 h-3 md:w-[18px] md:h-[18px]" />
+                        </div>
+                        <span className="text-white/80 text-[8px] md:text-xs font-black uppercase tracking-widest block whitespace-nowrap">{card.label}</span>
+                      </div>
+                      <h4 className="text-white font-black text-base sm:text-2xl md:text-4xl whitespace-nowrap tracking-tighter leading-tight pb-1">
+                        {card.title}
+                      </h4>
+                    </div>
                   </div>
-                  <h4 className="text-white font-black text-base sm:text-2xl md:text-4xl whitespace-normal md:whitespace-nowrap tracking-tighter leading-tight pb-1">
-                    {card.title}
-                  </h4>
-                </div>
-              </motion.div>
-            ))}
+                );
+              })}
+            </React.Fragment>
           </motion.div>
         </div>
 
         {/* Marquee */}
         <div className="relative pt-16 border-t border-slate-100">
           <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
-          <div className="w-full overflow-hidden flex">
-            <motion.div
-              className="flex-shrink-0 flex whitespace-nowrap"
-              animate={{ x: ['0%', '-100%'] }}
-              transition={{ ease: 'linear', duration: 20, repeat: Infinity }}
-            >
-              {brandLogos.map((logo, i) => (
-                <div key={i} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                  <img src={logo} alt={`Client Logo ${i}`} className="h-20 md:h-24 w-auto object-contain" loading="eager" />
-                </div>
-              ))}
-            </motion.div>
-            <motion.div
-              className="flex-shrink-0 flex whitespace-nowrap"
-              animate={{ x: ['0%', '-100%'] }}
-              transition={{ ease: 'linear', duration: 20, repeat: Infinity }}
-              aria-hidden="true"
-            >
-              {brandLogos.map((logo, i) => (
-                <div key={`dup-${i}`} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                  <img src={logo} alt={`Client Logo ${i}`} className="h-20 md:h-24 w-auto object-contain" loading="eager" />
-                </div>
-              ))}
-            </motion.div>
+          <div className="w-full overflow-hidden flex mask-gradient-sides">
+            {/* Wrapper for smooth infinite loop */}
+            <div className="flex w-max animate-marquee will-change-transform">
+              <div className="flex flex-shrink-0">
+                {brandLogos.map((logo, i) => (
+                  <div key={i} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
+                    <img
+                      src={logo}
+                      alt={`Client Logo ${i}`}
+                      className="h-20 md:h-24 w-auto object-contain transform-gpu"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Duplicate for seamless loop */}
+              <div className="flex flex-shrink-0">
+                {brandLogos.map((logo, i) => (
+                  <div key={`dup-${i}`} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
+                    <img
+                      src={logo}
+                      alt={`Client Logo ${i}`}
+                      className="h-20 md:h-24 w-auto object-contain transform-gpu"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

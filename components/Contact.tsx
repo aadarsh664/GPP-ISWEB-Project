@@ -20,7 +20,7 @@ const Contact: React.FC = () => {
     const [tooltip, setTooltip] = useState("Click to Copy");
     const [showTooltip, setShowTooltip] = useState(false);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    
+
     const copyToClipboard = async (text: string) => {
       // Try Modern Clipboard API
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -53,9 +53,9 @@ const Contact: React.FC = () => {
     const handleCopy = async (e: React.MouseEvent) => {
       e.preventDefault(); // Prevent context menu
       e.stopPropagation();
-      
+
       const success = await copyToClipboard(value);
-      
+
       if (success) {
         setTooltip("Copied!");
         setShowTooltip(true); // Force show tooltip on mobile/click
@@ -81,7 +81,7 @@ const Contact: React.FC = () => {
     };
 
     return (
-      <div 
+      <div
         className="flex items-start gap-4 md:gap-6 group cursor-pointer relative w-fit"
         onClick={handleClick}
         onContextMenu={handleCopy}
@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Tooltip */}
-        <div 
+        <div
           ref={tooltipRef}
           className={`absolute top-0 left-0 bg-black text-white text-[10px] font-bold py-1.5 px-3 rounded-lg transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl z-50 ${showTooltip ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
         >
@@ -156,36 +156,36 @@ const Contact: React.FC = () => {
             className="flex flex-col h-full gap-10"
           >
             <div className="space-y-8 shrink-0">
-              <CopyableItem 
-                icon={Phone} 
-                label="Phone" 
-                value="9341749399, 7004138194" 
+              <CopyableItem
+                icon={Phone}
+                label="Phone"
+                value="9341749399, 7004138194"
               />
-              
-              <CopyableItem 
-                icon={Mail} 
-                label="Email" 
-                value="guruprintingp@gmail.com" 
+
+              <CopyableItem
+                icon={Mail}
+                label="Email"
+                value="guruprintingp@gmail.com"
                 isEmail={true}
               />
-              
-              <CopyableItem 
-                icon={MapPin} 
-                label="Address" 
+
+              <CopyableItem
+                icon={MapPin}
+                label="Address"
                 value="Kazipur Road No. - 4, Near Arvind Mahila College, Patna, Bihar - 800004"
                 displayValue={<>
-                    Kazipur Road No. - 4,<br className="md:hidden" /> Near Arvind Mahila College,<br />
-                    Patna, Bihar - 800004.
+                  Kazipur Road No. - 4,<br className="md:hidden" /> Near Arvind Mahila College,<br />
+                  Patna, Bihar - 800004.
                 </>}
               />
             </div>
 
             <div className="h-[300px] lg:h-auto lg:flex-1 w-full bg-slate-100 rounded-[32px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3597.749667746408!2d85.1631596!3d25.6135371!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM2JzQ4LjciTiA4NcKwMDknNDcuNCJF!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3597.749667746408!2d85.1631596!3d25.6135371!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM2JzQ4LjciTiA4NcKwMDknNDcuNCJF!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
                 loading="lazy"
                 title="Google Map"
               ></iframe>
@@ -229,7 +229,7 @@ const Contact: React.FC = () => {
                   </div>
                 </>
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="py-10 text-center space-y-4"
@@ -245,9 +245,8 @@ const Contact: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting || isSuccess}
-                className={`w-full py-4 md:py-5 rounded-2xl font-black text-base md:text-lg transition-all flex items-center justify-center gap-3 shadow-xl ${
-                  isSuccess ? 'bg-green-500 text-white' : 'bg-black text-white hover:bg-indigo-600'
-                }`}
+                className={`w-full py-4 md:py-5 rounded-2xl font-black text-base md:text-lg transition-all flex items-center justify-center gap-3 shadow-xl ${isSuccess ? 'bg-green-500 text-white' : 'bg-black text-white hover:bg-indigo-600'
+                  }`}
               >
                 {isSubmitting ? (
                   <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />
@@ -263,10 +262,10 @@ const Contact: React.FC = () => {
                   </>
                 )}
               </motion.button>
-              
+
               <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 mt-6">
                 <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400">Or Chat Instantly</p>
-                <a 
+                <a
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"

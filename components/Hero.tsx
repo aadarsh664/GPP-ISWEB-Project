@@ -32,17 +32,17 @@ const Hero: React.FC = () => {
 
       // Step 1: Swap Solution -> Partner
       tlSwap.to(".word-1", { yPercent: -100, opacity: 0, duration: duration, ease: "power3.inOut", force3D: true }, `+=${pause}`)
-            .to(".word-2", { yPercent: 0, opacity: 1, duration: duration, ease: "power3.inOut", force3D: true }, "<")
-            
-            // Reset Solution to bottom
-            .set(".word-1", { yPercent: 100, opacity: 0 })
+        .to(".word-2", { yPercent: 0, opacity: 1, duration: duration, ease: "power3.inOut", force3D: true }, "<")
 
-      // Step 2: Swap Partner -> Solution
-            .to(".word-2", { yPercent: -100, opacity: 0, duration: duration, ease: "power3.inOut", force3D: true }, `+=${pause}`)
-            .to(".word-1", { yPercent: 0, opacity: 1, duration: duration, ease: "power3.inOut", force3D: true }, "<")
-            
-            // Reset Partner to bottom for loop
-            .set(".word-2", { yPercent: 100, opacity: 0 });
+        // Reset Solution to bottom
+        .set(".word-1", { yPercent: 100, opacity: 0 })
+
+        // Step 2: Swap Partner -> Solution
+        .to(".word-2", { yPercent: -100, opacity: 0, duration: duration, ease: "power3.inOut", force3D: true }, `+=${pause}`)
+        .to(".word-1", { yPercent: 0, opacity: 1, duration: duration, ease: "power3.inOut", force3D: true }, "<")
+
+        // Reset Partner to bottom for loop
+        .set(".word-2", { yPercent: 100, opacity: 0 });
     }, containerRef);
 
     return () => ctx.revert();
@@ -64,13 +64,13 @@ const Hero: React.FC = () => {
         ease: "power4.out",
         force3D: true
       })
-      .to(".hero-subheading", {
-        yPercent: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power4.out",
-        force3D: true
-      }, "-=0.8"); // Overlap slightly with heading
+        .to(".hero-subheading", {
+          yPercent: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power4.out",
+          force3D: true
+        }, "-=0.8"); // Overlap slightly with heading
 
     }, containerRef);
   };
@@ -88,7 +88,7 @@ const Hero: React.FC = () => {
   return (
     <section ref={containerRef} id="home" className="contain-section relative h-screen w-full overflow-hidden flex items-center justify-center bg-black">
       <Loader onComplete={playHeroEntrance} />
-      
+
       {/* Background Video */}
       <div className="absolute inset-0 z-0 bg-black">
         <motion.video
@@ -110,7 +110,7 @@ const Hero: React.FC = () => {
       <div className="relative z-20 container mx-auto px-6 md:px-12 flex flex-col items-center text-center">
         <div className="w-full">
           <h1 className="text-fluid-hero font-dharma uppercase leading-[0.85] mb-0 text-white flex flex-col items-center w-full text-balance">
-            
+
             {/* Line 1 Desktop: "Your One-Stop" | Mobile: Stacked "Your" then "One-Stop" */}
             <div className="overflow-hidden pb-1 md:pb-4 w-full md:w-auto">
               <div className="hero-reveal-text hero-line gpu-accelerate flex flex-col md:block">
@@ -123,17 +123,17 @@ const Hero: React.FC = () => {
             <div className="overflow-hidden pb-1 md:pb-4 w-full md:w-auto">
               <div className="hero-reveal-text hero-line gpu-accelerate flex flex-col md:flex-row items-center gap-0 md:gap-4 justify-center">
                 <span className="block">Printing</span>
-                
+
                 {/* Text Swap Container */}
                 <span className="gpu-accelerate relative inline-block align-bottom overflow-hidden min-w-[3ch] h-[1.1em] md:h-auto w-full md:w-auto">
                   {/* Invisible placeholder to set width/height */}
                   <span className="opacity-0 select-none">Solution</span>
-                  
+
                   {/* Word 1: Solution */}
                   <span className="word-1 absolute top-0 left-0 w-full text-center text-white">
                     Solution
                   </span>
-                  
+
                   {/* Word 2: Partner */}
                   <span className="word-2 absolute top-0 left-0 w-full text-center text-white">
                     Partner
@@ -142,7 +142,7 @@ const Hero: React.FC = () => {
               </div>
             </div>
           </h1>
-          
+
           <div className="overflow-hidden pb-2">
             <p className="masked-heading hero-subheading gpu-accelerate text-fluid-body text-white/90 mb-0 max-w-2xl mx-auto leading-relaxed font-bold inline-block drop-shadow-md px-4 text-balance">
               Partner with Patna’s most reliable press for seamless printing.
