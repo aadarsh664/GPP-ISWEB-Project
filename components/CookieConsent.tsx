@@ -37,7 +37,7 @@ const META_PIXEL_ID = '1072990775314621';
 
 const loadAdvertisingScript = () => {
   if (document.getElementById('meta-pixel-script')) return;
-  
+
   const script = document.createElement('script');
   script.id = 'meta-pixel-script';
   script.innerHTML = `
@@ -58,7 +58,7 @@ const loadAdvertisingScript = () => {
 const CookieConsent: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
-  
+
   const [settings, setSettings] = useState<ConsentSettings>({
     analytics: false,
     advertising: false,
@@ -67,7 +67,7 @@ const CookieConsent: React.FC = () => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
     const savedConsent = localStorage.getItem('gpp_cookie_consent');
-    
+
     if (!savedConsent) {
       timer = setTimeout(() => setIsVisible(true), 1500);
     } else {
@@ -80,7 +80,7 @@ const CookieConsent: React.FC = () => {
         if (parsed.ad_storage === 'granted') {
           loadAdvertisingScript();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const handleOpenSettings = () => {
@@ -92,14 +92,14 @@ const CookieConsent: React.FC = () => {
             analytics: parsed.analytics_storage === 'granted',
             advertising: parsed.ad_storage === 'granted',
           });
-        } catch (e) {}
+        } catch (e) { }
       }
       setShowCustomize(true);
       setIsVisible(true);
     };
 
     window.addEventListener('open-cookie-settings', handleOpenSettings);
-    
+
     return () => {
       if (timer) clearTimeout(timer);
       window.removeEventListener('open-cookie-settings', handleOpenSettings);
@@ -114,10 +114,10 @@ const CookieConsent: React.FC = () => {
       ad_personalization: advertising ? 'granted' : 'denied',
       timestamp: new Date().toISOString()
     };
-    
+
     localStorage.setItem('gpp_cookie_consent', JSON.stringify(consentChoice));
     setIsVisible(false);
-    
+
     // Conditionally Load Scripts Based on User's Choice Now
     if (analytics) {
       loadAnalyticsScript();
@@ -137,7 +137,7 @@ const CookieConsent: React.FC = () => {
         <h4 className="text-white text-sm md:text-base font-medium mb-1">{label}</h4>
         <p className="text-slate-400 text-[11px] md:text-xs leading-relaxed">{description}</p>
       </div>
-      <button 
+      <button
         type="button"
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
@@ -151,7 +151,7 @@ const CookieConsent: React.FC = () => {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div 
+        <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -159,30 +159,30 @@ const CookieConsent: React.FC = () => {
           className="fixed bottom-0 left-0 w-full z-[9999] p-3 md:p-5 pointer-events-none"
         >
           <div className="max-w-2xl mx-auto bg-[#0a0a0a] border border-white/10 rounded-[14px] shadow-2xl overflow-hidden pointer-events-auto">
-            
+
             {/* Primary Banner View */}
             {!showCustomize ? (
               <div className="p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex-1">
                   <h3 className="text-white text-lg font-medium mb-1 tracking-tight">Your Privacy Matters</h3>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
-                    We use cookies to improve your experience, serve personalized content, and analyze our traffic. 
+                    We use cookies to improve your experience, serve personalized content, and analyze our traffic.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row w-full md:w-auto gap-2 shrink-0">
-                  <button 
+                  <button
                     onClick={() => setShowCustomize(true)}
                     className="px-4 py-2 rounded-full text-[11px] md:text-xs font-medium text-white border border-white/20 hover:bg-white/10 transition-colors"
                   >
                     Customize
                   </button>
-                  <button 
+                  <button
                     onClick={handleRejectAll}
                     className="px-4 py-2 rounded-full text-[11px] md:text-xs font-medium text-white border border-white/20 hover:bg-white/10 transition-colors"
                   >
                     Reject Non-Essential
                   </button>
-                  <button 
+                  <button
                     onClick={handleAcceptAll}
                     className="px-5 py-2 rounded-full text-[11px] md:text-xs font-medium text-black bg-white hover:bg-slate-200 transition-colors"
                   >
@@ -199,21 +199,21 @@ const CookieConsent: React.FC = () => {
                     Essential cookies cannot be disabled as they are required for the website to function properly.
                   </p>
                 </div>
-                
+
                 <div className="bg-white/5 rounded-xl p-3 md:p-4 mb-5">
-                  <Toggle 
+                  <Toggle
                     label="Strictly Necessary"
                     description="Essential for the website to function properly. Cannot be disabled."
                     checked={true}
                     disabled={true}
                   />
-                  <Toggle 
+                  <Toggle
                     label="Analytics (GA4)"
                     description="Help us understand how visitors interact with our website anonymously."
                     checked={settings.analytics}
                     onChange={(val: boolean) => setSettings(s => ({ ...s, analytics: val }))}
                   />
-                  <Toggle 
+                  <Toggle
                     label="Advertising"
                     description="Used to track visitors across websites to display relevant ads."
                     checked={settings.advertising}
@@ -222,13 +222,13 @@ const CookieConsent: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-end gap-2">
-                  <button 
+                  <button
                     onClick={handleRejectAll}
                     className="px-4 py-2 rounded-full text-[11px] md:text-xs font-medium text-white border border-white/20 hover:bg-white/10 transition-colors"
                   >
                     Reject All
                   </button>
-                  <button 
+                  <button
                     onClick={handleSaveCustom}
                     className="px-5 py-2 rounded-full text-[11px] md:text-xs font-medium text-black bg-white hover:bg-slate-200 transition-colors"
                   >
