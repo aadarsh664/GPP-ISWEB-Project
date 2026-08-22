@@ -3,11 +3,17 @@ import Lenis from 'lenis';
 
 const SmoothScroll = () => {
   useEffect(() => {
+    // Custom easing function for natural deceleration (outExpo)
+    function easeOutExpo(x: number): number {
+      return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+    }
+
     const lenis = new Lenis({
-      lerp: 0.07,             // Smoothness (0.1 default hai, 0.07 thoda aur smooth hai)
-      wheelMultiplier: 1,     // Mouse speed ke saath 1:1 match karega
+      lerp: 0.05,             // lower value = more inertia/momentum
+      wheelMultiplier: 1.2,   // slightly amplified scroll distance
       smoothWheel: true,
-      autoRaf: true,          // Animation loop automatically handle karega
+      easing: easeOutExpo,    // smooth natural deceleration
+      autoRaf: true,          // animation loop
     });
 
     return () => {

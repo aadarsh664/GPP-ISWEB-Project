@@ -93,7 +93,7 @@ const Search: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, on
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search for products, services..."
-                  className="w-full bg-black/80 border border-slate-700 text-white rounded-full py-5 pl-16 pr-8 text-lg focus:ring-2 focus:ring-[#FF6600] outline-none transition-all shadow-2xl backdrop-blur-xl"
+                  className="w-full bg-black/80 border border-slate-700 text-white rounded-[30px] py-5 pl-16 pr-8 text-lg focus:ring-2 focus:ring-[#FF6600] outline-none transition-all shadow-2xl backdrop-blur-xl"
                 />
               </div>
 
@@ -103,7 +103,7 @@ const Search: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, on
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   data-lenis-prevent
-                  className="mt-6 bg-black/90 border border-white/10 rounded-2xl max-h-[60vh] overflow-y-auto overscroll-contain shadow-2xl backdrop-blur-xl"
+                  className="mt-6 bg-black/90 border border-white/10 rounded-[30px] max-h-[60vh] overflow-y-auto overscroll-contain shadow-2xl backdrop-blur-xl"
                 >
                   {searchResults.length > 0 ? (
                     <ul className="p-4 space-y-2">
@@ -125,9 +125,9 @@ const Search: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, on
                                 window.dispatchEvent(new CustomEvent('open-product-modal', { detail: result.id }));
                               }, 600);
                             }} 
-                            className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-4 p-3 rounded-[30px] hover:bg-white/10 transition-colors"
                           >
-                            <img src={result.imageUrl} alt={result.name} className="w-16 h-16 rounded-md object-cover bg-slate-700" />
+                            <img src={result.imageUrl} alt={result.name} className="w-16 h-16 rounded-[30px] object-cover bg-slate-700" />
                             <div>
                               <p className="font-bold text-white text-lg">{highlightMatch(result.name)}</p>
                               <p className="text-slate-400 text-sm">{highlightMatch(result.category)}</p>

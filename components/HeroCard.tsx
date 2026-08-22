@@ -56,7 +56,7 @@ const HeroCard: React.FC = () => {
       >
         {/* LAYER 1: Background GIF (Deepest Layer) */}
         <div 
-          className="absolute inset-0 rounded-[32px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.2)] bg-white border border-slate-100"
+          className="absolute inset-0 rounded-[30px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.2)] bg-white border border-slate-100"
           style={{ transform: 'translateZ(0px)' }}
         >
           <img 
@@ -72,7 +72,7 @@ const HeroCard: React.FC = () => {
           style={{ transform: 'translateZ(40px)' }} // Parallax depth
         >
            {/* Right Side Border Element */}
-           <div className="absolute -right-2 md:-right-4 top-16 md:top-20 bg-white/40 backdrop-blur-2xl border border-slate-200/50 p-2 md:p-4 rounded-2xl md:rounded-3xl shadow-xl transition-transform duration-500 group-hover:translate-x-2">
+           <div className="absolute -right-2 md:-right-4 top-16 md:top-20 bg-white/40 backdrop-blur-2xl border border-slate-200/50 p-2 md:p-4 rounded-[30px] md:rounded-[30px] shadow-xl transition-transform duration-500 group-hover:translate-x-2">
              <img 
                src="/hero/right side border element.svg" 
                className="w-16 h-16 md:w-24 md:h-24 drop-shadow-lg opacity-90"
@@ -81,7 +81,7 @@ const HeroCard: React.FC = () => {
            </div>
            
            {/* Left Side Logo */}
-           <div className="absolute -left-4 md:-left-8 top-1/3 bg-white/40 backdrop-blur-2xl border border-slate-200/50 p-2 md:p-4 rounded-full shadow-2xl">
+           <div className="absolute -left-4 md:-left-8 top-1/3 bg-white/40 backdrop-blur-2xl border border-slate-200/50 p-2 md:p-4 rounded-[30px] shadow-2xl">
              <img 
                src="/hero/left side logo.svg" 
                className="w-8 h-8 md:w-10 md:h-10 drop-shadow-lg"
@@ -96,8 +96,8 @@ const HeroCard: React.FC = () => {
           style={{ transform: 'translateZ(80px)' }} // Maximum depth
         >
            {/* Bottom Glass Card */}
-           <div className="bg-white/60 backdrop-blur-2xl border border-white/50 p-3 md:p-4 rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] flex items-center gap-3 md:gap-4 w-max max-w-full transition-transform duration-300 group-hover:-translate-y-2">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+           <div className="bg-white/60 backdrop-blur-2xl border border-white/50 p-3 md:p-4 rounded-[30px] shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] flex items-center gap-3 md:gap-4 w-max max-w-full transition-transform duration-300 group-hover:-translate-y-2">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-[30px] flex items-center justify-center shadow-sm shrink-0">
                 <img src="/hero/bottom logo.svg" className="w-7 h-7 object-contain" alt="GPP" />
               </div>
               <div>

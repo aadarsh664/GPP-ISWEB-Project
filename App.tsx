@@ -1,68 +1,64 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import SmoothScroll from './components/SmoothScroll';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
+import ImageStackSection from './components/ImageStackSection';
+import StatsSection from './components/StatsSection';
 import Service from './components/Service';
+import DigitalServices from './components/DigitalServices';
 import Products from './components/Products';
-import WhyChooseUs from './components/WhyChooseUs';
-import CTA from './components/CTA';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
+
+// PERF: Lazy load below-the-fold components to reduce initial bundle size
+const WhyChooseUs = React.lazy(() => import('./components/WhyChooseUs'));
+const Showcase = React.lazy(() => import('./components/Showcase'));
+const Contact = React.lazy(() => import('./components/Contact'));
+const CTA = React.lazy(() => import('./components/CTA'));
+const Footer = React.lazy(() => import('./components/Footer'));
+
+// PERF: Lazy load route pages (separate pages, never needed on initial load)
+const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+const TermsAndConditions = React.lazy(() => import('./pages/TermsAndConditions'));
 
 const HomePage: React.FC = () => {
   return (
-    <main className="bg-white">
+    <main className="bg-white w-full">
       <Hero />
       <About />
+      <ImageStackSection />
+      <StatsSection />
       <Service />
+      <DigitalServices />
       <Products />
-      <WhyChooseUs />
-      <Contact />
-      <CTA />
-      <Footer />
+      <Suspense fallback={null}>
+        <WhyChooseUs />
+        <Showcase />
+        <Contact />
+        <CTA />
+        <Footer />
+      </Suspense>
     </main>
   );
 };
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Disable Right Click
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
-    // Disable Keyboard Shortcuts (F12, Ctrl+Shift+I, Ctrl+U, etc.)
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
-      ) {
-        e.preventDefault();
-      }
-    };
-
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    // Development mode: blockages removed
   }, []);
 
   return (
     <div className="antialiased">
+      <SmoothScroll />
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-conditions" element={<TermsAndConditions />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsAndConditions />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

@@ -41,9 +41,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script>
-    // 1. ACTIVATE GSAP SCROLL NORMALIZATION & LAG SMOOTHING
+    // 1. ACTIVATE GSAP SCROLL CONFIG
     gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.normalizeScroll(true); // Creates smooth "app-like" scroll feel
+    // PERF: Removed ScrollTrigger.normalizeScroll(true) — was conflicting with
+    // Framer Motion's useScroll/useTransform and double-processing scroll events
     ScrollTrigger.config({ ignoreMobileResize: true }); // Prevents jitter on mobile
     gsap.ticker.lagSmoothing(1000, 16); // Handles CPU spikes gracefully
   </script>
@@ -66,10 +67,11 @@
             'fluid-body': 'clamp(1rem, 1vw + 0.5rem, 1.25rem)',
           },
           fontFamily: {
-            sans: ['General Sans', 'Plus Jakarta Sans', 'sans-serif'],
-            heading: ['Gilroy-Bold', 'sans-serif'],
-            jakarta: ['Plus Jakarta Sans', 'sans-serif'],
-            dharma: ['Dharma Gothic E', 'sans-serif'],
+            sans: ['Helvetica Now Display', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+            heading: ['Helvetica Now Display', 'sans-serif'],
+            jakarta: ['Helvetica Now Display', 'sans-serif'],
+            dharma: ['Helvetica Now Display', 'sans-serif'],
+            helvetica: ['Helvetica Now Display', 'sans-serif'],
           },
           maxWidth: {
             '8xl': '88rem',
@@ -92,9 +94,49 @@
     }
   </script>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Helvetica Now Display';
+      src: url('/font/helvetica/HelveticaNowDisplay-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Helvetica Now Display';
+      src: url('/font/helvetica/HelveticaNowDisplay-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Helvetica Now Display';
+      src: url('/font/helvetica/HelveticaNowDisplay-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Helvetica Now Display';
+      src: url('/font/helvetica/HelveticaNowDisplay-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Helvetica Now Display';
+      src: url('/font/helvetica/HelveticaNowDisplay-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
     @font-face {
       font-family: 'Dharma Gothic E';
       src: url('/font/DharmaGothicE_Bold_R.otf') format('opentype');
@@ -120,14 +162,16 @@
     }
 
     .font-dharma {
-      font-family: 'Dharma Gothic E', sans-serif;
+      font-family: 'Helvetica Now Display', sans-serif;
     }
 
-    body {
-      font-family: 'General Sans', 'Plus Jakarta Sans', 'Inter', sans-serif;
+    body, html {
+      font-family: 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 400;
       background-color: #ffffff;
       color: #0f172a;
       width: 100%;
+      overflow-x: clip;
     }
 
     h1,
@@ -136,12 +180,8 @@
     h4,
     h5,
     h6 {
-      font-family: 'Gilroy-Bold', sans-serif;
-    }
-
-    /* Exception for Hero Section Heading */
-    #home h1 {
-      font-family: 'Dharma Gothic E', sans-serif;
+      font-family: 'Helvetica Now Display', sans-serif;
+      font-weight: 400;
     }
 
     /* Orange text exception (Plus Jakarta Sans) */
@@ -151,10 +191,9 @@
 
     /* Mobile-only overflow fix to prevent horizontal sliding */
     @media (max-width: 1024px) {
-
       html,
       body {
-        overflow-x: hidden;
+        overflow-x: clip;
       }
     }
 
@@ -168,7 +207,7 @@
       html {
         /* Scales root font size from 16px (at 2xl) up to 24px (at 4k+) */
         font-size: clamp(16px, 0.5vw + 8px, 24px);
-        overflow-x: hidden;
+        overflow-x: clip;
       }
     }
 

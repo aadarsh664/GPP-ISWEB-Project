@@ -1,275 +1,257 @@
+import React, { useRef, useState } from 'react';
+import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import RadialRevealButton from './RadialRevealButton';
+import Text3DFlip from './Text3DFlip';
+import RevealOnScroll from './RevealOnScroll';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
-import { ArrowRight, MoveRight } from 'lucide-react';
+const categories = [
+  "Visiting Card",
+  "Letterheads",
+  "Envelope",
+  "Diaries",
+  "Files",
+  "Calendars",
+  "Pen",
+  "Flyer",
+  "Sticker",
+  "Led Frame"
+];
 
-const brandLogos = Array.from({ length: 17 }, (_, i) => `/client-logos/logo${i + 1}.svg`);
+const products = [
+  { id: 1, title: "Luxury Visiting Card" },
+  { id: 2, title: "Premium Letterhead" },
+  { id: 3, title: "Custom Envelopes" },
+  { id: 4, title: "Corporate Diaries" },
+  { id: 5, title: "Executive Files" },
+  { id: 6, title: "Wall Calendars" },
+];
 
-const ScrollRevealText = ({ content, className }: { content: string, className?: string }) => {
-  const element = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: element,
-    offset: ['start 0.95', 'start 0.7']
-  });
+function useDragScroll() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0, hasDragged: false });
 
-  const words = content.split(" ");
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    setIsDragging(true);
+    dragState.current.isDown = true;
+    dragState.current.startX = e.pageX - ref.current.offsetLeft;
+    dragState.current.scrollLeft = ref.current.scrollLeft;
+    dragState.current.hasDragged = false;
+    ref.current.style.scrollBehavior = 'auto';
+    ref.current.style.scrollSnapType = 'none';
+  };
 
-  return (
-    <p ref={element} className={`${className} flex flex-wrap justify-center md:justify-start`}>
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = start + (1 / words.length);
-        const opacity = useTransform(scrollYProgress, [start, end], [0.15, 1]);
+  const onMouseLeave = () => {
+    if (!dragState.current.isDown) return;
+    setIsDragging(false);
+    dragState.current.isDown = false;
+    if (ref.current) {
+      ref.current.style.scrollBehavior = '';
+      ref.current.style.scrollSnapType = '';
+    }
+  };
 
-        return (
-          <motion.span
-            key={i}
-            style={{ opacity }}
-            className={i === words.length - 1 ? "" : "mr-1.5"}
-          >
-            {word}
-          </motion.span>
-        );
-      })}
-    </p>
-  );
-};
+  const onMouseUp = () => {
+    setIsDragging(false);
+    dragState.current.isDown = false;
+    if (ref.current) {
+      ref.current.style.scrollBehavior = '';
+      ref.current.style.scrollSnapType = '';
+    }
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!dragState.current.isDown || !ref.current) return;
+    const x = e.pageX - ref.current.offsetLeft;
+    const walk = (x - dragState.current.startX) * 1.5; 
+    
+    if (Math.abs(walk) > 5) {
+      dragState.current.hasDragged = true;
+    }
+    
+    if (dragState.current.hasDragged) {
+      e.preventDefault();
+      ref.current.scrollLeft = dragState.current.scrollLeft - walk;
+    }
+  };
+
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (dragState.current.hasDragged) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Reset for next click
+      dragState.current.hasDragged = false;
+    }
+  };
+
+  return {
+    ref,
+    onMouseDown,
+    onMouseLeave,
+    onMouseUp,
+    onMouseMove,
+    onClickCapture,
+    isDragging,
+  };
+}
 
 const About: React.FC = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [scrollActiveCard, setScrollActiveCard] = useState<number | null>(null);
-  const [sequenceStarted, setSequenceStarted] = useState(false);
-  const containerRef = useRef<HTMLElement>(null);
-  const arrowRef = useRef<HTMLDivElement>(null);
+  const categoriesScroll = useDragScroll();
+  const productsScroll = useDragScroll();
 
-  // Scroll logic for the rotating arrow
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Automatically trigger sequence when scrolled into view
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest > 0.2 && !sequenceStarted) {
-      setSequenceStarted(true);
-    } else if (latest < 0.1 && sequenceStarted) {
-      setSequenceStarted(false);
-      setScrollActiveCard(null);
+  const scrollLeft = () => {
+    if (productsScroll.ref.current) {
+      productsScroll.ref.current.scrollBy({ left: -400, behavior: 'smooth' });
     }
-  });
+  };
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    let step = 0;
-
-    const sequence = [
-      { card: 0, delay: 2000 },
-      { card: 1, delay: 1800 },
-      { card: 2, delay: 2000 },
-      { card: 1, delay: 1800 }
-    ];
-
-    const runStep = () => {
-      const current = sequence[step % sequence.length];
-      setScrollActiveCard(current.card);
-      step++;
-      timeoutId = setTimeout(runStep, current.delay);
-    };
-
-    if (sequenceStarted) {
-      runStep();
+  const scrollRight = () => {
+    if (productsScroll.ref.current) {
+      productsScroll.ref.current.scrollBy({ left: 400, behavior: 'smooth' });
     }
-
-    return () => clearTimeout(timeoutId);
-  }, [sequenceStarted]);
-
-  // Parallax for the right side cards (moves slightly faster/slower than text)
-  const cardsY = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
-
-  // Rotates the arrow based on scroll progress
-  const rotation = useTransform(scrollYProgress, [0.1, 0.6], [0, 360]);
-  const arrowOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-
-  // Tom and Jerry Effect (Magnetic Repulsion)
-  const springConfig = { stiffness: 200, damping: 15 };
-  const x = useSpring(0, springConfig);
-  const y = useSpring(0, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!arrowRef.current) return;
-
-      const rect = arrowRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const dx = e.clientX - centerX;
-      const dy = e.clientY - centerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const triggerDistance = 200; // Detection range
-
-      if (distance < triggerDistance) {
-        // Calculate repulsion force (stronger when closer)
-        const force = (triggerDistance - distance) / triggerDistance;
-        const moveDistance = force * 120; // Max movement range
-
-        // Move opposite to mouse direction
-        const angle = Math.atan2(dy, dx);
-        x.set(-Math.cos(angle) * moveDistance);
-        y.set(-Math.sin(angle) * moveDistance);
-      } else {
-        x.set(0);
-        y.set(0);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [x, y]);
-
-  const cards = [
-    { id: 1, title: 'Design', image: '/aboutcardimages/design.jpg', label: 'Step 01' },
-    { id: 2, title: 'Print', image: '/aboutcardimages/print.jpg', label: 'Step 02' },
-    { id: 3, title: 'Deliver', image: '/aboutcardimages/deliver.jpg', label: 'Step 03' }
-  ];
+  };
 
   return (
-    <section ref={containerRef} id="about" className="py-12 md:py-32 bg-white overflow-hidden relative">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-16 md:mb-32">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            style={{ y: textY }}
-            className="lg:w-1/2 text-center md:text-left flex flex-col items-center md:items-start"
-          >
-            <span className="text-[#FF6600] font-black uppercase tracking-[0.3em] text-[10px] md:text-xs mb-3 md:mb-6 block">Our Vision</span>
-            <h2 className="text-3xl sm:text-4xl md:text-7xl font-black mb-4 md:mb-10 leading-[1.1] text-black tracking-tighter">
-              More Than Just <br />
-              <span className="text-[#4F46E5]">Ink on Paper.</span>
-            </h2>
-            <h3 className="text-lg md:text-3xl font-black mb-4 md:mb-8 text-black">Your Reliable Printing Partner.</h3>
-            <ScrollRevealText
-              content="At GPP, we turn printing from a hassle into an asset. Bridging creative design and premium production, we serve as your complete backend solution. We replace vendor chaos with a streamlined workflow, delivering not just prints, but peace of mind."
-              className="text-slate-900 text-sm md:text-xl leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 font-medium"
-            />
-
-            {/* Sticky/Pinned Rotating Arrow aligned left */}
-            <div className="relative w-full h-24 hidden md:flex items-center justify-start">
-              <motion.div
-                ref={arrowRef}
-                style={{ rotate: rotation, opacity: arrowOpacity, x, y }}
-                className="text-[#FF6600] flex items-center justify-center"
+    <section id="featured-products" className="py-16 md:py-24 bg-white font-normal" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+      <div className="container mx-auto px-6 md:px-12 mb-16 md:mb-24">
+        {/* Categories Strip */}
+        <div 
+          className="w-full overflow-x-auto pb-6 hide-scrollbar md:overflow-visible cursor-grab active:cursor-grabbing select-none"
+          ref={categoriesScroll.ref}
+          onMouseDown={categoriesScroll.onMouseDown}
+          onMouseLeave={categoriesScroll.onMouseLeave}
+          onMouseUp={categoriesScroll.onMouseUp}
+          onMouseMove={categoriesScroll.onMouseMove}
+          onClickCapture={categoriesScroll.onClickCapture}
+        >
+          <div className="flex md:grid items-start gap-4 md:gap-4 lg:gap-6 grid-cols-1 md:grid-cols-5 lg:grid-cols-10 min-w-max md:min-w-0" onDragStart={(e) => e.preventDefault()}>
+            {categories.map((cat, idx) => (
+              <a
+                key={idx}
+                href="#"
+                draggable={false}
+                className="flex flex-col items-center gap-3 md:gap-4 w-[100px] md:w-full shrink-0 group pointer-events-auto"
               >
-                <MoveRight size={64} className="stroke-[2.5]" />
-              </motion.div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            style={{ y: cardsY }}
-            className="lg:w-1/2 w-full flex gap-2 md:gap-4 h-[350px] md:h-[650px] layout-root"
-          >
-            <React.Fragment>
-              {cards.map((card, idx) => {
-                const isHovered = hoveredCard === idx;
-                const isScrollActive = scrollActiveCard === idx;
-                const isActive = isHovered || isScrollActive;
-
-                return (
-                  <div
-                    key={card.id}
-                    onMouseEnter={() => setHoveredCard(idx)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setHoveredCard(hoveredCard === idx ? null : idx)}
-                    style={{ willChange: 'flex-grow' }}
-                    className={`relative overflow-hidden rounded-[30px] md:rounded-[40px] h-full cursor-pointer group gpu-accelerate transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${hoveredCard !== null
-                      ? (hoveredCard === idx ? 'flex-[3]' : 'flex-[1]')
-                      : (scrollActiveCard !== null
-                        ? (scrollActiveCard === idx ? 'flex-[3]' : 'flex-[1]')
-                        : 'flex-[1]')
-                      }`}
-                  >
-                    <img
-                      src={card.image}
-                      className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 will-change-transform"
-                      alt={card.title}
-                    />
-
-                    {/* Premium Bottom Glass Overlay - Optimized */}
-                    <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 pointer-events-none transform-gpu">
-                      <div
-                        className="w-full h-full backdrop-blur-md bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-700"
-                        style={{
-                          maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
-                          WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
-                        }}
-                      />
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-10 z-20">
-                      <div className="flex items-center gap-1.5 md:gap-3 mb-2 md:mb-4">
-                        <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-[#FF6600] flex items-center justify-center shrink-0">
-                          <ArrowRight className="text-white w-3 h-3 md:w-[18px] md:h-[18px]" />
-                        </div>
-                        <span className="text-white/80 text-[8px] md:text-xs font-black uppercase tracking-widest block whitespace-nowrap">{card.label}</span>
-                      </div>
-                      <h4 className="text-white font-black text-base sm:text-2xl md:text-4xl whitespace-nowrap tracking-tighter leading-tight pb-1">
-                        {card.title}
-                      </h4>
-                    </div>
-                  </div>
-                );
-              })}
-            </React.Fragment>
-          </motion.div>
-        </div>
-
-        {/* Marquee */}
-        <div className="relative pt-16 border-t border-slate-100">
-          <p className="text-center text-slate-400 font-bold text-xs tracking-[0.4em] uppercase mb-16">Trusted by Corporate Leaders</p>
-          <div className="w-full overflow-hidden flex mask-gradient-sides">
-            {/* Wrapper for smooth infinite loop */}
-            <div className="flex w-max animate-marquee will-change-transform">
-              <div className="flex flex-shrink-0">
-                {brandLogos.map((logo, i) => (
-                  <div key={i} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                    <img
-                      src={logo}
-                      alt={`Client Logo ${i}`}
-                      className="h-20 md:h-24 w-auto object-contain transform-gpu"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Duplicate for seamless loop */}
-              <div className="flex flex-shrink-0">
-                {brandLogos.map((logo, i) => (
-                  <div key={`dup-${i}`} className="flex-shrink-0 w-60 flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer">
-                    <img
-                      src={logo}
-                      alt={`Client Logo ${i}`}
-                      className="h-20 md:h-24 w-auto object-contain transform-gpu"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+                <div className="w-[100px] h-[100px] md:w-full md:aspect-square border border-slate-200 rounded-[30px] flex items-center justify-center bg-slate-50 transition-colors group-hover:border-slate-400 group-hover:bg-slate-100 overflow-hidden">
+                  <span className="text-[10px] md:text-xs text-slate-400 font-medium tracking-wide text-center px-1">
+                    Transparent Image
+                  </span>
+                </div>
+                <span className="text-black text-[11px] md:text-sm tracking-tight text-center">
+                  {cat}
+                </span>
+              </a>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Our Products Section */}
+      <div className="container mx-auto px-6 md:px-12 relative group">
+        <RevealOnScroll delay={0.1}>
+          <div className="flex items-end justify-between mb-8 md:mb-12">
+            <h2 className="text-4xl md:text-[3.5rem] tracking-tight leading-none">Our Products</h2>
+            <a href="#" className="hidden md:flex items-center group pointer-events-auto overflow-visible pb-1">
+            <Text3DFlip 
+              text="View all" 
+              font={{ fontSize: '18px', fontWeight: 500, fontFamily: "'Helvetica Now Display', sans-serif", lineHeight: "1em" }} 
+              color="#000000" 
+              animation="hover" 
+            />
+          </a>
+        </div>
+        </RevealOnScroll>
+        
+        {/* Floating Arrows */}
+        <button 
+          onClick={scrollLeft} 
+          className="flex absolute left-4 md:left-8 top-[calc(50%-45px)] -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-[30px] border border-slate-200 bg-white shadow-md items-center justify-center text-black hover:bg-slate-50 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
+        >
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+        </button>
+        <button 
+          onClick={scrollRight} 
+          className="flex absolute right-4 md:right-8 top-[calc(50%-45px)] -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-[30px] border border-slate-200 bg-white shadow-md items-center justify-center text-black hover:bg-slate-50 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
+        >
+          <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+        </button>
+
+        <div 
+          className="w-full overflow-x-auto pb-10 hide-scrollbar cursor-grab active:cursor-grabbing select-none"
+          ref={productsScroll.ref}
+          onMouseDown={productsScroll.onMouseDown}
+          onMouseLeave={productsScroll.onMouseLeave}
+          onMouseUp={productsScroll.onMouseUp}
+          onMouseMove={productsScroll.onMouseMove}
+          onClickCapture={productsScroll.onClickCapture}
+        >
+          <div className="flex items-start gap-6 min-w-max" onDragStart={(e) => e.preventDefault()}>
+            {products.map((product) => (
+              <div 
+                key={product.id} 
+                className="flex flex-col w-[280px] md:w-[calc((100vw-6rem-4.5rem)/4)] lg:w-[calc((100vw-6rem-4.5rem)/4)] max-w-[400px]"
+              >
+                {/* Product Image Area */}
+                <a href="#" draggable={false} className="w-full aspect-[3/4] border border-slate-200 rounded-[30px] bg-slate-50 flex items-center justify-center mb-5 md:mb-6 overflow-hidden relative group pointer-events-auto">
+                  {/* Container that will hold the future image, scales on hover */}
+                  <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110 flex items-center justify-center bg-slate-50">
+                    <span className="text-slate-400 text-sm md:text-base">
+                      Image
+                    </span>
+                  </div>
+                </a>
+
+                {/* Product Info */}
+                <div className="flex items-center justify-between mb-4 md:mb-5 px-1">
+                  <h3 className="text-xl md:text-2xl tracking-tight text-black">{product.title}</h3>
+                  <button className="text-slate-400 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+                  </button>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex items-center gap-3 md:gap-4 px-1 mt-1 pointer-events-auto">
+                  <RadialRevealButton
+                    label="Buy"
+                    link="#"
+                    padding="8px 24px"
+                    rounded={30}
+                    colors={{
+                      fill: "#000000",
+                      textColor: "#FFFFFF",
+                      hoverFill: "#FF6600",
+                      hoverTextColor: "#FFFFFF",
+                    }}
+                    border={{
+                      borderWidth: 1,
+                      borderStyle: "solid",
+                      borderColor: "#000000",
+                    }}
+                    font={{
+                      fontFamily: "'Helvetica Now Display', sans-serif",
+                      fontWeight: 400,
+                      fontSize: 14,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Required CSS for hiding scrollbars but allowing scroll */}
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 };

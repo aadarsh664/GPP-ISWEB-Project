@@ -3,10 +3,11 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import WhatsAppLogo from './WhatsAppLogo';
 import { ChevronUp } from 'lucide-react';
+import RadialRevealButton from './RadialRevealButton';
 
 const CTA: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -19,9 +20,9 @@ const CTA: React.FC = () => {
   const whatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I am ready to start my printing project. Please assist me.")}`;
 
   return (
-    <div ref={containerRef} className="cta-responsive relative h-[200vh] md:h-[300vh] bg-black">
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#4F46E5]">
-        
+    <div id="cta-section" ref={containerRef} className="cta-responsive relative h-[180vh] md:h-[250vh] bg-black">
+      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
+
         {/* Background Decorative Lines */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="grid grid-cols-12 h-full">
@@ -31,12 +32,12 @@ const CTA: React.FC = () => {
           </div>
         </div>
 
-        {/* The Animated Text Section - Reduced letter gap, kept word gap large */}
-        <motion.div 
+        {/* The Animated Text Section */}
+        <motion.div
           style={{ x, scale }}
-          className="w-full whitespace-nowrap py-10"
+          className="w-full whitespace-nowrap py-6 md:py-8"
         >
-          <h2 className="text-[25vw] font-black text-white leading-none flex items-center gap-[0.5em] uppercase select-none tracking-normal">
+          <h2 className="text-[22vw] font-normal text-white leading-none flex items-center gap-[0.5em] uppercase select-none tracking-normal">
             <span>Ready to Print?</span>
             <span>Ready to Print?</span>
             <span>Ready to Print?</span>
@@ -44,26 +45,39 @@ const CTA: React.FC = () => {
         </motion.div>
 
         {/* Content & Call to Action */}
-        <div className="relative z-10 text-center px-6 mt-8 max-w-full">
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-white/90 text-xl md:text-3xl font-black mb-10 max-w-3xl mx-auto tracking-tight"
-          >
-            Don't settle for less. Experience industrial-grade quality prints and seamless delivery.
-          </motion.p>
-          
-          <motion.a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 md:gap-5 bg-[#25D366] text-white border-2 border-[#25D366] px-6 py-4 md:px-14 md:py-7 rounded-xl md:rounded-3xl font-black text-sm md:text-2xl shadow-[0_30px_70px_rgba(0,0,0,0.4)] hover:bg-white hover:text-[#25D366] transition-all group uppercase tracking-widest relative z-20 whitespace-nowrap"
-          >
-            <WhatsAppLogo className="w-5 h-5 md:w-9 md:h-9 group-hover:rotate-12 transition-transform" />
-            <span>Start Your Project</span>
-          </motion.a>
+        <div className="relative z-10 text-center px-6 mt-6 max-w-full">
+          <RadialRevealButton
+            label="Start Your Project"
+            link={whatsappLink}
+            newTab={true}
+            addIcon={true}
+            icon={{
+              type: "symbol",
+              symbol: "→",
+              color: "#000000",
+              hoverColor: "#FFFFFF",
+              size: 20,
+              side: "right",
+            }}
+            padding="16px 40px"
+            rounded={100}
+            colors={{
+              fill: "#FFFFFF",
+              textColor: "#000000",
+              hoverFill: "#FF6600",
+              hoverTextColor: "#FFFFFF",
+            }}
+            border={{
+              borderWidth: 2,
+              borderStyle: "solid",
+              borderColor: "#FFFFFF",
+            }}
+            font={{
+              fontFamily: "'Helvetica Now Display', sans-serif",
+              fontWeight: 400,
+              fontSize: 18,
+            }}
+          />
         </div>
 
         {/* Scroll Up Indicator - Mobile Only */}
@@ -73,12 +87,12 @@ const CTA: React.FC = () => {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="md:hidden absolute bottom-24 left-0 right-0 flex flex-col items-center gap-2 pointer-events-none z-20"
         >
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
             className="flex flex-col items-center"
           >
-            <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">
+            <p className="text-white/60 text-[10px] font-normal uppercase tracking-[0.2em]">
               Scroll Up
             </p>
             <ChevronUp className="text-white/60 mt-1" size={16} />

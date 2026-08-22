@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
+import RadialRevealButton from './RadialRevealButton';
 
 const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,17 +23,14 @@ const Contact: React.FC = () => {
     const tooltipRef = useRef<HTMLDivElement>(null);
 
     const copyToClipboard = async (text: string) => {
-      // Try Modern Clipboard API
       if (navigator.clipboard && navigator.clipboard.writeText) {
         try {
           await navigator.clipboard.writeText(text);
           return true;
         } catch (err) {
-          // Continue to fallback if failed
         }
       }
 
-      // Fallback for Mobile / Older Browsers / Non-Secure Contexts
       try {
         const textArea = document.createElement("textarea");
         textArea.value = text;
@@ -51,14 +49,14 @@ const Contact: React.FC = () => {
     };
 
     const handleCopy = async (e: React.MouseEvent) => {
-      e.preventDefault(); // Prevent context menu
+      e.preventDefault();
       e.stopPropagation();
 
       const success = await copyToClipboard(value);
 
       if (success) {
         setTooltip("Copied!");
-        setShowTooltip(true); // Force show tooltip on mobile/click
+        setShowTooltip(true);
         setTimeout(() => {
           setTooltip("Click to Copy");
           setShowTooltip(false);
@@ -75,7 +73,6 @@ const Contact: React.FC = () => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        // Tooltip follows cursor
         tooltipRef.current.style.transform = `translate(${x + 15}px, ${y - 15}px)`;
       }
     };
@@ -87,20 +84,19 @@ const Contact: React.FC = () => {
         onContextMenu={handleCopy}
         onMouseMove={handleMouseMove}
       >
-        <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 flex-shrink-0 transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:scale-110 shadow-sm">
+        <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-50 rounded-[30px] md:rounded-[30px] flex items-center justify-center text-indigo-600 flex-shrink-0 transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:scale-110 shadow-sm">
           <Icon className="w-5 h-5 md:w-6 md:h-6" />
         </div>
         <div>
-          <h4 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</h4>
-          <p className="text-base md:text-xl font-bold text-slate-900 group-hover:text-[#FF6600] transition-colors leading-relaxed">
+          <h4 className="text-xs md:text-sm font-normal text-slate-400 uppercase tracking-widest mb-1">{label}</h4>
+          <p className="text-base md:text-xl font-normal text-slate-900 group-hover:text-[#FF6600] transition-colors leading-relaxed">
             {displayValue || value}
           </p>
         </div>
 
-        {/* Tooltip */}
         <div
           ref={tooltipRef}
-          className={`absolute top-0 left-0 bg-black text-white text-[10px] font-bold py-1.5 px-3 rounded-lg transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl z-50 ${showTooltip ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+          className={`absolute top-0 left-0 bg-black text-white text-[10px] font-normal py-1.5 px-3 rounded-[30px] transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl z-50 ${showTooltip ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
         >
           {tooltip}
         </div>
@@ -130,8 +126,7 @@ const Contact: React.FC = () => {
 
       if (response.ok) {
         setIsSuccess(true);
-        (e.target as HTMLFormElement).reset(); // Form clear karein
-        // setTimeout removed so success state persists until reload
+        (e.target as HTMLFormElement).reset();
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -141,11 +136,12 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-white relative overflow-hidden">
+    <section id="contact" className="py-10 md:py-16 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 text-center">
         <div className="mb-12 md:mb-16">
-          <h3 className="text-3xl md:text-5xl font-black mb-3 md:mb-4 tracking-tighter">Get in Touch</h3>
-          <p className="text-[#FF6600] font-bold uppercase tracking-widest text-xs md:text-sm">We'd love to hear from you</p>
+          <h2 className="font-normal tracking-tight mb-6 text-black" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
+            Get in touch
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 text-left">
@@ -180,7 +176,7 @@ const Contact: React.FC = () => {
               />
             </div>
 
-            <div className="h-[300px] lg:h-auto lg:flex-1 w-full bg-slate-100 rounded-[32px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">
+            <div className="h-[300px] lg:h-auto lg:flex-1 w-full bg-slate-100 rounded-[30px] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3597.749667746408!2d85.1631596!3d25.6135371!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM2JzQ4LjciTiA4NcKwMDknNDcuNCJF!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
                 width="100%"
@@ -196,7 +192,7 @@ const Contact: React.FC = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-slate-50 p-6 md:p-12 rounded-[32px] md:rounded-[40px] shadow-sm border border-slate-100"
+            className="bg-slate-50 p-6 md:p-12 rounded-[30px] md:rounded-[30px] shadow-sm border border-slate-100"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               {!isSuccess ? (
@@ -204,28 +200,28 @@ const Contact: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Name</label>
-                      <input required name="name" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="John Doe" />
+                      <input required name="name" type="text" className="w-full bg-white border border-slate-200 rounded-[30px] px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="John Doe" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Mobile Number</label>
-                      <input required name="mobile" type="tel" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="+91 0000000000" />
+                      <input required name="mobile" type="tel" className="w-full bg-white border border-slate-200 rounded-[30px] px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="+91 0000000000" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</label>
-                      <input required name="email" type="email" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="john@example.com" />
+                      <input required name="email" type="email" className="w-full bg-white border border-slate-200 rounded-[30px] px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="john@example.com" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Company Name</label>
-                      <input name="company" type="text" className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Acme Inc." />
+                      <input name="company" type="text" className="w-full bg-white border border-slate-200 rounded-[30px] px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Acme Inc." />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Requirement</label>
-                    <textarea required name="requirement" rows={4} className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
+                    <textarea required name="requirement" rows={4} className="w-full bg-white border border-slate-200 rounded-[30px] px-5 py-4 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
                   </div>
                 </>
               ) : (
@@ -241,39 +237,57 @@ const Contact: React.FC = () => {
                 </motion.div>
               )}
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <RadialRevealButton
+                label={isSubmitting ? "SENDING..." : isSuccess ? "SENT SUCCESSFULLY!" : "SUBMIT FORM"}
+                type="submit"
                 disabled={isSubmitting || isSuccess}
-                className={`w-full py-4 md:py-5 rounded-2xl font-black text-base md:text-lg transition-all flex items-center justify-center gap-3 shadow-xl ${isSuccess ? 'bg-green-500 text-white' : 'bg-black text-white hover:bg-indigo-600'
-                  }`}
-              >
-                {isSubmitting ? (
-                  <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                ) : isSuccess ? (
-                  <>
-                    <Send size={20} />
-                    <span>SENT SUCCESSFULLY!</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={20} />
-                    <span>SUBMIT FORM</span>
-                  </>
-                )}
-              </motion.button>
+                padding="16px 24px"
+                rounded={100}
+                style={{ width: "100%" }}
+                colors={{
+                  fill: isSuccess ? "#22c55e" : "#000000",
+                  textColor: "#FFFFFF",
+                  hoverFill: isSuccess ? "#16a34a" : "#4F46E5",
+                  hoverTextColor: "#FFFFFF",
+                }}
+                border={{
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: isSuccess ? "#22c55e" : "#000000",
+                }}
+                font={{
+                  fontFamily: "'Helvetica Now Display', sans-serif",
+                  fontWeight: 400,
+                  fontSize: 16,
+                }}
+              />
 
-              <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 mt-6">
-                <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400">Or Chat Instantly</p>
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-4 md:py-5 bg-[#25D366] text-white rounded-2xl font-black text-base md:text-lg flex items-center justify-center gap-3 shadow-xl hover:bg-black transition-all"
-                >
-                  <WhatsAppLogo size={24} />
-                  WHATSAPP US
-                </a>
+              <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 mt-6 text-center">
+                <p className="text-center text-[10px] font-normal uppercase tracking-widest text-slate-400">Or Chat Instantly</p>
+                <RadialRevealButton
+                  label="WHATSAPP US"
+                  link={whatsappLink}
+                  newTab={true}
+                  padding="16px 24px"
+                  rounded={100}
+                  style={{ width: "100%" }}
+                  colors={{
+                    fill: "#25D366",
+                    textColor: "#FFFFFF",
+                    hoverFill: "#000000",
+                    hoverTextColor: "#FFFFFF",
+                  }}
+                  border={{
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderColor: "#25D366",
+                  }}
+                  font={{
+                    fontFamily: "'Helvetica Now Display', sans-serif",
+                    fontWeight: 400,
+                    fontSize: 16,
+                  }}
+                />
               </div>
             </form>
           </motion.div>

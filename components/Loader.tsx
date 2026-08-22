@@ -72,7 +72,7 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
            <BrandLogo className="w-full h-auto" />
         </div>
         {/* Progress Bar Container */}
-        <div className="w-48 h-[2px] bg-slate-100 rounded-full overflow-hidden">
+        <div className="w-48 h-[2px] bg-slate-100 rounded-[30px] overflow-hidden">
            <div className="loader-progress h-full bg-black w-0" />
         </div>
       </div>

@@ -1,118 +1,97 @@
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { WHY_CHOOSE_US, TESTIMONIALS } from '../constants';
 import * as LucideIcons from 'lucide-react';
 import { Star } from 'lucide-react';
 
 // Optimized Marquee Component to prevent re-renders
 const ClientsMarquee = React.memo(() => {
-  const getStars = (idx: number) => {
-    const ratings = [5, 4.5, 5, 4.5, 4.5];
-    const rating = ratings[idx % ratings.length];
-    const stars = [];
 
-    for (let i = 1; i <= 5; i++) {
-      if (i <= Math.floor(rating)) {
-        stars.push(<Star key={i} size={14} className="text-[#FF6600] fill-[#FF6600]" />);
-      } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-        stars.push(
-          <div key={i} className="relative">
-            <Star size={14} className="text-slate-200 fill-slate-200" />
-            <div className="absolute inset-0 overflow-hidden w-1/2">
-              <Star size={14} className="text-[#FF6600] fill-[#FF6600]" />
-            </div>
-          </div>
-        );
-      } else {
-        stars.push(<Star key={i} size={14} className="text-slate-200 fill-slate-200" />);
-      }
-    }
-    return stars;
-  };
 
   return (
     <div className="flex overflow-hidden relative py-8">
-      <motion.div
-        className="flex flex-shrink-0 will-change-transform"
-        animate={{ x: ["0%", "-100%"] }}
-        transition={{ ease: "linear", duration: 60, repeat: Infinity }}
-      >
-        {TESTIMONIALS.map((t, idx) => (
-          <div
-            key={`${t.id}-${idx}`}
-            className="w-[17.5rem] sm:w-[25rem] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
-          >
-            <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
-                {t.avatarUrl ? (
-                  <img
-                    src={t.avatarUrl}
-                    alt={t.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
-                )}
+      <div className="flex w-max will-change-transform" style={{ animation: 'marquee 60s linear infinite' }}>
+        <div className="flex flex-shrink-0">
+          {TESTIMONIALS.map((t, idx) => (
+            <div
+              key={`${t.id}-${idx}`}
+              className="w-[15rem] sm:w-[20rem] bg-white border border-slate-100 p-5 sm:p-8 rounded-[24px] sm:rounded-[24px] shadow-sm hover:shadow-md hover:shadow-slate-200 hover:-translate-y-1 transition-all transform-gpu mr-4 sm:mr-6"
+            >
+              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#4F46E5]/10 rounded-[30px] flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+                  {t.avatarUrl ? (
+                    <img
+                      src={t.avatarUrl}
+                      alt={t.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                </div>
+                <div>
+                  <h5 className="font-normal text-black text-sm sm:text-base">{t.name}</h5>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 font-normal uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+                </div>
               </div>
-              <div>
-                <h5 className="font-black text-black text-base sm:text-lg">{t.name}</h5>
-                <p className="text-[8px] sm:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+              <p className="text-slate-600 leading-relaxed whitespace-normal text-xs sm:text-sm mb-0 font-normal">
+                "{t.content}"
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-shrink-0">
+          {TESTIMONIALS.map((t, idx) => (
+            <div
+              key={`${t.id}-${idx}-dup`}
+              className="w-[15rem] sm:w-[20rem] bg-white border border-slate-100 p-5 sm:p-8 rounded-[24px] sm:rounded-[24px] shadow-sm hover:shadow-md hover:shadow-slate-200 hover:-translate-y-1 transition-all transform-gpu mr-4 sm:mr-6"
+            >
+              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#4F46E5]/10 rounded-[30px] flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
+                  {t.avatarUrl ? (
+                    <img
+                      src={t.avatarUrl}
+                      alt={t.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                </div>
+                <div>
+                  <h5 className="font-normal text-black text-sm sm:text-base">{t.name}</h5>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 font-normal uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
+                </div>
               </div>
+              <p className="text-slate-600 leading-relaxed whitespace-normal text-xs sm:text-sm mb-0 font-normal">
+                "{t.content}"
+              </p>
             </div>
-            <p className="text-slate-600 leading-relaxed whitespace-normal text-sm sm:text-lg mb-4 sm:mb-6">
-              "{t.content}"
-            </p>
-            <div className="flex gap-1 items-center scale-90 origin-left sm:scale-100">
-              {getStars(idx)}
-            </div>
-          </div>
-        ))}
-      </motion.div>
-      <motion.div
-        className="flex flex-shrink-0 will-change-transform"
-        animate={{ x: ["0%", "-100%"] }}
-        transition={{ ease: "linear", duration: 60, repeat: Infinity }}
-      >
-        {TESTIMONIALS.map((t, idx) => (
-          <div
-            key={`${t.id}-${idx}-dup`}
-            className="w-[17.5rem] sm:w-[25rem] bg-white border border-slate-100 p-6 sm:p-10 rounded-[24px] sm:rounded-[40px] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all transform-gpu mr-6 sm:mr-10"
-          >
-            <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#4F46E5]/10 rounded-full flex items-center justify-center text-[#4F46E5] shrink-0 overflow-hidden">
-                {t.avatarUrl ? (
-                  <img
-                    src={t.avatarUrl}
-                    alt={t.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <LucideIcons.User className="w-5 h-5 sm:w-6 sm:h-6" />
-                )}
-              </div>
-              <div>
-                <h5 className="font-black text-black text-base sm:text-lg">{t.name}</h5>
-                <p className="text-[8px] sm:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] whitespace-normal">{t.designation}, {t.company}</p>
-              </div>
-            </div>
-            <p className="text-slate-600 leading-relaxed whitespace-normal text-sm sm:text-lg mb-4 sm:mb-6">
-              "{t.content}"
-            </p>
-            <div className="flex gap-1 items-center scale-90 origin-left sm:scale-100">
-              {getStars(idx)}
-            </div>
-          </div>
-        ))}
-      </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 });
 
 const WhyChooseUs: React.FC = () => {
   const [activeCard, setActiveCard] = useState<string | null>(null);
+  const headerRef = useRef<HTMLHeadingElement>(null);
+  const [isHoveringHeader, setIsHoveringHeader] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (headerRef.current) {
+      const rect = headerRef.current.getBoundingClientRect();
+      setMousePos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
 
   const getIcon = (iconName: string) => {
     const formattedName = iconName
@@ -126,12 +105,33 @@ const WhyChooseUs: React.FC = () => {
   };
 
   return (
-    <section id="why-choose-us" className="py-12 md:py-32 bg-white overflow-hidden">
+    <section id="why-choose-us" className="py-10 md:py-16 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-12">
         {/* Why Choose GPP Header */}
-        <div className="text-center mb-10 md:mb-24 relative">
-          <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-2 md:mb-4 text-black tracking-tighter whitespace-nowrap">Why Choose GPP?</h3>
-          <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-4 md:mb-8">Unmatched Printing Excellence</p>
+        <div className="text-center mb-8 md:mb-12 relative">
+          <h2 
+            ref={headerRef}
+            className="font-normal tracking-tight mb-6 text-black relative z-10 inline-block cursor-default" 
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}
+            onMouseEnter={() => setIsHoveringHeader(true)}
+            onMouseLeave={() => setIsHoveringHeader(false)}
+            onMouseMove={handleMouseMove}
+          >
+            Why choose GPP?
+            <AnimatePresence>
+              {isHoveringHeader && (
+                <motion.img 
+                  src="/favicon/Logo.svg"
+                  alt="GPP"
+                  className="absolute pointer-events-none z-20 w-16 h-16 md:w-24 md:h-24 object-contain origin-center"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1, left: mousePos.x, top: mousePos.y, x: "-50%", y: "-50%" }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ type: "spring", damping: 20, stiffness: 300, mass: 0.5 }}
+                />
+              )}
+            </AnimatePresence>
+          </h2>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5 }}
@@ -140,32 +140,31 @@ const WhyChooseUs: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Feature Cards Grid - Refactored to 3 columns on large screens */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20 md:mb-40 max-w-7xl mx-auto">
+        {/* Feature Cards Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-12 md:mb-20 max-w-7xl mx-auto items-start">
           {WHY_CHOOSE_US.map((card) => (
             <motion.div
-              layout // Magic prop for smooth layout transitions
               key={card.id}
               onMouseEnter={() => setActiveCard(card.id)}
               onMouseLeave={() => setActiveCard(null)}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`relative p-4 md:p-8 rounded-[24px] md:rounded-[40px] border transition-colors duration-300 cursor-pointer overflow-hidden group 
+              className={`relative p-4 md:p-8 rounded-[30px] md:rounded-[30px] border transition-colors duration-300 cursor-pointer overflow-hidden group 
                 [&:nth-child(odd):last-child]:col-span-2 [&:nth-child(odd):last-child]:justify-self-center [&:nth-child(odd):last-child]:w-[calc(50%-0.375rem)] md:[&:nth-child(odd):last-child]:w-[calc(50%-0.75rem)] lg:[&:nth-child(odd):last-child]:col-span-1 lg:[&:nth-child(odd):last-child]:w-auto lg:[&:nth-child(odd):last-child]:justify-self-auto
                 ${activeCard === card.id
                   ? 'bg-black text-white shadow-2xl border-transparent z-10'
                   : 'bg-slate-50 text-slate-900 border-slate-100 hover:border-slate-300'
                 }`}
             >
-              <motion.div layout="position" className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-colors duration-300 ${activeCard === card.id ? 'bg-[#FF6600]/20' : 'bg-white shadow-sm'
+              <motion.div className={`w-10 h-10 md:w-14 md:h-14 rounded-[30px] md:rounded-[30px] flex items-center justify-center mb-3 md:mb-6 transition-colors duration-300 ${activeCard === card.id ? 'bg-[#FF6600]/20' : 'bg-white shadow-sm'
                 }`}>
                 <div className={`${activeCard === card.id ? 'text-[#FF6600]' : 'text-[#4F46E5]'} scale-75 md:scale-100 transition-colors duration-300`}>
                   {getIcon(card.icon)}
                 </div>
               </motion.div>
 
-              <motion.h4 layout="position" className="text-sm md:text-xl font-black mb-2 md:mb-4 tracking-tight leading-tight">
+              <motion.h4 className="text-sm md:text-xl font-normal mb-2 md:mb-4 tracking-tight leading-tight">
                 {card.title}
               </motion.h4>
 
@@ -175,10 +174,10 @@ const WhyChooseUs: React.FC = () => {
                   height: activeCard === card.id ? 'auto' : 0,
                   opacity: activeCard === card.id ? 1 : 0
                 }}
-                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }} // Smooth spring-like ease
+                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                 className="overflow-hidden"
               >
-                <p className="text-slate-400 leading-relaxed text-[10px] md:text-base pb-2">
+                <p className="text-slate-400 leading-relaxed text-[10px] md:text-base pb-2 font-normal">
                   {card.content}
                 </p>
               </motion.div>
@@ -186,17 +185,12 @@ const WhyChooseUs: React.FC = () => {
           ))}
         </div>
 
-        {/* Our Clients Say Header */}
+        {/* Testimonials Header */}
         <div className="relative">
-          <div className="text-center mb-10 md:mb-20 relative">
-            <h3 className="text-[1.8rem] sm:text-[2.6rem] md:text-5xl lg:text-6xl font-black mb-2 md:mb-4 text-black tracking-tighter whitespace-nowrap">Our Clients Say</h3>
-            <p className="text-[#FF6600] font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-4 md:mb-8">Voices of Satisfaction</p>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              <LucideIcons.Star className="mx-auto text-[#FF6600] fill-[#FF6600]" size={20} />
-            </motion.div>
+          <div className="text-center mb-4 md:mb-8 relative">
+            <h2 className="font-normal tracking-tight mb-2 text-black" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
+              Testimonials
+            </h2>
           </div>
 
           <ClientsMarquee />
