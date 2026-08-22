@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
-  <!-- Include the Netlify Identity widget for login -->
-  <!-- Note: We are using a custom GitHub OAuth proxy instead, but keeping this for fallback/structure if needed -->
+  <!-- Explicitly specify config URL so Decap doesn't fail on missing trailing slash -->
+  <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url">
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
