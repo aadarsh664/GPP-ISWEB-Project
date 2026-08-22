@@ -27,7 +27,7 @@ const BLOG_POSTS: Record<string, any> = {
     image: '/product-images/Visiting Cards.jpg',
     date: 'August 24, 2026',
     readTime: '4 min read',
-    author: 'Guru Printing Press Team'
+    author: 'Team GPP'
   },
   'premium-visiting-card-signs': {
     title: '5 Signs of a Premium Visiting Card',
@@ -59,7 +59,7 @@ const BLOG_POSTS: Record<string, any> = {
     image: '/serviceimage/new/service.png',
     date: 'August 20, 2026',
     readTime: '3 min read',
-    author: 'Guru Printing Press Team'
+    author: 'Team GPP'
   },
   'commercial-printing-trends': {
     title: 'Future Trends in Commercial Packaging',
@@ -71,7 +71,7 @@ const BLOG_POSTS: Record<string, any> = {
     image: '/product-images/Custom Product Boxes.jpg',
     date: 'August 15, 2026',
     readTime: '5 min read',
-    author: 'Guru Printing Press Team'
+    author: 'Team GPP'
   }
 };
 
@@ -120,9 +120,7 @@ const BlogPost: React.FC = () => {
             {post.title}
           </h1>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white text-xl font-bold">
-              G
-            </div>
+            <img src="/favicon/Logo.svg" alt="GPP Logo" className="w-12 h-12 object-contain" />
             <div>
               <p className="text-white text-sm font-medium">{post.author}</p>
               <p className="text-white/40 text-xs">Printing Experts</p>
