@@ -1,33 +1,9 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import blogData from '../src/data/blogPosts.json';
 
-const BLOG_POSTS = [
-  {
-    id: 'metal-vs-gold-foil',
-    title: 'Metal vs Gold Foil Business Cards',
-    excerpt: 'Discover the ultimate choice for luxury visiting cards. Learn how metal and gold foil finishes leave a lasting impression.',
-    image: '/product-images/Visiting Cards.jpg',
-    date: 'August 24, 2026',
-    readTime: '4 min read'
-  },
-  {
-    id: 'premium-visiting-card-signs',
-    title: '5 Signs of a Premium Visiting Card',
-    excerpt: 'What separates a standard card from a masterpiece? Explore the tactile and visual elements of high-end business cards.',
-    image: '/serviceimage/new/service.png',
-    date: 'August 20, 2026',
-    readTime: '3 min read'
-  },
-  {
-    id: 'commercial-printing-trends',
-    title: 'Future Trends in Commercial Packaging',
-    excerpt: 'How custom product boxes and sustainable packaging are transforming the brand experience across India.',
-    image: '/product-images/Custom Product Boxes.jpg',
-    date: 'August 15, 2026',
-    readTime: '5 min read'
-  }
-];
+const BLOG_POSTS = blogData.posts;
 
 const BlogListing: React.FC = () => {
   useEffect(() => {

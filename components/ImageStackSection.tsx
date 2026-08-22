@@ -1,14 +1,10 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
 import RadialRevealButton from './RadialRevealButton';
+import craftData from '../src/data/craftItems.json';
 
 /* ─── Data ─── */
-const craftItems = [
-  { id: 1, image: '/stackimages/1.png',  mobileImage: '/stackimages/mobile/1.png',  title: 'Precision Metal Craftsmanship', link: '#' },
-  { id: 2, image: '/stackimages/2.png',  mobileImage: '/stackimages/mobile/2.png',  title: 'Ultra-Luxury Foil Stamping',    link: '#' },
-  { id: 3, image: '/stackimages/3.png',  mobileImage: '/stackimages/mobile/3.png',  title: 'Bespoke Corporate Journals',    link: '#' },
-  { id: 4, image: '/stackimages/4.png',  mobileImage: '/stackimages/mobile/4.png',  title: 'Comprehensive Brand Suites',    link: '#' },
-];
+const craftItems = craftData.crafts;
 const SLIDE_COUNT = craftItems.length;
 
 /* ─── Liquid Glass Arrow Button ─── */

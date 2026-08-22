@@ -1,0 +1,59 @@
+backend:
+  name: github
+  repo: aadarsh664/GPP-ISWEB-Project
+  branch: main
+  # Base URL for the OAuth proxy. When running locally or on Vercel, this points to our Serverless function.
+  # We leave this blank or absolute domain later if needed, but Decap usually works with relative if same domain, 
+  # but base_url expects the origin like https://your-domain.com
+  # Vercel provides the host dynamically to functions. 
+  # Since base_url requires full domain, we'll configure it dynamically or hardcode the production URL.
+  # If empty, it defaults to Netlify. We must use our custom OAuth provider base url.
+  base_url: https://gpp-isweb-project.vercel.app
+  # For local testing, you can change this to http://localhost:5173
+  auth_endpoint: api/auth
+
+local_backend: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    # We are using a single JSON file that contains an array of posts.
+    # Decap CMS supports "file" collections where each file can be an array or object.
+    files:
+      - label: "Blog Data"
+        name: "blog_data"
+        file: "src/data/blogPosts.json"
+        # We need a list widget for the array of posts
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            fields:
+              - {label: "ID (Slug)", name: "id", widget: "string"}
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Author", name: "author", widget: "string"}
+              - {label: "Date", name: "date", widget: "string"}
+              - {label: "Read Time", name: "readTime", widget: "string"}
+              - {label: "Featured Image", name: "image", widget: "image"}
+              - {label: "Short Excerpt", name: "excerpt", widget: "text"}
+              - {label: "Full Content (HTML)", name: "content", widget: "text"}
+
+  - name: "portfolio"
+    label: "Portfolio/Craft Images"
+    files:
+      - label: "Craft Items Data"
+        name: "craft_items_data"
+        file: "src/data/craftItems.json"
+        fields:
+          - label: "Crafts"
+            name: "crafts"
+            widget: "list"
+            fields:
+              - {label: "ID", name: "id", widget: "number"}
+              - {label: "Title / Caption", name: "title", widget: "string"}
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Mobile Image", name: "mobileImage", widget: "image", required: false}
+              - {label: "Link", name: "link", widget: "string", default: "#"}
