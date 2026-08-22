@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search as SearchIcon } from 'lucide-react';
 import WhatsAppLogo from './WhatsAppLogo';
 import BrandLogo from './BrandLogo';
@@ -54,8 +55,15 @@ const Header: React.FC = () => {
           inFooter = rect.top <= 64 && rect.bottom >= 64;
         }
 
-        // Trigger change ONLY after scrolling past the hero video (approx 100vh), and NOT in our-craft, service-dark, digital-dark, cta, or footer sections
-        setIsScrolled(window.scrollY > window.innerHeight - 50 && !inCraft && !inServiceDark && !inDigitalDark && !inCta && !inFooter);
+        const faqSection = document.getElementById('faq-section');
+        let inFaq = false;
+        if (faqSection) {
+          const rect = faqSection.getBoundingClientRect();
+          inFaq = rect.top <= 64 && rect.bottom >= 64;
+        }
+
+        // Trigger change ONLY after scrolling past the hero video (approx 100vh), and NOT in our-craft, service-dark, digital-dark, faq, cta, or footer sections
+        setIsScrolled(window.scrollY > window.innerHeight - 50 && !inCraft && !inServiceDark && !inDigitalDark && !inFaq && !inCta && !inFooter);
       });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -116,8 +124,30 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleNavClick = (item: string) => {
+    if (item === 'Blog') {
+      navigate('/blog');
+      setIsMenuOpen(false);
+      return;
+    }
+    
+    let targetId = item.toLowerCase().replace(/ /g, '-');
+    if (item === 'Shop' || item === 'Product') targetId = 'featured-products';
+    if (item === 'About') targetId = 'about-section';
+    if (item === 'Services') targetId = 'service-intro';
+    if (item === 'Showcase') targetId = 'our-work';
+    
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => scrollTo(targetId), 150);
+      setIsMenuOpen(false);
+    } else {
+      scrollTo(targetId);
+    }
+  };
+
   const handleProductClick = (productId: string) => {
-    scrollTo('products');
+    handleNavClick('Product');
     // Dispatch a custom event to open the product modal
     setTimeout(() => {
       const event = new CustomEvent('open-product-modal', { detail: productId });
@@ -125,7 +155,10 @@ const Header: React.FC = () => {
     }, 600); // Slight delay to allow scrolling to finish
   };
 
-  const navItems = ['Home', 'Shop', 'About', 'Services', 'Product', 'Contact', 'Showcase'];
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const navItems = ['Home', 'Shop', 'About', 'Services', 'Product', 'Contact', 'Showcase', 'Blog'];
   const headerWhatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -152,14 +185,7 @@ const Header: React.FC = () => {
               return (
                 <button
                   key={item}
-                  onClick={() => {
-                    let targetId = item.toLowerCase().replace(/ /g, '-');
-                    if (item === 'Shop' || item === 'Product') targetId = 'featured-products';
-                    if (item === 'About') targetId = 'about-section';
-                    if (item === 'Services') targetId = 'service-intro';
-                    if (item === 'Showcase') targetId = 'our-work';
-                    scrollTo(targetId);
-                  }}
+                  onClick={() => handleNavClick(item)}
                   className="nav-link relative group"
                 >
                   <Text3DFlip
@@ -280,14 +306,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + idx * 0.05 }}
-                  onClick={() => {
-                    let targetId = item.toLowerCase().replace(/ /g, '-');
-                    if (item === 'Shop' || item === 'Product') targetId = 'featured-products';
-                    if (item === 'About') targetId = 'about-section';
-                    if (item === 'Services') targetId = 'service-intro';
-                    if (item === 'Showcase') targetId = 'our-work';
-                    scrollTo(targetId);
-                  }}
+                  onClick={() => handleNavClick(item)}
                 className="text-3xl font-normal hover:text-[#FF6600] transition-colors"
                 style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}
               >

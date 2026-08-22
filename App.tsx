@@ -17,10 +17,13 @@ const Showcase = React.lazy(() => import('./components/Showcase'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const CTA = React.lazy(() => import('./components/CTA'));
 const Footer = React.lazy(() => import('./components/Footer'));
+const FAQ = React.lazy(() => import('./components/FAQ'));
 
 // PERF: Lazy load route pages (separate pages, never needed on initial load)
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const TermsAndConditions = React.lazy(() => import('./pages/TermsAndConditions'));
+const BlogListing = React.lazy(() => import('./pages/BlogListing'));
+const BlogPost = React.lazy(() => import('./pages/BlogPost'));
 
 const HomePage: React.FC = () => {
   return (
@@ -35,6 +38,7 @@ const HomePage: React.FC = () => {
       <Suspense fallback={null}>
         <WhyChooseUs />
         <Showcase />
+        <FAQ />
         <Contact />
         <CTA />
         <Footer />
@@ -57,6 +61,8 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsAndConditions />} />
+          <Route path="/blog" element={<BlogListing />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
         </Routes>
       </Suspense>
     </div>

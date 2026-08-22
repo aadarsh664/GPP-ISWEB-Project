@@ -87,6 +87,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex flex-row items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-normal text-white/50 whitespace-nowrap">
+            <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy policy</Link>
             <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms & conditions</Link>
           </div>
