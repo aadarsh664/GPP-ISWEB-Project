@@ -73,20 +73,15 @@ const ImageStackSection: React.FC = () => {
 
   /* ─── Core slide function ─── */
   const goToSlide = useCallback((index: number) => {
-    const slides = slidesRef.current;
-    if (!slides) return;
-
     const clamped = Math.max(0, Math.min(SLIDE_COUNT - 1, index));
     currentSlide.current = clamped;
     setActiveIndex(clamped);
+    
+    // Minimal delay to prevent instant spamming, framer-motion handles animation automatically
     isAnimating.current = true;
-
-    window.gsap.to(slides, {
-      x: -clamped * window.innerWidth,
-      duration: 0.9,
-      ease: 'power3.inOut',
-      onComplete: () => { isAnimating.current = false; },
-    });
+    setTimeout(() => {
+      isAnimating.current = false;
+    }, 900);
   }, []);
 
   /* ─── Ping-pong auto-advance ─── */
@@ -183,10 +178,12 @@ const ImageStackSection: React.FC = () => {
     >
 
       {/* ── Horizontal slides strip ── */}
-      <div
+      <motion.div
         ref={slidesRef}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        animate={{ x: `-${activeIndex * 100}vw` }}
+        transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
         style={{
           position: 'absolute',
           top: 0, left: 0,
@@ -272,7 +269,7 @@ const ImageStackSection: React.FC = () => {
 
               <RadialRevealButton
                 label="Shop"
-                onClick={() => { window.location.href = item.link; }}
+                onClick={() => window.open('https://shop.guruprintingpress.com', '_blank')}
                 padding="10px 30px"
                 rounded={100}
                 colors={{
@@ -285,7 +282,7 @@ const ImageStackSection: React.FC = () => {
             </motion.div>
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* ── Liquid glass Left button ── */}
       <div className="hidden md:block" style={{

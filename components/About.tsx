@@ -204,15 +204,12 @@ const About: React.FC = () => {
                 </a>
 
                 {/* Product Info */}
-                <div className="flex items-center justify-between mb-4 md:mb-5 px-1">
+                <div className="flex items-center justify-between mb-2 md:mb-3 px-1">
                   <h3 className="text-xl md:text-2xl tracking-tight text-black">{product.title}</h3>
-                  <button className="text-slate-400 hover:text-red-500 transition-colors">
-                    <Heart className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
-                  </button>
                 </div>
 
                 {/* Buttons */}
-                <div className="flex items-center gap-3 md:gap-4 px-1 mt-1 pointer-events-auto">
+                <div className="flex items-center gap-3 md:gap-4 px-1 pointer-events-auto">
                   <RadialRevealButton
                     label="Buy"
                     link="#"

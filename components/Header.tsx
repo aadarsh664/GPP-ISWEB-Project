@@ -1,69 +1,76 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Search as SearchIcon } from 'lucide-react';
-import WhatsAppLogo from './WhatsAppLogo';
 import BrandLogo from './BrandLogo';
-import { PRODUCTS } from '../constants';
-import Search from './Search';
-import RadialRevealButton from './RadialRevealButton';
+import { SearchIcon, Menu, X } from 'lucide-react';
 import Text3DFlip from './Text3DFlip';
+import RadialRevealButton from './RadialRevealButton';
+import Search from './Search';
+
+const WhatsAppLogo = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.662-2.06-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+  </svg>
+);
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolledState, setIsScrolledState] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isBlog = location.pathname.startsWith('/blog');
+  const isScrolled = isBlog ? false : isScrolledState;
 
   useEffect(() => {
     let rafId: number | null = null;
+    let cachedSections: HTMLElement[] | null = null;
+    let lastFetch = 0;
+
+    const fetchSections = () => {
+      return ['our-craft', 'service-dark', 'digital-dark', 'cta-section', 'footer-section', 'faq-section']
+        .map(id => document.getElementById(id))
+        .filter(Boolean) as HTMLElement[];
+    };
+
     const handleScroll = () => {
       if (rafId !== null) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
-        const craftSection = document.getElementById('our-craft');
-        let inCraft = false;
-        if (craftSection) {
-          const rect = craftSection.getBoundingClientRect();
-          inCraft = rect.top <= 64 && rect.bottom >= 64;
+        
+        const scrollY = window.scrollY;
+        const threshold = window.innerHeight - 50;
+
+        // Fast path: Before hero ends, header is transparent
+        if (scrollY <= threshold && !isBlog) {
+          setIsScrolledState(false);
+          return;
         }
 
-        const serviceDarkSection = document.getElementById('service-dark');
-        let inServiceDark = false;
-        if (serviceDarkSection) {
-          const rect = serviceDarkSection.getBoundingClientRect();
-          inServiceDark = rect.top <= 64 && rect.bottom >= 64;
+        // Fetch sections once every 2 seconds if not all are loaded yet (due to React.lazy)
+        const now = Date.now();
+        if (!cachedSections || cachedSections.length < 6) {
+          if (now - lastFetch > 2000) {
+            cachedSections = fetchSections();
+            lastFetch = now;
+          }
         }
 
-        const digitalDarkSection = document.getElementById('digital-dark');
-        let inDigitalDark = false;
-        if (digitalDarkSection) {
-          const rect = digitalDarkSection.getBoundingClientRect();
-          inDigitalDark = rect.top <= 64 && rect.bottom >= 64;
+        const sections = cachedSections || [];
+        let inDark = false;
+        
+        for (let i = 0; i < sections.length; i++) {
+          const rect = sections[i].getBoundingClientRect();
+          if (rect.top <= 64 && rect.bottom >= 64) {
+            inDark = true;
+            break;
+          }
         }
 
-        const ctaSection = document.getElementById('cta-section');
-        let inCta = false;
-        if (ctaSection) {
-          const rect = ctaSection.getBoundingClientRect();
-          inCta = rect.top <= 64 && rect.bottom >= 64;
-        }
-
-        const footerSection = document.getElementById('footer-section');
-        let inFooter = false;
-        if (footerSection) {
-          const rect = footerSection.getBoundingClientRect();
-          inFooter = rect.top <= 64 && rect.bottom >= 64;
-        }
-
-        const faqSection = document.getElementById('faq-section');
-        let inFaq = false;
-        if (faqSection) {
-          const rect = faqSection.getBoundingClientRect();
-          inFaq = rect.top <= 64 && rect.bottom >= 64;
-        }
-
-        // Trigger change ONLY after scrolling past the hero video (approx 100vh), and NOT in our-craft, service-dark, digital-dark, faq, cta, or footer sections
-        setIsScrolled(window.scrollY > window.innerHeight - 50 && !inCraft && !inServiceDark && !inDigitalDark && !inFaq && !inCta && !inFooter);
+        setIsScrolledState(!inDark);
       });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -73,35 +80,24 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  // GSAP Entrance Animation Logic
-  useLayoutEffect(() => {
-    const ctx = window.gsap.context(() => {
-      // 1. Initial State: Hide Nav Items
-      window.gsap.set([".nav-logo", ".nav-link", ".nav-action"], { 
-        y: -30, 
-        opacity: 0 
-      });
-    }, headerRef);
+  useEffect(() => {
+    // If not on the homepage, immediately show the nav (no hero entrance delay)
+    if (location.pathname !== '/') {
+      setIsNavVisible(true);
+      return;
+    }
 
-    const handleEntrance = () => {
-      ctx.add(() => {
-        window.gsap.to([".nav-logo", ".nav-link", ".nav-action"], {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.1,
-          ease: "power3.out",
-          force3D: true
-        });
-      });
-    };
-
+    const handleEntrance = () => setIsNavVisible(true);
     window.addEventListener('hero-entrance-start', handleEntrance);
+    
+    // Fallback: just in case the event was already fired or missed
+    const timeout = setTimeout(() => setIsNavVisible(true), 2500);
+
     return () => {
       window.removeEventListener('hero-entrance-start', handleEntrance);
-      ctx.revert();
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [location.pathname]);
 
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -131,8 +127,14 @@ const Header: React.FC = () => {
       return;
     }
     
+    if (item === 'Shop') {
+      window.open('https://shop.guruprintingpress.com', '_blank');
+      setIsMenuOpen(false);
+      return;
+    }
+    
     let targetId = item.toLowerCase().replace(/ /g, '-');
-    if (item === 'Shop' || item === 'Product') targetId = 'featured-products';
+    if (item === 'Product') targetId = 'featured-products';
     if (item === 'About') targetId = 'about-section';
     if (item === 'Services') targetId = 'service-intro';
     if (item === 'Showcase') targetId = 'our-work';
@@ -155,9 +157,6 @@ const Header: React.FC = () => {
     }, 600); // Slight delay to allow scrolling to finish
   };
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const navItems = ['Home', 'Shop', 'About', 'Services', 'Product', 'Contact', 'Showcase', 'Blog'];
   const headerWhatsappLink = `https://wa.me/919341749399?text=${encodeURIComponent("Hi GPP, I found your website and want to discuss a printing project.")}`;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -175,15 +174,24 @@ const Header: React.FC = () => {
       >
         <div className="container mx-auto px-4 md:px-8 flex items-center justify-between relative">
           {/* Logo */}
-          <div className={`nav-logo flex items-center gap-2 cursor-pointer group px-2 py-1 rounded-[30px] transition-all relative z-20 ${isScrolled ? 'bg-transparent' : ''}`} onClick={() => scrollTo('home')}>
+          <motion.div 
+            initial={{ y: -30, opacity: 0 }}
+            animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0 }}
+            className={`nav-logo flex items-center gap-2 cursor-pointer group px-2 py-1 rounded-[30px] transition-all relative z-20 ${isScrolled ? 'bg-transparent' : ''}`} 
+            onClick={() => scrollTo('home')}
+          >
              <BrandLogo isWhite={!isScrolled} className="h-7 md:h-8 w-auto group-hover:scale-105 transition-transform" />
-          </div>
+          </motion.div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-7 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            {navItems.map((item) => {
+            {navItems.map((item, i) => {
               return (
-                <button
+                <motion.button
+                  initial={{ y: -30, opacity: 0 }}
+                  animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 + i * 0.05 }}
                   key={item}
                   onClick={() => handleNavClick(item)}
                   className="nav-link relative group"
@@ -194,14 +202,19 @@ const Header: React.FC = () => {
                     color={isScrolled ? '#64748b' : '#ffffff'}
                     animation="hover"
                   />
-                </button>
+                </motion.button>
               );
             })}
           </nav>
 
           {/* Action Button & Toggle */}
           <div className="flex items-center gap-3 relative z-20">
-            <div className="nav-action hidden lg:block group">
+            <motion.div 
+              initial={{ y: -30, opacity: 0 }}
+              animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+              className="nav-action hidden lg:block group"
+            >
               <RadialRevealButton
                 label={
                   <div className="flex items-center gap-2 overflow-hidden w-4 group-hover:w-[76px] transition-all duration-500 ease-out">
@@ -229,11 +242,21 @@ const Header: React.FC = () => {
                   fontSize: 11,
                 }}
               />
-            </div>
+            </motion.div>
 
-            <div className={`nav-action hidden lg:block w-px h-4 ${isScrolled ? 'bg-slate-200' : 'bg-white/20'}`} />
+            <motion.div 
+              initial={{ y: -30, opacity: 0 }}
+              animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.55 }}
+              className={`nav-action hidden lg:block w-px h-4 ${isScrolled ? 'bg-slate-200' : 'bg-white/20'}`} 
+            />
 
-            <div className="nav-action hidden lg:block group">
+            <motion.div 
+              initial={{ y: -30, opacity: 0 }}
+              animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
+              className="nav-action hidden lg:block group"
+            >
               <RadialRevealButton
                 label={
                   <div className="flex items-center gap-2 overflow-hidden w-4 group-hover:w-[85px] transition-all duration-500 ease-out">
@@ -262,7 +285,7 @@ const Header: React.FC = () => {
                   fontSize: 11,
                 }}
               />
-            </div>
+            </motion.div>
 
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}

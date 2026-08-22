@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
-import { HERO_CONTENT, IMAGES } from '../constants';
+
 import Loader from './Loader';
 import RadialRevealButton from './RadialRevealButton';
 import FocusReveal from './FocusReveal';
@@ -17,32 +17,26 @@ const Hero: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  // GSAP Entrance Animations
-  useLayoutEffect(() => {
-    const ctx = window.gsap.context(() => {
-      window.gsap.set(".hero-reveal-item", { y: 20, opacity: 0 });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const playHeroEntrance = () => {
-    const ctx = window.gsap.context(() => {
-      const tl = window.gsap.timeline();
-      window.dispatchEvent(new CustomEvent('hero-entrance-start'));
-      tl.to(".hero-reveal-item", {
-        y: 0,
-        opacity: 1,
-        duration: 1.8,
-        stagger: 0.12,
-        ease: "power2.inOut",
-        force3D: true
-      });
-    }, containerRef);
+    setIsLoaded(true);
+    window.dispatchEvent(new CustomEvent('hero-entrance-start'));
   };
 
+  const [videoSrc, setVideoSrc] = useState("/hero/Final Video.mp4");
+
   useEffect(() => {
+    // Basic Adaptive Loading: check hardware concurrency and network connection
+    const cores = navigator.hardwareConcurrency || 4;
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const isSlowNetwork = connection && (connection.effectiveType === '2g' || connection.effectiveType === '3g' || connection.saveData);
+    
+    // If running on a low-end device (<= 4 cores) or slow network, request compressed video
+    if (cores <= 4 || isSlowNetwork) {
+      setVideoSrc("/hero/Final Video Compressed.mp4"); // Fallback compressed version
+    }
+
     const timeout = setTimeout(() => {
       if (videoRef.current) {
         videoRef.current
@@ -94,7 +88,7 @@ const Hero: React.FC = () => {
           poster="/hero/main gif.gif"
           className="w-full h-full object-cover"
         >
-          <source src="/hero/Final Video.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </motion.video>
       </div>
 
@@ -138,20 +132,29 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Subtext */}
-          <div className="mb-8 md:mb-10 w-full max-w-[800px]">
-            <div className="hero-reveal-item opacity-0">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 1.8, ease: "easeInOut" }}
+            className="mb-8 md:mb-10 w-full max-w-[800px]"
+          >
+            <div>
               <p className="text-white/85 text-sm sm:text-base md:text-xl font-normal leading-relaxed text-center md:text-left mx-auto md:mx-0">
                 World-class commercial design meets flawless print execution. We transform corporate visions into tactile, high-end assets.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Radial Reveal Buttons */}
-          <div className="hero-reveal-item opacity-0">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 1.8, ease: "easeInOut", delay: 0.12 }}
+          >
             <div className="flex flex-row items-center justify-center md:justify-start gap-3 sm:gap-5 w-full md:scale-[1.2] md:origin-left mt-2 md:mt-4">
               <RadialRevealButton
                 label="Explore"
-                onClick={() => scrollTo('about')}
+                onClick={() => scrollTo('featured-products')}
                 padding="12px 28px"
                 rounded={100}
                 colors={{
@@ -173,7 +176,7 @@ const Hero: React.FC = () => {
               />
               <RadialRevealButton
                 label="Shop"
-                onClick={() => scrollTo('products')}
+                onClick={() => window.open('https://shop.guruprintingpress.com', '_blank')}
                 padding="12px 36px"
                 rounded={100}
                 colors={{
@@ -194,11 +197,16 @@ const Hero: React.FC = () => {
                 }}
               />
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Text Sections (Desktop Only) */}
-        <div className="hidden md:flex flex-row justify-start gap-24 w-full opacity-0 hero-reveal-item pt-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 1.8, ease: "easeInOut", delay: 0.24 }}
+          className="hidden md:flex flex-row justify-start gap-24 w-full pt-10"
+        >
           <div className="flex flex-col text-left">
             <h3 className="text-white text-[20px] font-normal tracking-tight leading-tight mb-1">Your Reliable Partner</h3>
             <p className="text-white/80 text-[14px] font-normal leading-relaxed">Trusted by elite brands for absolute print perfection.</p>
@@ -207,7 +215,7 @@ const Hero: React.FC = () => {
             <h3 className="text-white text-[20px] font-normal tracking-tight leading-tight mb-1">Premium Craftsmanship</h3>
             <p className="text-white/80 text-[14px] font-normal leading-relaxed">Mastery in high-end commercial print and tactile finishes.</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

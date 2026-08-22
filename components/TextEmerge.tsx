@@ -4,8 +4,7 @@
 
 import * as React from "react";
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { useInView } from "framer-motion";
+import { motion, useInView, Variants } from "framer-motion";
 
 type FontStyle = React.CSSProperties;
 
@@ -77,40 +76,40 @@ export default function InkdropSpread({
     const containerRef = useRef<HTMLElement>(null);
     const inView = useInView(containerRef, { once: true, amount: 0.5 });
     const words = text.trim().split(/\s+/).filter(Boolean);
-    const textAlign =
-        (font.textAlign as React.CSSProperties["textAlign"]) ?? "left";
+    const textAlign = (font.textAlign as React.CSSProperties["textAlign"]) ?? "left";
 
-    useEffect(() => {
-        if (!containerRef.current || !inView) return;
+    const containerVariants: Variants = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: transition.staggerChildren ?? 0.03,
+                delayChildren: transition.delay ?? 0,
+            }
+        }
+    };
 
-        const wordEls = containerRef.current.querySelectorAll(".word");
+    const childVariants: Variants = {
+        hidden: { opacity: 0, scale: 0, filter: "blur(4px)" },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            transition: {
+                duration: transition.duration ?? 0.5,
+                ease: (transition.ease as any) ?? "easeOut"
+            }
+        }
+    };
 
-        gsap.killTweensOf(wordEls);
+    const MotionTag = motion[tag as keyof typeof motion] as any;
 
-        gsap.set(wordEls, {
-            clearProps: "transform,opacity,filter",
-        });
-
-        gsap.from(wordEls, {
-            opacity: 0,
-            scale: 0,
-            filter: "blur(4px)",
-
-            duration: transition.duration ?? 0.5,
-            delay: transition.delay ?? 0,
-            stagger: {
-                each: transition.staggerChildren ?? 0.03,
-                from: staggerFrom,
-            },
-            ease: mapEase(transition.ease),
-        });
-    }, [text, staggerFrom, transition, inView]);
-
-    return React.createElement(
-        tag,
-        {
-            ref: containerRef,
-            style: {
+    return (
+        <MotionTag
+            ref={containerRef}
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            style={{
                 margin: 0,
                 display: "block",
                 width: "100%",
@@ -118,20 +117,20 @@ export default function InkdropSpread({
                 color,
                 ...font,
                 textAlign,
-            },
-        },
-        words.map((word, index) => (
-            <React.Fragment key={`${word}-${index}`}>
-                <span
-                    className="word"
-                    style={{
-                        display: "inline-block",
-                    }}
-                >
-                    {word}
-                </span>
-                {index < words.length - 1 ? " " : null}
-            </React.Fragment>
-        ))
+            }}
+        >
+            {words.map((word, index) => (
+                <React.Fragment key={`${word}-${index}`}>
+                    <motion.span
+                        variants={childVariants}
+                        className="word"
+                        style={{ display: "inline-block" }}
+                    >
+                        {word}
+                    </motion.span>
+                    {index < words.length - 1 ? " " : null}
+                </React.Fragment>
+            ))}
+        </MotionTag>
     );
 }
