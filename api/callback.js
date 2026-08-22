@@ -23,12 +23,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    
+
     // Format the postMessage payload that Decap CMS expects
     const message = data.error
       ? 'authorization:github:error:' + JSON.stringify({ message: data.error_description || data.error })
       : 'authorization:github:success:' + JSON.stringify({ token: data.access_token, provider: "github" });
-      
+
     // Return HTML that communicates with the Decap CMS parent window
     res.status(200).send(`
       <!DOCTYPE html>
