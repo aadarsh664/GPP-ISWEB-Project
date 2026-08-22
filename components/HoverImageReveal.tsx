@@ -147,22 +147,23 @@ const HoverImageReveal: React.FC<HoverImageRevealProps> = ({
               className={`w-full flex flex-col lg:flex-row items-start lg:items-center justify-between py-12 transition-colors duration-300 border-b border-black ${i === 0 ? 'border-t' : ''}`}
               style={{ color }}
             >
-              <div className="flex items-start md:items-center gap-6 md:gap-12 w-full lg:w-3/5">
-                <span className="text-xl md:text-3xl font-normal mt-1 md:mt-0 w-8" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+              <div className="flex items-start md:items-center gap-6 md:gap-12 w-full lg:w-3/5 min-w-0">
+                <span className="text-xl md:text-3xl font-normal mt-1 md:mt-0 w-8 shrink-0" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
                   {i + 1}.
                 </span>
                 <motion.div
                   style={{ position: "relative" }}
                   animate={{ x: isHovered ? 10 : 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="min-w-0 flex-1"
                 >
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-medium tracking-tighter leading-[1.1] pb-2" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-[4.5rem] font-medium tracking-tighter leading-[1.1] pb-2 break-words" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
                     {item.title}
                   </h3>
                 </motion.div>
               </div>
-              <div className="w-full lg:w-2/5 mt-6 lg:mt-0 text-left lg:text-right pl-14 lg:pl-0 flex justify-end">
-                <p className="text-base md:text-xl font-normal leading-snug whitespace-normal lg:whitespace-nowrap" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+              <div className="w-full lg:w-2/5 mt-6 lg:mt-0 text-left lg:text-right pl-14 lg:pl-0 flex lg:justify-end shrink-0">
+                <p className="text-base md:text-xl font-normal leading-snug max-w-lg lg:ml-auto" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
                   {item.description}
                 </p>
               </div>
