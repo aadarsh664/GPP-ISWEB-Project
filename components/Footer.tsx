@@ -86,10 +86,16 @@ const Footer: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-normal text-white/50 whitespace-nowrap">
+          <div className="flex flex-row items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-normal text-white/50 whitespace-nowrap flex-wrap">
             <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy policy</Link>
             <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms & conditions</Link>
+            <button 
+              onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))} 
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              Cookie Settings
+            </button>
           </div>
 
           <p className="text-[10px] md:text-xs text-white/50 font-normal text-center md:text-right whitespace-nowrap">

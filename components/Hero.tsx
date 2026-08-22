@@ -39,6 +39,11 @@ const Hero: React.FC = () => {
 
     const timeout = setTimeout(() => {
       if (videoRef.current) {
+        // Fix for Android Chrome strict autoplay: forcefully set muted via DOM
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+        videoRef.current.setAttribute('playsinline', '');
+
         videoRef.current
           .play()
           .then(() => setIsPlaying(true))

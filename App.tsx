@@ -4,19 +4,19 @@ import { Routes, Route } from 'react-router-dom';
 import SmoothScroll from './components/SmoothScroll';
 import Header from './components/Header';
 import Hero from './components/Hero';
-// PERF: Lazy load below-the-fold components to reduce initial bundle size
-const About = React.lazy(() => import('./components/About'));
-const ImageStackSection = React.lazy(() => import('./components/ImageStackSection'));
-const StatsSection = React.lazy(() => import('./components/StatsSection'));
-const Service = React.lazy(() => import('./components/Service'));
-const DigitalServices = React.lazy(() => import('./components/DigitalServices'));
-const Products = React.lazy(() => import('./components/Products'));
-const WhyChooseUs = React.lazy(() => import('./components/WhyChooseUs'));
-const Showcase = React.lazy(() => import('./components/Showcase'));
-const Contact = React.lazy(() => import('./components/Contact'));
-const CTA = React.lazy(() => import('./components/CTA'));
-const Footer = React.lazy(() => import('./components/Footer'));
-const FAQ = React.lazy(() => import('./components/FAQ'));
+import CookieConsent from './components/CookieConsent';
+import About from './components/About';
+import ImageStackSection from './components/ImageStackSection';
+import StatsSection from './components/StatsSection';
+import Service from './components/Service';
+import DigitalServices from './components/DigitalServices';
+import Products from './components/Products';
+import WhyChooseUs from './components/WhyChooseUs';
+import Showcase from './components/Showcase';
+import Contact from './components/Contact';
+import CTA from './components/CTA';
+import Footer from './components/Footer';
+import FAQ from './components/FAQ';
 
 // PERF: Lazy load route pages (separate pages, never needed on initial load)
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
@@ -64,6 +64,7 @@ const App: React.FC = () => {
           <Route path="/blog/:id" element={<BlogPost />} />
         </Routes>
       </Suspense>
+      <CookieConsent />
     </div>
   );
 };
