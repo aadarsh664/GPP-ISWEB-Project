@@ -1,0 +1,685 @@
+<style>
+  .product-page-wrapper {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-margin);
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  /* Split Layout */
+  .product-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media screen and (min-width: 990px) {
+    .product-split {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  /* Left: Media Gallery */
+  .product-media {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 2rem;
+  }
+  .product-media__main {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--color-foreground);
+    border-radius: var(--radius-md);
+    background-color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-media__main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-media__main .wishlist-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .product-media__thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .product-media__thumb {
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--color-foreground);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-white);
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .product-media__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Right: Details */
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .product-breadcrumbs {
+    font-size: 11px;
+    color: var(--color-gray-800);
+    text-decoration: none;
+  }
+  
+  .product-title {
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .product-features {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  
+  .product-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .product-price {
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  .product-discount-badge {
+    color: #0088cc;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .product-unit-text {
+    font-size: 14px;
+    color: var(--color-gray-800);
+    display: block;
+    margin-top: -5px;
+  }
+
+  /* Pincode */
+  .pincode-checker {
+    border: 1px solid var(--color-foreground);
+    border-radius: 6px;
+    padding: 16px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .pincode-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    width: fit-content;
+  }
+  .pincode-input-wrap input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 120px;
+  }
+  .pincode-msg {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Form / Variants */
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .quantity-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .quantity-selector select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 6px;
+    font-size: 16px;
+    background: transparent;
+    appearance: auto;
+  }
+  .quantity-subtext {
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-gray-800);
+  }
+
+  .variant-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .variant-label {
+    font-size: 15px;
+    color: var(--color-gray-800);
+    font-weight: 500;
+  }
+  .variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .variant-pill {
+    padding: 12px 16px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 6px;
+    font-size: 15px;
+    background: var(--color-white);
+    cursor: pointer;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    transition: all 0.2s ease;
+  }
+  .variant-pill.active {
+    background: var(--color-gray-100);
+    border-width: 2px;
+    padding: 11px 15px; /* Offset border width */
+  }
+  
+  .color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .color-swatch {
+    padding: 12px 16px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 15px;
+    color: var(--color-white);
+    cursor: pointer;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+    transition: transform 0.2s ease;
+  }
+  .color-swatch:hover {
+    transform: scale(1.02);
+  }
+
+  /* Upload Section */
+  .upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .upload-options {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  @media screen and (min-width: 768px) {
+    .upload-options {
+      flex-direction: row;
+    }
+  }
+  .upload-btn {
+    flex: 1;
+    border: 1px solid var(--color-foreground);
+    border-radius: 6px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--color-white);
+    transition: all 0.2s ease;
+  }
+  .upload-btn.active {
+    background: var(--color-gray-100);
+    border-width: 2px;
+    padding: calc(1.5rem - 1px);
+  }
+  .upload-instructions {
+    display: none;
+    border: 1px dashed var(--color-foreground);
+    border-radius: 6px;
+    padding: 1.5rem;
+    background: #fafafa;
+    font-size: 13px;
+    color: var(--color-gray-800);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+  }
+  .upload-instructions.active {
+    display: block;
+  }
+
+  /* Buttons & Mac OS Tactile */
+  .product-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .btn-tactile {
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  .btn-tactile:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1), inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Radial Hover Effect */
+  .btn-tactile::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.4s ease-out;
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .btn-tactile:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .btn-add {
+    flex: 1;
+    background: var(--color-white);
+    color: var(--color-foreground);
+    border: 2px solid var(--color-foreground);
+  }
+  .btn-purchase {
+    flex: 1;
+    background: #0088cc;
+    color: var(--color-white);
+    border: 2px solid #0088cc;
+  }
+
+  /* Bottom Content (Desc & FAQ) */
+  .product-bottom-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media screen and (min-width: 990px) {
+    .product-bottom-content {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .desc-section h3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .desc-section ul {
+    font-size: 15px;
+    line-height: 1.8;
+    padding-left: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .desc-image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--color-foreground);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .faq-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .faq-item {
+    border: 1px solid var(--color-foreground);
+    border-radius: 6px;
+    background: var(--color-white);
+  }
+  .faq-summary {
+    padding: 18px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+  }
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-summary::after {
+    content: "+";
+    font-size: 20px;
+  }
+  .faq-item[open] .faq-summary::after {
+    content: "-";
+  }
+  .faq-content {
+    padding: 0 18px 18px;
+    font-size: 14px;
+    color: var(--color-gray-800);
+    line-height: 1.6;
+  }
+</style>
+
+<div class="product-page-wrapper full-width animate-up">
+  
+  <!-- Top Split -->
+  <div class="product-split">
+    
+    <!-- Left Media -->
+    <div class="product-media">
+      <div class="product-media__main">
+        {%- if product.featured_media != blank -%}
+          {{ product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy' }}
+        {%- else -%}
+          <div style="color:var(--color-gray-500);">No image</div>
+        {%- endif -%}
+        <button class="wishlist-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
+      </div>
+      <div class="product-media__thumbnails">
+        {%- for media in product.media limit: 4 -%}
+          <div class="product-media__thumb">
+            {{ media | image_url: width: 200 | image_tag: loading: 'lazy' }}
+          </div>
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <div class="product-media__thumb"></div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Right Details -->
+    <div class="product-details">
+      
+      <a href="#" class="product-breadcrumbs">Shop > {{ product.collections.first.title | default: 'Category' }} > {{ product.title }}</a>
+      
+      <h1 class="product-title">{{ product.title | default: 'Luxury Business Card' }}</h1>
+      
+      <ul class="product-features">
+        <li>500 GSM</li>
+        <li>Foiling</li>
+        <li>Velvet Lamination</li>
+        <li>Spot UV</li>
+      </ul>
+      
+      <div>
+        <div class="product-price-block">
+          <span class="product-price">{{ product.price | default: 349900 | money }}</span>
+          <span class="product-discount-badge">↓ 12% off</span>
+        </div>
+        <span class="product-unit-text">for 500 units</span>
+      </div>
+
+      <div class="pincode-checker">
+        <div class="pincode-input-wrap">
+          <span style="margin-right:8px;opacity:0.6;">Delivery to</span>
+          <input type="text" placeholder="800004">
+        </div>
+        <div class="pincode-msg">
+          Congratulation you are eligible for <strong>FREE DELIVERY</strong>.<br>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg> Delivery By 04 Sep, Fri.
+        </div>
+      </div>
+
+      {%- form 'product', product, class: 'product-form' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        
+        <div class="quantity-selector">
+          <label class="variant-label">Quantity</label>
+          <select name="quantity">
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="1500">1500</option>
+          </select>
+          <div class="quantity-subtext">
+            <span>Minimum Quantity 500 units</span>
+            <span>Quantity should be in multiple of 500</span>
+          </div>
+        </div>
+
+        <!-- Custom Variant Selectors (UI Only for now) -->
+        <div class="variant-group">
+          <span class="variant-label">Sides</span>
+          <div class="variant-options">
+            <div class="variant-pill active">Single Side Print</div>
+            <div class="variant-pill">Both Side Print</div>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <span class="variant-label">Corners</span>
+          <div class="variant-options">
+            <div class="variant-pill active">Sharp</div>
+            <div class="variant-pill">Rounded</div>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <span class="variant-label">Foiling Sides</span>
+          <div class="variant-options">
+            <div class="variant-pill active">Front Side</div>
+            <div class="variant-pill">Back Side</div>
+            <div class="variant-pill">Both Side</div>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <span class="variant-label">Foiling Color</span>
+          <div class="color-options">
+            <div class="color-swatch" style="background:#d4af37;">Gold</div>
+            <div class="color-swatch" style="background:#c0c0c0; color:#000;">Silver</div>
+            <div class="color-swatch" style="background:#8b0000;">Red</div>
+            <div class="color-swatch" style="background:#006400;">Green</div>
+            <div class="color-swatch" style="background:#00008b;">Blue</div>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <span class="variant-label">Spot UV</span>
+          <div class="variant-options">
+            <div class="variant-pill active">Front Side</div>
+            <div class="variant-pill">Back Side</div>
+            <div class="variant-pill">Both Side</div>
+            <div class="variant-pill" style="flex:auto;">Not Required</div>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <span class="variant-label">Upload Design</span>
+          <div class="upload-section">
+            <div class="upload-options">
+              <div class="upload-btn btn-tactile active" id="btn-drag-browse">Drop or click to browse</div>
+              <div class="upload-btn btn-tactile" id="btn-design-service">Start with our designing service</div>
+            </div>
+            
+            <div class="upload-instructions active" id="upload-instructions">
+              <strong>Supported file formats:</strong> ai, pdf, cdr<br>
+              <strong>max. file size:</strong> 100 mb.<br><br>
+              <strong>Full Design Size (Including Bleed):</strong> 93 × 56 mm<br>
+              <strong>Safe Area for Text & Important Content:</strong> 82 × 45 mm<br>
+              <strong>Final Size (After Trimming):</strong> 90 × 53 mm<br><br>
+              Upload a single PDF file with 6 pages in the following order:<br>
+              Page 1: Front Design File<br>
+              Page 2: Back Design File<br>
+              Page 3: Front Spot UV File (black only)<br>
+              Page 4: Back Spot UV File (black only)<br>
+              Page 5: Front Foil File (black only)<br>
+              Page 6: Back Foil File (black only)
+            </div>
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <button type="button" class="btn-add btn-tactile">Add to bag</button>
+          <button type="submit" class="btn-purchase btn-tactile">Purchase</button>
+        </div>
+
+      {%- endform -%}
+
+    </div>
+  </div>
+
+  <!-- Bottom Content -->
+  <div class="product-bottom-content">
+    
+    <div class="desc-section">
+      <h3>More about this</h3>
+      <ul>
+        <li>Ultra-premium look with a luxurious feel</li>
+        <li>Deep color saturation, perfect for dark and vibrant designs</li>
+        <li>Embossed Spot UV for magnificent 3D texture (ideal for 10pt+ text)</li>
+        <li>Custom foil accents to highlight key brand elements</li>
+        <li>Eco-friendly and sustainable printing processes</li>
+        <li>Flawless edge finishing from our advanced post-printing unit</li>
+      </ul>
+
+      <h3>Size & Design Guide</h3>
+      <ul>
+        <li>Full Design Size (with bleed): 93.00 mm x 56.00 mm</li>
+        <li>Final Card Size: 90.00 mm x 53.00 mm</li>
+        <li>Safe Text Area: 82.00 mm x 45.00 mm</li>
+        <li>Please use high-resolution images for the sharpest results</li>
+      </ul>
+    </div>
+    
+    <div class="desc-section" style="padding-top: 48px;">
+      <div class="desc-image-placeholder">
+        Image
+      </div>
+    </div>
+
+  </div>
+  
+  <div class="faq-section" style="margin-top: 2rem;">
+    <h3>Frequently ask questions</h3>
+    <details class="faq-item">
+      <summary class="faq-summary">Ultra-premium look with a luxurious feel</summary>
+      <div class="faq-content">Detail content goes here.</div>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-summary">Deep color saturation, perfect for dark and vibrant designs</summary>
+      <div class="faq-content">Detail content goes here.</div>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-summary">Embossed Spot UV for magnificent 3D texture (ideal for 10pt+ text)</summary>
+      <div class="faq-content">Detail content goes here.</div>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-summary">Custom foil accents to highlight key brand elements</summary>
+      <div class="faq-content">Detail content goes here.</div>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-summary">Eco-friendly and sustainable printing processes</summary>
+      <div class="faq-content">Detail content goes here.</div>
+    </details>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Main Product",
+  "settings": []
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Basic JS to toggle active states on variant pills and swatches
+    const groups = document.querySelectorAll('.variant-options, .color-options');
+    groups.forEach(group => {
+      const items = group.querySelectorAll('.variant-pill, .color-swatch');
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          items.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          if(item.classList.contains('color-swatch')) {
+            // Apply white border for active color swatch to show selection
+            items.forEach(i => i.style.border = '2px solid transparent');
+            item.style.border = '2px solid var(--color-foreground)';
+          }
+        });
+      });
+    });
+
+    // Upload Logic
+    const btnDragBrowse = document.getElementById('btn-drag-browse');
+    const btnDesignService = document.getElementById('btn-design-service');
+    const uploadInstructions = document.getElementById('upload-instructions');
+    
+    if (btnDragBrowse && btnDesignService && uploadInstructions) {
+      btnDragBrowse.addEventListener('click', () => {
+        btnDragBrowse.classList.add('active');
+        btnDesignService.classList.remove('active');
+        uploadInstructions.classList.add('active');
+      });
+      
+      btnDesignService.addEventListener('click', () => {
+        btnDesignService.classList.add('active');
+        btnDragBrowse.classList.remove('active');
+        uploadInstructions.classList.remove('active');
+      });
+    }
+  });
+</script>

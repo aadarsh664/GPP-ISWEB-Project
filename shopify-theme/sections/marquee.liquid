@@ -1,0 +1,70 @@
+<style>
+  .marquee-wrapper {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    padding: 8px 0;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee-scroll {{ section.settings.speed }}s linear infinite;
+  }
+
+  .marquee-text {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 0 1rem;
+  }
+
+  @keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>
+
+<div class="marquee-wrapper full-width">
+  <div class="marquee-track">
+    <!-- Render text multiple times to create seamless loop -->
+    {%- for i in (1..6) -%}
+      <div class="marquee-text">
+        {{ section.settings.text }}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Marquee Text",
+      "default": "FREE SHIPPING ON ORDERS OVER ₹5000 • PREMIUM QUALITY GUARANTEED • FAST DELIVERY"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "sec",
+      "label": "Scroll Speed",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Bar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,34 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+      }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {
+      }
+    },
+    "related-products": {
+      "type": "product-row",
+      "settings": {
+        "title": "Related Products"
+      }
+    },
+    "frequently-bought": {
+      "type": "product-row",
+      "settings": {
+        "title": "Frequently bought together with this product"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "related-products",
+    "frequently-bought"
+  ]
+}
+
+

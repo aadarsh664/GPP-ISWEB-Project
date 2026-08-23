@@ -1,0 +1,179 @@
+<style>
+  .promo-banner-wrapper {
+    padding: 2rem var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .promo-banner-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    .promo-banner-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .promo-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    text-decoration: none;
+    color: var(--color-white);
+  }
+
+  @media screen and (min-width: 768px) {
+    .promo-card {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .promo-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    transition: transform 0.5s ease;
+  }
+
+  .promo-card:hover .promo-card__image {
+    transform: scale(1.05);
+  }
+
+  .promo-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+  }
+
+  .promo-card__content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .promo-card__title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  @media screen and (min-width: 768px) {
+    .promo-card__title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .promo-card__price {
+    font-size: 0.9rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .promo-card__btn {
+    margin-top: 1rem;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    border: none;
+    font-weight: 400;
+  }
+</style>
+
+<div class="promo-banner-wrapper full-width">
+  <div class="promo-banner-grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: '#' }}" class="promo-card animate-up" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image | image_url: width: 800 | image_tag: class: 'promo-card__image', loading: 'lazy' }}
+        {%- else -%}
+          <div class="promo-card__image" style="background-color: var(--color-gray-300);"></div>
+        {%- endif -%}
+        
+        <div class="promo-card__overlay"></div>
+        
+        <div class="promo-card__content">
+          <h3 class="promo-card__title">{{ block.settings.title }}</h3>
+          {%- if block.settings.price_text != blank -%}
+            <p class="promo-card__price">{{ block.settings.price_text }}</p>
+          {%- endif -%}
+          <span class="btn promo-card__btn">
+            {{ block.settings.button_label | default: 'Shop' }}
+          </span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Two-Column Promo Banner",
+  "max_blocks": 2,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Promo Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Luxury Products"
+        },
+        {
+          "type": "text",
+          "id": "price_text",
+          "label": "Price Text",
+          "default": "Starting at just ₹499/-"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two-Column Promo Banner",
+      "blocks": [
+        { "type": "promo" },
+        { "type": "promo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

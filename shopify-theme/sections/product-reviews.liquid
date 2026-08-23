@@ -1,0 +1,204 @@
+<style>
+  .reviews-wrapper {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 4rem var(--page-margin);
+  }
+  
+  .reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .reviews-title {
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .add-review-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .add-review-btn svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* Media Row */
+  .reviews-media-row {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .reviews-media-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .review-media-card {
+    flex-shrink: 0;
+    width: 280px;
+    aspect-ratio: 9 / 16;
+    border: 1px solid var(--color-foreground);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    color: var(--color-gray-800);
+    font-size: 14px;
+    overflow: hidden;
+  }
+  
+  /* Text Reviews List */
+  .reviews-text-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .review-text-card {
+    border: 1px solid var(--color-foreground);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--color-white);
+  }
+
+  .review-stars-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .review-stars {
+    color: #FFC107;
+    display: flex;
+    gap: 2px;
+  }
+  .review-stars svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .review-verified {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .review-verified svg {
+    color: #4CAF50;
+  }
+  
+  .review-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-foreground);
+    margin-bottom: 0.5rem;
+  }
+  
+  .review-meta {
+    font-size: 12px;
+    color: var(--color-gray-500);
+  }
+</style>
+
+<div class="reviews-wrapper full-width animate-up">
+  <div class="reviews-header">
+    <h2 class="reviews-title">{{ section.settings.title }}</h2>
+    <button class="add-review-btn" aria-label="Add a review">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+    </button>
+  </div>
+
+  <div class="reviews-media-row">
+    <div class="review-media-card">Video</div>
+    <div class="review-media-card">Video</div>
+    <div class="review-media-card">Images</div>
+    <div class="review-media-card">Video</div>
+  </div>
+
+  <div class="reviews-text-list">
+    
+    <div class="review-text-card">
+      <div class="review-stars-header">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div class="review-verified">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          Verified Purchaser
+        </div>
+      </div>
+      <div class="review-body">
+        The out put of visiting cards is excellent and is having elegant look. Your delivery time duration is commendable, I mean very quick delivery, and beyond expectations.
+      </div>
+      <div class="review-meta">
+        15 Aug 2026 | Arvind Kumar | 8 days ago.
+      </div>
+    </div>
+
+    <div class="review-text-card">
+      <div class="review-stars-header">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div class="review-verified">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          Verified Purchaser
+        </div>
+      </div>
+      <div class="review-body">
+        The out put of visiting cards is excellent and is having elegant look. Your delivery time duration is commendable, I mean very quick delivery, and beyond expectations.
+      </div>
+      <div class="review-meta">
+        15 Aug 2026 | Arvind Kumar | 8 days ago.
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Reviews and ratings"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews"
+    }
+  ]
+}
+{% endschema %}

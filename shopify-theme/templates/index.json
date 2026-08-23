@@ -1,0 +1,85 @@
+{
+  "sections": {
+    "category-strip": {
+      "type": "category-strip",
+      "blocks": {
+        "cat1": { "type": "category" },
+        "cat2": { "type": "category" },
+        "cat3": { "type": "category" },
+        "cat4": { "type": "category" },
+        "cat5": { "type": "category" },
+        "cat6": { "type": "category" },
+        "cat7": { "type": "category" },
+        "cat8": { "type": "category" },
+        "cat9": { "type": "category" },
+        "cat10": { "type": "category" }
+      },
+      "block_order": ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8", "cat9", "cat10"]
+    },
+    "marquee": {
+      "type": "marquee"
+    },
+    "banner_1": {
+      "type": "promo-banner",
+      "blocks": {
+        "promo1": { "type": "promo", "settings": { "title": "Visiting Cards", "price_text": "Starting at just ₹250/-" } },
+        "promo2": { "type": "promo", "settings": { "title": "Letterheads", "price_text": "Starting at just ₹199/-" } }
+      },
+      "block_order": ["promo1", "promo2"]
+    },
+    "luxury_products": {
+      "type": "product-row",
+      "settings": { "title": "Luxury Products" }
+    },
+    "most_popular": {
+      "type": "product-row",
+      "settings": { "title": "Most Popular" }
+    },
+    "trending": {
+      "type": "product-row",
+      "settings": { "title": "Trending" }
+    },
+    "flyers": {
+      "type": "product-row",
+      "settings": { "title": "Flyers and Pamphlets" }
+    },
+    "banner_2": {
+      "type": "promo-banner",
+      "blocks": {
+        "promo3": { "type": "promo", "settings": { "title": "Branding Products", "price_text": "Starting at just ₹499/-" } },
+        "promo4": { "type": "promo", "settings": { "title": "Cloths", "price_text": "Starting at just ₹350/-" } }
+      },
+      "block_order": ["promo3", "promo4"]
+    },
+    "letterheads": {
+      "type": "product-row",
+      "settings": { "title": "Letterheads" }
+    },
+    "packaging": {
+      "type": "product-row",
+      "settings": { "title": "Packaging/Labels/Stickers" }
+    },
+    "banner_fw": {
+      "type": "full-width-banner",
+      "settings": { "title": "Bulk ID Cards", "price_text": "Starting at just ₹25/-" }
+    },
+    "id_cards": {
+      "type": "product-row",
+      "settings": { "title": "Identity Cards" }
+    }
+  },
+  "order": [
+    "category-strip",
+    "marquee",
+    "banner_1",
+    "luxury_products",
+    "most_popular",
+    "trending",
+    "flyers",
+    "banner_2",
+    "letterheads",
+    "packaging",
+    "banner_fw",
+    "id_cards"
+  ]
+}

@@ -1,0 +1,131 @@
+<style>
+  .category-strip-wrapper {
+    background-color: var(--color-background);
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .category-strip {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding: 0 var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+    scroll-snap-type: x mandatory;
+    justify-content: center;
+  }
+
+  .category-strip::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 80px;
+    text-decoration: none;
+    color: var(--color-foreground);
+    scroll-snap-align: start;
+    transition: transform 0.2s;
+  }
+
+  .category-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .category-item__image-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--color-foreground);
+  }
+
+  .category-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .category-item__label {
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+</style>
+
+<div class="category-strip-wrapper full-width">
+  <div class="category-strip">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.collection.url | default: '#' }}" class="category-item" {{ block.shopify_attributes }}>
+        <div class="category-item__image-wrap">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 128 | image_tag: class: 'category-item__image', loading: 'lazy' }}
+          {%- else -%}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-gray-300)"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          {%- endif -%}
+        </div>
+        <span class="category-item__label">{{ block.settings.title | default: block.settings.collection.title | default: 'Category' }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Category Strip",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon/Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label override (optional)"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Strip",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

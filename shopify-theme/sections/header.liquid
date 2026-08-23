@@ -1,0 +1,353 @@
+{% comment %}
+  Header Section
+{% endcomment %}
+
+<style>
+  .header-wrapper {
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .header__heading-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .header__heading-logo {
+    max-width: {{ section.settings.logo_width }}px;
+    height: auto;
+  }
+
+  .header__inline-menu {
+    display: none;
+  }
+  
+  .list-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 2rem;
+  }
+
+  .list-menu__item {
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .list-menu__item:hover {
+    color: var(--color-gray-300);
+  }
+
+  .header__icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-foreground);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: background-color 0.2s;
+  }
+  
+  .header__icon:hover {
+    background-color: var(--color-gray-100);
+  }
+
+  .header__icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .header__menu-icon {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-foreground);
+  }
+
+  /* Desktop */
+  @media screen and (min-width: 990px) {
+    .header__inline-menu {
+      display: block;
+    }
+    .header__menu-icon {
+      display: none;
+    }
+  }
+
+  /* Mega Menu Glassmorphism */
+  .mega-menu-item {
+    position: relative;
+  }
+  .mega-menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 600px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 2rem;
+    z-index: 1000;
+  }
+  .mega-menu-item:hover .mega-menu-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .mega-menu-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .mega-menu-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .mega-menu-column a {
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .mega-menu-column a:hover {
+    color: var(--color-gray-800);
+    text-decoration: underline;
+  }
+  
+  /* Mobile Menu Drawer */
+  .mobile-menu-drawer {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: var(--color-background);
+    z-index: 1000;
+    padding: 2rem;
+    transition: left 0.3s ease;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .mobile-menu-drawer.is-open {
+    left: 0;
+  }
+  
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+  }
+  
+  .mobile-menu-overlay.is-open {
+    display: block;
+  }
+</style>
+
+<div class="header-wrapper full-width">
+  <header class="header">
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="header__menu-icon" aria-haspopup="dialog" id="MobileMenuToggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Logo -->
+    <a href="{{ routes.root_url }}" class="header__heading-link">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 600 | image_tag:
+          class: 'header__heading-logo',
+          widths: '50, 100, 150, 200, 250, 300, 400, 500, 600',
+          height: section.settings.logo.height,
+          width: section.settings.logo.width,
+          alt: section.settings.logo.alt | default: shop.name | escape
+        }}
+      {%- else -%}
+        <span class="h2" style="font-weight:700;font-size:24px;">GURU PRINTING PRESS</span>
+      {%- endif -%}
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="header__inline-menu">
+      <ul class="list-menu" role="list">
+        <li><a href="/" class="list-menu__item">Home</a></li>
+        
+        <!-- Product Mega Menu -->
+        <li class="mega-menu-item">
+          <a href="/collections/all" class="list-menu__item" style="display:inline-flex; align-items:center; gap:4px; vertical-align:middle;">
+            Product
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="mega-menu-dropdown">
+            <div class="mega-menu-content">
+              <!-- Categories will be fetched from linklists or collections, hardcoded for preview -->
+              <div class="mega-menu-column">
+                <a href="#">Luxury Visiting Cards</a>
+                <a href="#">Letterheads</a>
+                <a href="#">Envelopes</a>
+                <a href="#">Diaries</a>
+              </div>
+              <div class="mega-menu-column">
+                <a href="#">Files</a>
+                <a href="#">Calendars</a>
+                <a href="#">Pens</a>
+                <a href="#">Flyers</a>
+              </div>
+              <div class="mega-menu-column">
+                <a href="#">Stickers</a>
+                <a href="#">LED Frames</a>
+                <a href="#">Packaging</a>
+                <a href="#">Apparel</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="/pages/track-order" class="list-menu__item">Track</a></li>
+        <li><a href="/pages/contact" class="list-menu__item">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Icons -->
+    <div class="header__icons">
+      <a href="/pages/wishlist" class="header__icon">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </a>
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.cart_url }}" class="header__icon" id="cart-icon-bubble">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+<!-- Mobile Drawer -->
+<div class="mobile-menu-overlay" id="MobileMenuOverlay"></div>
+<div class="mobile-menu-drawer" id="MobileMenuDrawer">
+  <button id="MobileMenuClose" style="background:none;border:none;float:right;cursor:pointer;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
+  <ul style="list-style:none;padding:0;margin-top:3rem;display:flex;flex-direction:column;gap:1.5rem;">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        <a href="{{ link.url }}" style="text-decoration:none;color:var(--color-foreground);font-size:18px;font-weight:500;">
+          {{ link.title | escape }}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('MobileMenuToggle');
+    const close = document.getElementById('MobileMenuClose');
+    const drawer = document.getElementById('MobileMenuDrawer');
+    const overlay = document.getElementById('MobileMenuOverlay');
+
+    function openMenu() {
+      drawer.classList.add('is-open');
+      overlay.classList.add('is-open');
+    }
+
+    function closeMenu() {
+      drawer.classList.remove('is-open');
+      overlay.classList.remove('is-open');
+    }
+
+    if (toggle) toggle.addEventListener('click', openMenu);
+    if (close) close.addEventListener('click', closeMenu);
+    if (overlay) overlay.addEventListener('click', closeMenu);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact_button",
+      "default": true,
+      "label": "Show Contact Button"
+    }
+  ]
+}
+{% endschema %}
