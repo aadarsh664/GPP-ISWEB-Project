@@ -9,7 +9,20 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      plugins: [react()],
+      plugins: [
+        react(),
+        {
+          name: 'admin-redirect',
+          configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+              if (req.url === '/admin' || req.url === '/admin/') {
+                req.url = '/admin/index.html';
+              }
+              next();
+            });
+          }
+        }
+      ],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)

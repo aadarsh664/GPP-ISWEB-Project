@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import blogData from '../src/data/blogPosts.json';
+import { marked } from 'marked';
 
 const BLOG_POSTS = blogData.posts.reduce((acc, post) => {
   acc[post.id] = post;
@@ -78,7 +79,7 @@ const BlogPost: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="prose prose-lg prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: marked.parse(post.content.replace(/^[ ]+/gm, '')) as string }}
         />
         
         {/* Footer actions */}
