@@ -287,6 +287,18 @@ const Header: React.FC = () => {
               />
             </motion.div>
 
+            {/* Mobile Shop Button */}
+            <motion.button 
+              initial={{ y: -30, opacity: 0 }}
+              animate={isNavVisible ? { y: 0, opacity: 1 } : { y: -30, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
+              onClick={() => window.open('https://shop.guruprintingpress.com', '_blank')}
+              className={`nav-action lg:hidden text-[11px] font-semibold tracking-wide px-4 py-2 rounded-full border mr-1 transition-colors ${isScrolled ? 'border-black/10 text-slate-600 hover:bg-black hover:text-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}`}
+              style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}
+            >
+              SHOP
+            </motion.button>
+
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`nav-action lg:hidden w-10 h-10 flex items-center justify-center rounded-[30px] transition-colors ${isScrolled ? 'text-black hover:bg-slate-100' : 'text-white hover:bg-white/10'}`}

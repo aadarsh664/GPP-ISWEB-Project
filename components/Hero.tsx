@@ -45,20 +45,17 @@ const Hero: React.FC = () => {
       setVideoSrc("/hero/Final Video Compressed.mp4"); // Fallback compressed version
     }
 
-    const timeout = setTimeout(() => {
-      if (videoRef.current) {
-        // Fix for Android Chrome strict autoplay: forcefully set muted via DOM
-        videoRef.current.defaultMuted = true;
-        videoRef.current.muted = true;
-        videoRef.current.setAttribute('playsinline', '');
+    if (videoRef.current) {
+      // Fix for Android Chrome strict autoplay: forcefully set muted via DOM
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.setAttribute('playsinline', '');
 
-        videoRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch((e) => console.error("Video play failed", e));
-      }
-    }, 600);
-    return () => clearTimeout(timeout);
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((e) => console.error("Video play failed", e));
+    }
   }, []);
 
   const scrollTo = (id: string) => {
