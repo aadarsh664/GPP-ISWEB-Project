@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 
-import Loader from './Loader';
 import RadialRevealButton from './RadialRevealButton';
 import FocusReveal from './FocusReveal';
 import RevealOnScroll from './RevealOnScroll';
@@ -19,10 +18,19 @@ const Hero: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const playHeroEntrance = () => {
-    setIsLoaded(true);
-    window.dispatchEvent(new CustomEvent('hero-entrance-start'));
-  };
+  useEffect(() => {
+    const handleEntrance = () => setIsLoaded(true);
+    
+    // Check if the global loader has already finished (e.g. returning to home page from another route)
+    const loaderEl = document.getElementById('global-loader');
+    if (!loaderEl || loaderEl.style.display === 'none') {
+      setIsLoaded(true);
+    } else {
+      window.addEventListener('hero-entrance-start', handleEntrance);
+    }
+
+    return () => window.removeEventListener('hero-entrance-start', handleEntrance);
+  }, []);
 
   const [videoSrc, setVideoSrc] = useState("/hero/Final Video.mp4");
 
@@ -77,8 +85,6 @@ const Hero: React.FC = () => {
       id="home"
       className="contain-section relative min-h-screen w-full overflow-hidden flex items-center justify-center md:justify-start bg-black text-center md:text-left"
     >
-      <Loader onComplete={playHeroEntrance} />
-
       {/* Background Video */}
       <div className="absolute inset-0 z-0 bg-black">
         <motion.video

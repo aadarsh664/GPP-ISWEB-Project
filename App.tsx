@@ -51,6 +51,58 @@ const App: React.FC = () => {
     // Development mode: blockages removed
   }, []);
 
+  // Global Loader Logic (Zero-FOUC Shutter Reveal with 0-100% Counter)
+  useEffect(() => {
+    const loaderEl = document.getElementById('global-loader');
+    if (!loaderEl) return;
+
+    const loaderState = (window as any).__LOADER_STATE;
+    
+    if (loaderState) {
+      // React has mounted, bump to 40%
+      loaderState.setTarget(40); 
+    }
+
+    // Minimum display time to prevent awkward flashing on fast networks
+    const minTimePromise = new Promise(resolve => setTimeout(resolve, 600));
+    
+    // Wait for all critical assets (images, fonts, stylesheets) to load
+    const windowLoadPromise = new Promise(resolve => {
+      if (document.readyState === 'complete') {
+        if (loaderState) loaderState.setTarget(70);
+        resolve(true);
+      } else {
+        window.addEventListener('load', () => {
+          if (loaderState) loaderState.setTarget(70);
+          resolve(true);
+        });
+      }
+    });
+
+    Promise.all([minTimePromise, windowLoadPromise]).then(() => {
+      if (loaderState) {
+        // We are completely ready, trigger the final stretch to 100%
+        loaderState.setTarget(100);
+        
+        // Only shutter up when the counter literally displays 100%
+        loaderState.onComplete = () => {
+          loaderEl.classList.add('shutter-up');
+          setTimeout(() => {
+            loaderEl.style.display = 'none';
+            window.dispatchEvent(new CustomEvent('hero-entrance-start'));
+          }, 600); // 600ms matches the CSS transition duration
+        };
+      } else {
+        // Fallback just in case
+        loaderEl.classList.add('shutter-up');
+        setTimeout(() => {
+          loaderEl.style.display = 'none';
+          window.dispatchEvent(new CustomEvent('hero-entrance-start'));
+        }, 600);
+      }
+    });
+  }, []);
+
   return (
     <div className="antialiased">
       <SmoothScroll />
