@@ -387,11 +387,16 @@
 
   <!-- ZERO-FOUC GLOBAL LOADER -->
   <div id="global-loader" style="--logo-color-1: #FFFFFF; --logo-color-2: #FFFFFF; --logo-color-3: #FFFFFF; --logo-color-4: #FFFFFF;">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 48px; width: 100%; max-width: 300px;">
       <svg class="gpp-loader-logo">
         <use href="#brand-logo" />
       </svg>
-      <div id="loader-counter" style="color: rgba(255, 255, 255, 0.4); font-size: 14px; font-weight: 500; letter-spacing: 2px; font-family: 'Helvetica Now Display', sans-serif;">0%</div>
+      <div style="display: flex; align-items: center; gap: 16px; width: 100%; justify-content: center;">
+        <div style="flex: 1; height: 1px; background-color: rgba(255,255,255,0.1); position: relative;">
+           <div id="loader-line" style="position: absolute; top: 0; left: 0; height: 100%; width: 0%; background-color: rgba(255,255,255,0.8);"></div>
+        </div>
+        <div id="loader-counter" style="width: 45px; text-align: right; color: rgba(255, 255, 255, 0.4); font-size: 14px; font-weight: 500; letter-spacing: 2px; font-family: 'Helvetica Now Display', sans-serif; font-variant-numeric: tabular-nums;">0%</div>
+      </div>
     </div>
   </div>
 
@@ -399,6 +404,7 @@
     // PRE-HYDRATION PROGRESS (0% -> 20%)
     // Animate the counter while JS loads, purely as a baseline.
     const counterEl = document.getElementById('loader-counter');
+    const lineEl = document.getElementById('loader-line');
     
     // Setup a global object that React can later access to continue the counter
     window.__LOADER_STATE = {
@@ -422,6 +428,9 @@
 
       if (counterEl) {
         counterEl.textContent = Math.round(window.__LOADER_STATE.progress) + "%";
+      }
+      if (lineEl) {
+        lineEl.style.width = window.__LOADER_STATE.progress + "%";
       }
 
       // Check if we reached 100
