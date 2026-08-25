@@ -324,12 +324,23 @@
 </footer>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const selector = document.getElementById('countrySelector');
     const btn = document.getElementById('countrySelectorBtn');
     const search = document.getElementById('countrySearch');
     const options = document.querySelectorAll('.country-option');
     const selectedFlag = document.getElementById('selectedCountryFlag');
+
+    // Radial Reveal Button Effect global logic
+    document.body.addEventListener("mousemove", (e) => {
+      const target = e.target.closest(".btn-radial-reveal");
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      target.style.setProperty("--x", `${x}px`);
+      target.style.setProperty("--y", `${y}px`);
+    });
 
     // Toggle dropdown
     btn.addEventListener('click', () => {
@@ -400,3 +411,20 @@
   ]
 }
 {% endschema %}
+
+ < s c r i p t > 
+     d o c u m e n t . a d d E v e n t L i s t e n e r ( " D O M C o n t e n t L o a d e d " ,   ( )   = >   { 
+         / /   R a d i a l   R e v e a l   B u t t o n   E f f e c t   g l o b a l   l o g i c 
+         d o c u m e n t . b o d y . a d d E v e n t L i s t e n e r ( " m o u s e m o v e " ,   ( e )   = >   { 
+             c o n s t   t a r g e t   =   e . t a r g e t . c l o s e s t ( " . b t n - r a d i a l " ) ; 
+             i f   ( ! t a r g e t )   r e t u r n ; 
+             c o n s t   r e c t   =   t a r g e t . g e t B o u n d i n g C l i e n t R e c t ( ) ; 
+             c o n s t   x   =   e . c l i e n t X   -   r e c t . l e f t ; 
+             c o n s t   y   =   e . c l i e n t Y   -   r e c t . t o p ; 
+             t a r g e t . s t y l e . s e t P r o p e r t y ( " - - x " ,   ` $ { x } p x ` ) ; 
+             t a r g e t . s t y l e . s e t P r o p e r t y ( " - - y " ,   ` $ { y } p x ` ) ; 
+         } ) ; 
+     } ) ; 
+ < / s c r i p t > 
+  
+ 

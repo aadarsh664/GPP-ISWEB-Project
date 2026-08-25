@@ -373,7 +373,7 @@
     z-index: 1;
   }
   .btn-tactile:active {
-    transform: scale(0.97);
+    transform: scale(0.99);
     box-shadow: 0 1px 2px rgba(0,0,0,0.1), inset 0 2px 4px rgba(0,0,0,0.1);
   }
   
@@ -543,35 +543,38 @@
       {%- form 'product', product, class: 'product-form' -%}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         
-        <div class="quantity-selector">
-          <label class="variant-label">Quantity</label>
-          <select name="quantity">
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-            <option value="1500">1500</option>
-          </select>
-          <div class="quantity-subtext">
-            <span>Minimum Quantity 500 units</span>
-            <span>Quantity should be in multiple of 500</span>
-          </div>
-        </div>
-
         <!-- Real Shopify Variants (Price Affecting) -->
         {%- unless product.has_only_default_variant -%}
           <div class="real-variants-container">
             {%- for option in product.options_with_values -%}
-              <div class="variant-group real-variant-group is-visible" data-option-position="option{{ option.position }}">
+              <div class="variant-group real-variant-group is-visible" data-option-position="option{{ option.position }}" data-option-name="{{ option.name | escape }}">
                 <span class="variant-label">
                   {{ option.name }}
                   <span style="font-size: 11px; font-weight: normal; margin-left: 6px; color: var(--color-primary); background: rgba(0,85,128,0.1); padding: 2px 6px; border-radius: 4px;">Price varies</span>
                 </span>
-                <div class="variant-options">
-                  {%- for value in option.values -%}
-                    <div class="variant-pill real-variant-pill {% if option.selected_value == value %}active{% endif %}" data-value="{{ value | escape }}">
-                      {{ value }}
+                
+                {%- assign downcased_name = option.name | downcase -%}
+                {%- if downcased_name contains 'quantity' or downcased_name contains 'qty' -%}
+                  <div class="quantity-selector">
+                    <select class="real-variant-select">
+                      {%- for value in option.values -%}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                      {%- endfor -%}
+                    </select>
+                    <div class="quantity-subtext">
+                      <span>Select pack size</span>
+                      <span>Multiples only</span>
                     </div>
-                  {%- endfor -%}
-                </div>
+                  </div>
+                {%- else -%}
+                  <div class="variant-options">
+                    {%- for value in option.values -%}
+                      <div class="variant-pill real-variant-pill {% if option.selected_value == value %}active{% endif %}" data-value="{{ value | escape }}">
+                        {{ value }}
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
               </div>
             {%- endfor -%}
             
@@ -638,7 +641,7 @@
           <span class="variant-label">Upload Design</span>
           <div class="upload-section">
             <div class="upload-options">
-              <div class="upload-btn btn-tactile active" id="btn-drag-browse">Drop or click to browse</div>
+              <div class="upload-btn btn-tactile btn-radial-reveal active" style="--hover-bg:#0056b3; --hover-color:#fff;" id="btn-drag-browse">Drop or click to browse</div>
               <div class="upload-btn btn-tactile" id="btn-design-service">Start with our designing service</div>
             </div>
             
@@ -760,53 +763,83 @@
         const hiddenVariantInput = document.querySelector('input[name="id"]');
         const priceDisplay = document.querySelector('.product-price');
 
+        const updateVariant = () => {
+          let selectedOptions = {};
+          realVariantGroups.forEach(g => {
+            const pos = g.getAttribute('data-option-position');
+            const activePill = g.querySelector('.real-variant-pill.active');
+            const activeSelect = g.querySelector('.real-variant-select');
+            
+            if (activePill) {
+              selectedOptions[pos] = activePill.getAttribute('data-value');
+            } else if (activeSelect) {
+              selectedOptions[pos] = activeSelect.value;
+            }
+          });
+
+          // Find matching variant
+          const matchedVariant = productVariants.find(variant => {
+            return (
+              (!selectedOptions['option1'] || variant.option1 === selectedOptions['option1']) &&
+              (!selectedOptions['option2'] || variant.option2 === selectedOptions['option2']) &&
+              (!selectedOptions['option3'] || variant.option3 === selectedOptions['option3'])
+            );
+          });
+
+          if (matchedVariant) {
+            // Update Hidden Input for cart
+            if (hiddenVariantInput) {
+              hiddenVariantInput.value = matchedVariant.id;
+            }
+            
+            // Update Price Display
+            if (priceDisplay) {
+              const formatter = new Intl.NumberFormat('en-IN');
+              priceDisplay.innerHTML = '₹' + formatter.format(matchedVariant.price / 100);
+            }
+
+            // Update Unit Text if Quantity variant changed
+            const unitText = document.querySelector('.product-unit-text');
+            if (unitText) {
+              // Try to find if one of the selected options is for Quantity
+              realVariantGroups.forEach(g => {
+                const optName = g.getAttribute('data-option-name');
+                if (optName && (optName.toLowerCase().includes('quantity') || optName.toLowerCase().includes('qty'))) {
+                  const pos = g.getAttribute('data-option-position');
+                  if (selectedOptions[pos]) {
+                    unitText.textContent = `for ${selectedOptions[pos]} units`;
+                  }
+                }
+              });
+            }
+            
+            // Update URL
+            const url = new URL(window.location);
+            url.searchParams.set('variant', matchedVariant.id);
+            window.history.replaceState({}, '', url);
+          }
+        };
+
         realVariantGroups.forEach(group => {
           const pills = group.querySelectorAll('.real-variant-pill');
           pills.forEach(pill => {
             pill.addEventListener('click', () => {
-              // UI Update
               pills.forEach(p => p.classList.remove('active'));
               pill.classList.add('active');
-
-              // Find selected options across all groups
-              let selectedOptions = {};
-              realVariantGroups.forEach(g => {
-                const activePill = g.querySelector('.real-variant-pill.active');
-                if (activePill) {
-                  selectedOptions[g.getAttribute('data-option-position')] = activePill.getAttribute('data-value');
-                }
-              });
-
-              // Find matching variant
-              const matchedVariant = productVariants.find(variant => {
-                return (
-                  (!selectedOptions['option1'] || variant.option1 === selectedOptions['option1']) &&
-                  (!selectedOptions['option2'] || variant.option2 === selectedOptions['option2']) &&
-                  (!selectedOptions['option3'] || variant.option3 === selectedOptions['option3'])
-                );
-              });
-
-              if (matchedVariant) {
-                // Update Hidden Input for cart
-                if (hiddenVariantInput) {
-                  hiddenVariantInput.value = matchedVariant.id;
-                }
-                
-                // Update Price Display
-                if (priceDisplay) {
-                  // Format as Indian Rupee
-                  const formatter = new Intl.NumberFormat('en-IN');
-                  priceDisplay.innerHTML = '₹' + formatter.format(matchedVariant.price / 100);
-                }
-                
-                // Update URL (optional but good for sharing)
-                const url = new URL(window.location);
-                url.searchParams.set('variant', matchedVariant.id);
-                window.history.replaceState({}, '', url);
-              }
+              updateVariant();
             });
           });
+
+          const selectEl = group.querySelector('.real-variant-select');
+          if (selectEl) {
+            selectEl.addEventListener('change', () => {
+              updateVariant();
+            });
+          }
         });
+        
+        // Initial run
+        updateVariant();
       } catch (e) {
         console.warn('Error parsing product variants JSON', e);
       }
@@ -886,8 +919,13 @@
             progressContainer.style.display = 'block';
             btnDragBrowse.textContent = 'Uploading...';
             
+            // File Identification: prepend timestamp and cart token
+            const timestamp = Date.now();
+            const cartToken = document.cookie.match(/(^|;)\s*cart=([^;]+)/)?.pop() || 'guest';
+            const newFilename = `${timestamp}_${cartToken}_${file.name}`;
+            
             const formData = new FormData();
-            formData.append('designFile', file);
+            formData.append('designFile', file, newFilename);
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://gpp-isweb-project.onrender.com/api/upload', true);
@@ -920,7 +958,7 @@
                 if (response.success && fileUrlInput) {
                   fileUrlInput.value = response.fileUrl;
                   btnDragBrowse.textContent = 'File Uploaded Successfully ✓';
-                  btnDragBrowse.style.backgroundColor = '#4CAF50';
+                  btnDragBrowse.style.backgroundColor = '#0056b3'; // Brand Blue
                   btnDragBrowse.style.color = '#fff';
                   progressText.textContent = 'Complete';
                 }
@@ -966,54 +1004,39 @@
 
         pincodeBtn.textContent = 'Checking...';
         
-        // --- SHIPROCKET API INTEGRATION ---
-        // REPLACE 'YOUR_SHIPROCKET_API_TOKEN_HERE' WITH YOUR ACTUAL TOKEN
-        const SHIPROCKET_TOKEN = 'YOUR_SHIPROCKET_API_TOKEN_HERE'; 
-        const PICKUP_PINCODE = 'YOUR_PICKUP_PINCODE'; // e.g., '110001'
-        const weight = 1; 
-        const cod = 0; 
-        
         try {
-          if (SHIPROCKET_TOKEN === 'YOUR_SHIPROCKET_API_TOKEN_HERE') {
-            throw new Error('Token not yet configured');
-          }
-
-          // Note: If Shiprocket blocks CORS from storefront, this fetch will need to be routed via the Node backend.
-          const response = await fetch(`https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${PICKUP_PINCODE}&delivery_postcode=${pincode}&weight=${weight}&cod=${cod}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${SHIPROCKET_TOKEN}`
-            }
-          });
+          // --- SHIPROCKET API INTEGRATION (PROXY SCAFFOLDING) ---
+          // Note: Exposing Shiprocket tokens on the frontend is a security risk.
+          // This fetch is structured to hit a proxy backend (e.g. your Render backend or Shopify App)
+          // The backend should securely hold the Shiprocket Token and make the actual API call.
           
+          /*
+          const response = await fetch(`https://gpp-isweb-project.onrender.com/api/pincode?code=${pincode}`);
           if (!response.ok) throw new Error('API Request Failed');
           const data = await response.json();
+          */
+
+          // Mocking Backend Response Logic for standard vs remote areas
+          await new Promise(resolve => setTimeout(resolve, 800)); // simulate network delay
+          let etd = '4-5 business days';
+          let costText = 'FREE DELIVERY';
           
-          if (data.status === 200 && data.data && data.data.available_courier_companies.length > 0) {
-            const couriers = data.data.available_courier_companies;
-            const fastest = couriers.reduce((prev, curr) => (prev.etd < curr.etd ? prev : curr));
-            
-            pincodeMessage.innerHTML = `
-              Congratulation you are eligible for <strong>DELIVERY</strong>.<br>
-              <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                <span id="pincode-date">Estimated Delivery By: ${fastest.etd}</span>
-              </div>
-            `;
-          } else {
-            pincodeMessage.innerHTML = `<span style="color:#d32f2f;">Sorry, delivery is not available for this pincode.</span>`;
+          // Specific remote area logic (e.g., Andaman and Nicobar Islands)
+          if (pincode.startsWith('744')) {
+            etd = '8-10 business days';
+            costText = 'Delivery Charge: ₹150 (Remote Area)';
           }
-        } catch (error) {
-          console.warn('Shiprocket API Error or Token Missing:', error);
-          // Fallback UI response until token is supplied
+
           pincodeMessage.innerHTML = `
-              Congratulation you are eligible for <strong>DELIVERY</strong>.<br>
-              <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                <span id="pincode-date">Delivery within 4-5 business days.</span>
-              </div>
-            `;
+            Congratulation you are eligible for <strong>${costText}</strong>.<br>
+            <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              <span id="pincode-date">Estimated Delivery By: ${etd}</span>
+            </div>
+          `;
+        } catch (error) {
+          console.warn('Pincode check failed:', error);
+          pincodeMessage.innerHTML = `<span style="color:#d32f2f;">Unable to verify pincode at this time. Please try again.</span>`;
         }
         
         pincodeBtn.textContent = 'Check';

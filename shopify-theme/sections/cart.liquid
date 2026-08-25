@@ -1,33 +1,213 @@
-{% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
+<style>
+  .cart-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: var(--font-primary-family, sans-serif);
+  }
+  .cart-header {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--color-foreground, #000);
+    padding-bottom: 10px;
+  }
+  .cart-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cart-table th {
+    text-align: left;
+    padding: 15px 0;
+    border-bottom: 1px solid #eaeaea;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #666;
+  }
+  .cart-table td {
+    padding: 20px 0;
+    border-bottom: 1px solid #eaeaea;
+    vertical-align: top;
+  }
+  .cart-item-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  .cart-item-details {
+    padding-left: 20px;
+  }
+  .cart-item-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 10px 0;
+    text-decoration: none;
+    color: var(--color-foreground, #000);
+  }
+  .cart-item-variant {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .cart-item-properties {
+    font-size: 13px;
+    color: #333;
+    background: #f4f4f4;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .cart-item-properties p {
+    margin: 4px 0;
+  }
+  .cart-item-properties strong {
+    font-weight: 600;
+  }
+  .cart-item-properties a {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+  .cart-item-remove {
+    font-size: 12px;
+    color: #d32f2f;
+    text-decoration: underline;
+  }
+  .cart-quantity-input {
+    width: 60px;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .cart-price {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .cart-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+  .cart-summary {
+    width: 100%;
+    max-width: 400px;
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  .cart-subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .cart-taxes {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  .cart-checkout-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    background: var(--color-foreground, #000);
+    color: var(--color-white, #fff);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+  }
+</style>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
-{% endcomment %}
+<div class="cart-container">
+  <h1 class="cart-header">Your Bag</h1>
 
-<h1>{{ 'cart.title' | t }}</h1>
+  {% if cart.item_count > 0 %}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th colspan="2">Product</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr>
+              <td style="width: 120px;">
+                {% if item.image %}
+                  <img src="{{ item.image | img_url: '240x' }}" alt="{{ item.title | escape }}" class="cart-item-image">
+                {% else %}
+                  <div class="cart-item-image" style="background:#eee;"></div>
+                {% endif %}
+              </td>
+              <td class="cart-item-details">
+                <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
+                
+                {% unless item.variant.title contains 'Default' %}
+                  <div class="cart-item-variant">{{ item.variant.title }}</div>
+                {% endunless %}
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+                {%- assign property_size = item.properties | size -%}
+                {% if property_size > 0 %}
+                  <div class="cart-item-properties">
+                    {% for p in item.properties %}
+                      {%- assign first_character_in_key = p.first | truncate: 1, '' -%}
+                      {% unless p.last == blank or first_character_in_key == '_' %}
+                        <p>
+                          <strong>{{ p.first }}:</strong>
+                          {% if p.last contains '/uploads/' or p.last contains 'http' %}
+                            <a href="{{ p.last }}" target="_blank">View Design File</a>
+                          {% else %}
+                            {{ p.last }}
+                          {% endif %}
+                        </p>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+                <a href="{{ item.url_to_remove }}" class="cart-item-remove">Remove</a>
+              </td>
+              <td>
+                <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" class="cart-quantity-input">
+              </td>
+              <td>
+                <div class="cart-price">{{ item.final_line_price | money }}</div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="cart-subtotal">
+            <span>Subtotal</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-taxes">Taxes and shipping calculated at checkout</p>
+          
+          <button type="submit" name="update" class="cart-checkout-btn" style="background:transparent; color:#000; border:1px solid #000; margin-bottom:10px;">Update Cart</button>
+          <button type="submit" name="checkout" class="cart-checkout-btn btn-tactile btn-radial-reveal" style="--hover-bg:#333; --hover-color:#fff;">Checkout</button>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <div class="empty-cart">
+      <h2>Your bag is currently empty.</h2>
+      <a href="{{ routes.all_products_collection_url }}" class="cart-checkout-btn" style="display:inline-block; max-width: 250px; text-decoration:none; margin-top:20px;">Continue Shopping</a>
+    </div>
+  {% endif %}
+</div>
 
 {% schema %}
 {
