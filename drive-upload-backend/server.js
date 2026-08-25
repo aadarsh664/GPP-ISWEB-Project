@@ -25,21 +25,18 @@ const upload = multer({
   }
 });
 
-// Configure Google Drive API Client using Service Account
-// We load credentials securely from an environment variable containing the JSON string
-const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
+// Configure Google Drive API Client using OAuth2
+const oauth2Client = new google.auth.OAuth2(
+  process.env.DRIVE_CLIENT_ID,
+  process.env.DRIVE_CLIENT_SECRET,
+  "https://developers.google.com/oauthplayground" // Standard redirect URI for this flow
+);
 
-let credentials = {};
-try {
-  credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS || '{}');
-} catch (e) {
-  console.error("Failed to parse GOOGLE_CREDENTIALS environment variable. Is it valid JSON?");
-}
-
-const auth = new google.auth.GoogleAuth({
-  credentials,
-  scopes: SCOPES,
+oauth2Client.setCredentials({
+  refresh_token: process.env.DRIVE_REFRESH_TOKEN
 });
+
+const auth = oauth2Client;
 const driveService = google.drive({ version: 'v3', auth });
 
 /**
