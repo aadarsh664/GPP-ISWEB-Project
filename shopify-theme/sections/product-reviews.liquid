@@ -1,8 +1,6 @@
 <style>
   .reviews-wrapper {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 4rem var(--page-margin);
+    padding: 4rem 0;
   }
   
   .reviews-header {
@@ -12,12 +10,6 @@
     margin-bottom: 2rem;
   }
   
-  .reviews-title {
-    font-size: 2rem;
-    font-weight: 400;
-    margin: 0;
-  }
-
   .add-review-btn {
     background: none;
     border: none;
@@ -120,11 +112,11 @@
   }
 </style>
 
-<div class="reviews-wrapper full-width animate-up">
+<div class="reviews-wrapper full-width animate-up page-container">
   <div class="reviews-header">
-    <h2 class="reviews-title">{{ section.settings.title }}</h2>
-    <button class="add-review-btn" aria-label="Add a review">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+    <h2 class="section-heading-global" style="margin-bottom:0;">{{ section.settings.title }}</h2>
+    <button class="add-review-btn btn-radial-reveal" aria-label="Add a review" style="--hover-bg:#000; --hover-color:#fff; border-radius:50%; padding:8px;">
+      <span class="btn-radial-reveal__text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></span>
     </button>
   </div>
 

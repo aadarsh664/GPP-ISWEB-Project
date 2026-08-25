@@ -116,6 +116,16 @@ body {
   grid-column: 1 / -1 !important;
 }
 
+/* Standard page container for consistent padding/margins across all boxed sections */
+.page-container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+}
+
 /* Luxury Animations */
 .animate-up {
   opacity: 0;
@@ -161,6 +171,51 @@ a {
   border: 1px solid transparent;
 }
 
+/* Radial Reveal Button CSS */
+.btn-radial-reveal {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 1;
+}
+
+.btn-radial-reveal__text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.btn-radial-reveal::after {
+  content: '';
+  position: absolute;
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.45s ease-in-out, height 0.45s ease-in-out;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--hover-bg, #000);
+}
+
+.btn-radial-reveal:hover::after {
+  width: var(--max-radius, 250%);
+  height: var(--max-radius, 250%);
+}
+
+.btn-radial-reveal:hover .btn-radial-reveal__text {
+  color: var(--hover-color, #fff);
+  transition: color 0.45s ease-in-out;
+}
+
 /* Filled Black Button */
 .btn-primary {
   background-color: var(--color-black);
@@ -188,4 +243,55 @@ a {
 }
 .btn-blue:hover {
   background-color: #005bb5;
+}
+
+/* Product Card Snippet Styles */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--color-foreground);
+  transition: transform 0.2s ease;
+}
+.product-card__image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+  border: 1px solid var(--color-foreground);
+}
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.product-card__image--secondary {
+  opacity: 0;
+  z-index: 1;
+}
+.product-card:hover .product-card__image {
+  transform: scale(1.05);
+}
+.product-card:hover .product-card__image--primary {
+  opacity: 0;
+}
+.product-card:hover .product-card__image--secondary {
+  opacity: 1;
+}
+.product-card__title {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

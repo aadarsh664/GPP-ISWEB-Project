@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: gpp-drive-uploader
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # You MUST manually add DRIVE_FOLDER_ID as an Environment Variable in the Render Dashboard after deploying.

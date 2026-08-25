@@ -1,14 +1,14 @@
 <style>
   .promo-banner-wrapper {
-    padding: 2rem var(--page-margin);
-    max-width: var(--page-width);
-    margin: 0 auto;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
   }
 
   .promo-banner-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 0;
   }
 
   @media screen and (min-width: 768px) {
@@ -19,7 +19,7 @@
 
   .promo-card {
     position: relative;
-    border-radius: var(--radius-lg);
+    border-radius: 0;
     overflow: hidden;
     aspect-ratio: 4 / 3;
     display: flex;
@@ -116,8 +116,8 @@
           {%- if block.settings.price_text != blank -%}
             <p class="promo-card__price">{{ block.settings.price_text }}</p>
           {%- endif -%}
-          <span class="btn promo-card__btn">
-            {{ block.settings.button_label | default: 'Shop' }}
+          <span class="btn promo-card__btn btn-radial-reveal" style="--hover-bg:#000; --hover-color:#fff;">
+            <span class="btn-radial-reveal__text">{{ block.settings.button_label | default: 'Shop' }}</span>
           </span>
         </div>
       </a>

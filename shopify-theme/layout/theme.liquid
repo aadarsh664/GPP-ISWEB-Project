@@ -48,6 +48,35 @@
       document.querySelectorAll('.animate-up').forEach(el => {
         observer.observe(el);
       });
+
+      // Radial Reveal Button JS
+      const radialBtns = document.querySelectorAll('.btn-radial-reveal');
+      radialBtns.forEach(btn => {
+        btn.addEventListener('mouseenter', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          btn.style.setProperty('--x', `${x}px`);
+          btn.style.setProperty('--y', `${y}px`);
+          
+          // Calculate max radius needed to cover the button
+          const maxDist = Math.max(
+            Math.hypot(x, y),
+            Math.hypot(rect.width - x, y),
+            Math.hypot(x, rect.height - y),
+            Math.hypot(rect.width - x, rect.height - y)
+          );
+          btn.style.setProperty('--max-radius', `${maxDist * 2}px`);
+        });
+
+        btn.addEventListener('mouseleave', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          btn.style.setProperty('--x', `${x}px`);
+          btn.style.setProperty('--y', `${y}px`);
+        });
+      });
     });
   </script>
 </body>
