@@ -61,15 +61,42 @@
   }
 
   @media screen and (min-width: 768px) {
-    .product-row-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      overflow-x: visible;
-      padding-bottom: 0;
-    }
     .product-row-grid .product-card {
-      width: auto;
-      min-width: 0;
+      min-width: 250px;
+      width: 250px;
+    }
+    .product-row-grid::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* Slider Navigation */
+  .row-slider-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .row-slider-arrow {
+    background: var(--color-gray-100);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-foreground);
+    transition: all 0.2s;
+  }
+  .row-slider-arrow:hover {
+    background: var(--color-foreground);
+    color: var(--color-white);
+  }
+  @media screen and (max-width: 767px) {
+    .row-slider-nav {
+      display: none; /* Hide arrows on mobile, rely on touch swipe */
     }
   }
 </style>
@@ -83,20 +110,44 @@
   </div>
 
   <div class="product-row-grid-container page-container">
-    <div class="product-row-grid">
+    <div class="product-row-grid" id="product-row-grid-{{ section.id }}">
       {%- if section.settings.collection != blank -%}
-        {%- for product in section.settings.collection.products limit: 5 -%}
+        {%- for product in section.settings.collection.products limit: 10 -%}
           {% render 'product-card', product: product, delay: forloop.index | times: 50 %}
         {%- endfor -%}
       {%- else -%}
         <!-- Placeholder for empty state in editor -->
-        {%- for i in (1..5) -%}
+        {%- for i in (1..8) -%}
           {% render 'product-card', delay: forloop.index | times: 50 %}
         {%- endfor -%}
       {%- endif -%}
     </div>
+    
+    <div class="row-slider-nav">
+      <button class="row-slider-arrow" id="row-prev-{{ section.id }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="row-slider-arrow" id="row-next-{{ section.id }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('product-row-grid-{{ section.id }}');
+    const prev = document.getElementById('row-prev-{{ section.id }}');
+    const next = document.getElementById('row-next-{{ section.id }}');
+    
+    if (grid && prev && next) {
+      prev.addEventListener('click', () => {
+        const itemWidth = grid.querySelector('.product-card').clientWidth + 24; // 24px is gap
+        grid.scrollBy({ left: -itemWidth * 2, behavior: 'smooth' });
+      });
+      next.addEventListener('click', () => {
+        const itemWidth = grid.querySelector('.product-card').clientWidth + 24;
+        grid.scrollBy({ left: itemWidth * 2, behavior: 'smooth' });
+      });
+    }
+  });
+</script>
 
 {% schema %}
 {

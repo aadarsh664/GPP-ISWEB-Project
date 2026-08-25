@@ -242,11 +242,49 @@
 <footer class="footer full-width">
   <div class="footer__content">
     
-    <!-- Left Column -->
-    <div class="footer__left">
-      <img src="https://cdn.shopify.com/s/files/1/1022/6561/8797/files/logo.svg?v=1787649778" alt="GPP Logo" class="footer__logo" style="height: 48px; width: auto; object-fit: contain; margin-bottom: 1rem;">
+    <!-- Left Column (Logo, Country, Tagline, Socials) -->
+    <div class="footer__left" style="width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; width: 100%;">
+        <img src="https://cdn.shopify.com/s/files/1/1022/6561/8797/files/logo.svg?v=1787649778" alt="GPP Logo" class="footer__logo" style="height: 48px; width: auto; object-fit: contain;">
+        
+        <div class="country-selector" id="countrySelector">
+          <button type="button" class="country-selector-btn" id="countrySelectorBtn">
+            <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India" id="selectedCountryFlag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="country-selector-dropdown">
+            <input type="text" placeholder="Search country..." class="country-search" id="countrySearch">
+            <div class="country-list" id="countryList">
+              <div class="country-option" data-code="IN" data-flag="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India" width="20"> India (INR ₹)
+              </div>
+              <div class="country-option" data-code="US" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="USA" width="20"> United States (USD $)
+              </div>
+              <div class="country-option" data-code="GB" data-flag="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="UK" width="20"> United Kingdom (GBP £)
+              </div>
+              <div class="country-option" data-code="AE" data-flag="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg" alt="UAE" width="20"> United Arab Emirates (AED د.إ)
+              </div>
+              <div class="country-option" data-code="SA" data-flag="https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg" alt="Saudi Arabia" width="20"> Saudi Arabia (SAR ﷼)
+              </div>
+              <div class="country-option" data-code="SG" data-flag="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg" alt="Singapore" width="20"> Singapore (SGD $)
+              </div>
+              <div class="country-option" data-code="AU" data-flag="https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg" alt="Australia" width="20"> Australia (AUD $)
+              </div>
+              <div class="country-option" data-code="CA" data-flag="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg" alt="Canada" width="20"> Canada (CAD $)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
-      <p class="footer__tagline">{{ section.settings.tagline }}</p>
+      <p class="footer__tagline" style="margin-bottom:1rem;">{{ section.settings.tagline }}</p>
       
       <div class="footer__socials">
         <!-- SVG icons for social media (solid circles) -->
@@ -257,63 +295,26 @@
       </div>
     </div>
 
-    <!-- Middle Column -->
-    <div class="footer__middle">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size: 12px;">Need help?</span>
-        <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" class="whatsapp-btn">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.662-2.06-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Whatsapp us
-        </a>
-      </div>
-    </div>
-
-    <!-- Right Column -->
-    <div class="footer__right">
-      <form class="track-order-wrapper" action="/search" method="get">
-        <button type="submit" class="track-order-btn btn-radial-reveal" style="--hover-bg:#333; --hover-color:#fff;">
-          <span class="btn-radial-reveal__text">Track your Order</span>
-        </button>
-        <input type="text" name="q" placeholder="*Enter mobile number or email id" class="track-order-input" required>
-      </form>
-      
-      <div class="country-selector" id="countrySelector">
-        <button type="button" class="country-selector-btn" id="countrySelectorBtn">
-          <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India" id="selectedCountryFlag">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="country-selector-dropdown">
-          <input type="text" placeholder="Search country..." class="country-search" id="countrySearch">
-          <div class="country-list" id="countryList">
-            <div class="country-option" data-code="IN" data-flag="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India" width="20"> India (INR ₹)
-            </div>
-            <div class="country-option" data-code="US" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="USA" width="20"> United States (USD $)
-            </div>
-            <div class="country-option" data-code="GB" data-flag="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="UK" width="20"> United Kingdom (GBP £)
-            </div>
-            <div class="country-option" data-code="AE" data-flag="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg" alt="UAE" width="20"> United Arab Emirates (AED د.إ)
-            </div>
-            <div class="country-option" data-code="SA" data-flag="https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg" alt="Saudi Arabia" width="20"> Saudi Arabia (SAR ﷼)
-            </div>
-            <div class="country-option" data-code="SG" data-flag="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg" alt="Singapore" width="20"> Singapore (SGD $)
-            </div>
-            <div class="country-option" data-code="AU" data-flag="https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg" alt="Australia" width="20"> Australia (AUD $)
-            </div>
-            <div class="country-option" data-code="CA" data-flag="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg" alt="Canada" width="20"> Canada (CAD $)
-            </div>
-          </div>
+    <!-- Right Column (WhatsApp & Track Order) -->
+    <div class="footer__right" style="width: 100%; display: flex; flex-direction: column; gap: 2rem;">
+      <div style="display: flex; align-items: center; gap: 1rem; width: 100%; justify-content: space-between;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size: 12px; display: none;">Need help?</span>
+          <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" class="whatsapp-btn">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.662-2.06-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Whatsapp us
+          </a>
         </div>
-      </div>
 
-      <div class="footer__bottom-links">
+        <form class="track-order-wrapper" action="/search" method="get" style="flex: 1; max-width: 300px; margin: 0;">
+          <button type="submit" class="track-order-btn btn-radial-reveal" style="--hover-bg:#333; --hover-color:#fff;">
+            <span class="btn-radial-reveal__text">Track Order</span>
+          </button>
+          <input type="text" name="q" placeholder="Mobile / Email" class="track-order-input" required style="width:100%; min-width:50px;">
+        </form>
+      </div>
+      
+      <div class="footer__bottom-links" style="width:100%;">
         <div><a href="/policies/privacy-policy">Our policies</a></div>
         <div><a href="/policies/terms-of-service">Terms and Conditions</a></div>
         <div>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.</div>
