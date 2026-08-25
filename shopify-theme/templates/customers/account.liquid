@@ -1,0 +1,149 @@
+<style>
+  .account-page {
+    max-width: var(--page-width);
+    margin: 4rem auto;
+    padding: 0 var(--page-margin);
+  }
+  .account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+  .account-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .account-logout {
+    font-size: 14px;
+    color: var(--color-gray-800);
+    text-decoration: underline;
+  }
+  .account-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  @media screen and (min-width: 768px) {
+    .account-layout {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  .account-section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  /* Orders Table */
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .orders-table th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid var(--color-border);
+    font-weight: 600;
+  }
+  .orders-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .no-orders {
+    padding: 2rem 0;
+    color: var(--color-gray-800);
+  }
+  /* Profile Sidebar */
+  .profile-card {
+    background: var(--color-gray-100);
+    border-radius: 8px;
+    padding: 2rem;
+  }
+  .profile-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .profile-details {
+    font-size: 14px;
+    color: var(--color-gray-800);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .profile-link {
+    display: inline-block;
+    color: var(--color-foreground);
+    text-decoration: underline;
+    font-size: 14px;
+    font-weight: 500;
+  }
+</style>
+
+<div class="account-page animate-up">
+  <div class="account-header">
+    <h1 class="account-title">My Account</h1>
+    <a href="{{ routes.account_logout_url }}" class="account-logout">Log out</a>
+  </div>
+
+  <div class="account-layout">
+    <!-- Orders Section -->
+    <div class="account-orders">
+      <h2 class="account-section-title">Order History</h2>
+      
+      {% if customer.orders.size > 0 %}
+        <div style="overflow-x: auto;">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Payment Status</th>
+                <th>Fulfillment</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in customer.orders %}
+                <tr>
+                  <td><a href="{{ order.customer_url }}" style="text-decoration:underline;">{{ order.name }}</a></td>
+                  <td>{{ order.created_at | date: "%b %d, %Y" }}</td>
+                  <td>{{ order.financial_status_label }}</td>
+                  <td>{{ order.fulfillment_status_label }}</td>
+                  <td>{{ order.total_price | money }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="no-orders">You haven't placed any orders yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Profile Details Section -->
+    <div class="account-profile">
+      <div class="profile-card">
+        <h2 class="account-section-title">Account Details</h2>
+        <div class="profile-name">{{ customer.name }}</div>
+        <div class="profile-details">
+          {{ customer.email }}<br>
+          {% if customer.default_address %}
+            {{ customer.default_address.address1 }}<br>
+            {% if customer.default_address.address2 != blank %}
+              {{ customer.default_address.address2 }}<br>
+            {% endif %}
+            {{ customer.default_address.city }}, {{ customer.default_address.province_code }} {{ customer.default_address.zip }}<br>
+            {{ customer.default_address.country }}
+          {% else %}
+            No default address saved.
+          {% endif %}
+        </div>
+        <a href="{{ routes.account_addresses_url }}" class="profile-link">View Addresses ({{ customer.addresses_count }})</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -72,9 +72,10 @@
   /* Middle Column */
   .footer__middle {
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     flex: 1;
+    margin-bottom: 1rem;
   }
 
   .whatsapp-btn {
@@ -100,14 +101,19 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1.5rem;
+    width: 100%;
   }
 
   @media screen and (min-width: 990px) {
     .footer__right {
       align-items: flex-end;
+      width: auto;
     }
     .footer__middle {
       padding-bottom: 2rem;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 0;
     }
   }
 
@@ -117,6 +123,8 @@
     border-radius: 4px;
     overflow: hidden;
     background: var(--color-white);
+    width: 100%;
+    max-width: 100%;
   }
 
   .track-order-btn {
@@ -126,6 +134,7 @@
     padding: 8px 16px;
     font-size: 11px;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .track-order-input {
@@ -133,7 +142,8 @@
     padding: 8px 12px;
     font-size: 11px;
     outline: none;
-    min-width: 200px;
+    width: 100%;
+    min-width: 0;
   }
 
   .country-selector {

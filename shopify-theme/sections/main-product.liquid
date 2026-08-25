@@ -23,14 +23,29 @@
 
   /* Left: Media Gallery */
   .product-media {
+    position: sticky;
+    top: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    position: sticky;
-    top: 2rem;
   }
-  .product-media__main {
+  
+  .product-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
     width: 100%;
+    gap: 1rem;
+  }
+  .product-slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-media__main {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
     aspect-ratio: 1 / 1;
     border: 1px solid var(--color-foreground);
     border-radius: var(--radius-md);
@@ -50,27 +65,68 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: none;
+    background: rgba(255, 255, 255, 0.8);
     border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s;
   }
-  .product-media__thumbnails {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+  .product-media__main .wishlist-btn:hover {
+    background: #000;
+    color: #fff;
+  }
+  .product-media__main .wishlist-btn.active svg {
+    fill: currentColor;
+    color: red;
+  }
+
+  .product-slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 1rem;
+    margin-top: 0.5rem;
   }
-  .product-media__thumb {
-    aspect-ratio: 1 / 1;
+  .slider-arrow {
+    background: none;
     border: 1px solid var(--color-foreground);
-    border-radius: var(--radius-sm);
-    background-color: var(--color-white);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    overflow: hidden;
+    transition: background 0.2s;
   }
-  .product-media__thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .slider-arrow:hover {
+    background: var(--color-gray-100);
+  }
+  .slider-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-gray-300);
+    transition: background 0.2s;
+  }
+  .slider-dot.active {
+    background: var(--color-foreground);
+  }
+
+  @media screen and (max-width: 989px) {
+    .slider-arrow {
+      display: none;
+    }
   }
 
   /* Right: Details */
@@ -417,27 +473,34 @@
     
     <!-- Left Media -->
     <div class="product-media">
-      <div class="product-media__main">
-        {%- if product.featured_media != blank -%}
-          {{ product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy' }}
-        {%- else -%}
-          <div style="color:var(--color-gray-500);">No image</div>
-        {%- endif -%}
-        <button class="wishlist-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        </button>
-      </div>
-      <div class="product-media__thumbnails">
-        {%- for media in product.media limit: 4 -%}
-          <div class="product-media__thumb">
-            {{ media | image_url: width: 200 | image_tag: loading: 'lazy' }}
-          </div>
-        {%- else -%}
-          {%- for i in (1..4) -%}
-            <div class="product-media__thumb"></div>
+      <div class="product-slider" id="product-slider">
+        {%- if product.media.size > 0 -%}
+          {%- for media in product.media -%}
+            <div class="product-media__main">
+              {{ media | image_url: width: 800 | image_tag: loading: 'lazy' }}
+              <button class="wishlist-btn" data-product-handle="{{ product.handle }}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+            </div>
           {%- endfor -%}
-        {%- endfor -%}
+        {%- else -%}
+          <div class="product-media__main">
+            <div style="color:var(--color-gray-500);">No image</div>
+          </div>
+        {%- endif -%}
       </div>
+      
+      {%- if product.media.size > 1 -%}
+      <div class="product-slider-nav">
+        <button class="slider-arrow prev-arrow" id="slider-prev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="slider-dots" id="slider-dots">
+          {%- for media in product.media -%}
+            <span class="slider-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}"></span>
+          {%- endfor -%}
+        </div>
+        <button class="slider-arrow next-arrow" id="slider-next"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      {%- endif -%}
     </div>
 
     <!-- Right Details -->
@@ -932,6 +995,67 @@
         }
         
         pincodeBtn.textContent = 'Check';
+      });
+    }
+    // Product Slider Logic
+    const slider = document.getElementById('product-slider');
+    const prevBtn = document.getElementById('slider-prev');
+    const nextBtn = document.getElementById('slider-next');
+    const dots = document.querySelectorAll('.slider-dot');
+
+    if (slider && prevBtn && nextBtn) {
+      const scrollAmount = slider.clientWidth;
+
+      prevBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
+
+      // Update dots on scroll
+      slider.addEventListener('scroll', () => {
+        const index = Math.round(slider.scrollLeft / slider.clientWidth);
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+      });
+
+      // Click dots to scroll
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          slider.scrollTo({ left: i * slider.clientWidth, behavior: 'smooth' });
+        });
+      });
+    }
+
+    // Wishlist Toggle Logic
+    const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+    if (wishlistBtns.length > 0) {
+      let saved = JSON.parse(localStorage.getItem('gpp_wishlist') || '[]');
+      const handle = wishlistBtns[0].getAttribute('data-product-handle');
+      
+      if (saved.includes(handle)) {
+        wishlistBtns.forEach(btn => btn.classList.add('active'));
+      }
+
+      wishlistBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const handle = btn.getAttribute('data-product-handle');
+          let currentSaved = JSON.parse(localStorage.getItem('gpp_wishlist') || '[]');
+          
+          if (currentSaved.includes(handle)) {
+            currentSaved = currentSaved.filter(h => h !== handle);
+            wishlistBtns.forEach(b => b.classList.remove('active'));
+          } else {
+            currentSaved.push(handle);
+            wishlistBtns.forEach(b => b.classList.add('active'));
+          }
+          
+          localStorage.setItem('gpp_wishlist', JSON.stringify(currentSaved));
+        });
       });
     }
   });

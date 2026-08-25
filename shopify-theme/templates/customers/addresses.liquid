@@ -1,0 +1,110 @@
+<style>
+  .addresses-page {
+    max-width: var(--page-width);
+    margin: 4rem auto;
+    padding: 0 var(--page-margin);
+  }
+  .addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+  .addresses-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .addresses-back {
+    font-size: 14px;
+    color: var(--color-gray-800);
+    text-decoration: underline;
+  }
+  .address-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media screen and (min-width: 768px) {
+    .address-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .address-card {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 2rem;
+    background: var(--color-white);
+  }
+  .address-card.default-address {
+    border-color: var(--color-foreground);
+    border-width: 2px;
+  }
+  .address-badge {
+    display: inline-block;
+    background: var(--color-foreground);
+    color: var(--color-white);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  .address-details {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-gray-800);
+    margin-bottom: 1.5rem;
+  }
+  .address-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  .address-btn {
+    background: transparent;
+    border: 1px solid var(--color-foreground);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .address-btn:hover {
+    background: var(--color-foreground);
+    color: var(--color-white);
+  }
+</style>
+
+<div class="addresses-page animate-up">
+  <div class="addresses-header">
+    <h1 class="addresses-title">Addresses</h1>
+    <a href="{{ routes.account_url }}" class="addresses-back">Back to Account</a>
+  </div>
+
+  <div class="address-grid">
+    {% for address in customer.addresses %}
+      <div class="address-card {% if address == customer.default_address %}default-address{% endif %}">
+        {% if address == customer.default_address %}
+          <div class="address-badge">Default</div>
+        {% endif %}
+        
+        <div class="address-details">
+          <strong>{{ address.first_name }} {{ address.last_name }}</strong><br>
+          {{ address.address1 }}<br>
+          {% if address.address2 != blank %}{{ address.address2 }}<br>{% endif %}
+          {{ address.city }}, {{ address.province_code }} {{ address.zip }}<br>
+          {{ address.country }}<br>
+          {% if address.phone != blank %}{{ address.phone }}{% endif %}
+        </div>
+        
+        <div class="address-actions">
+          <button type="button" class="address-btn" onclick="alert('Edit address form would open here (Requires full Shopify form setup)')">Edit</button>
+          <form method="post" action="/account/addresses/{{ address.id }}" onsubmit="return confirm('Delete this address?');" style="margin:0;">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="address-btn" style="border-color:red; color:red;">Delete</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

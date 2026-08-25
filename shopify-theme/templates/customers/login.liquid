@@ -1,0 +1,113 @@
+<style>
+  .customer-page {
+    max-width: 480px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  .customer-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .customer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .customer-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .customer-field label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .customer-field input {
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .customer-field input:focus {
+    border-color: var(--color-foreground);
+  }
+  .customer-btn {
+    background: var(--color-foreground);
+    color: var(--color-white);
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .customer-btn:hover {
+    background: var(--color-gray-800);
+  }
+  .customer-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-top: 1rem;
+  }
+  .customer-links a {
+    color: var(--color-foreground);
+    text-decoration: underline;
+  }
+</style>
+
+<div class="customer-page animate-up">
+  <div id="recover-form" style="display: none;">
+    <h1 class="customer-title">Reset Password</h1>
+    <p style="text-align:center; font-size:14px; margin-bottom:1.5rem;">We will send you an email to reset your password.</p>
+    {% form 'recover_customer_password', class: 'customer-form' %}
+      {{ form.errors | default_errors }}
+      <div class="customer-field">
+        <label for="RecoverEmail">Email</label>
+        <input type="email" name="email" id="RecoverEmail" required>
+      </div>
+      <button type="submit" class="customer-btn">Submit</button>
+      <div class="customer-links" style="justify-content:center;">
+        <a href="#login" onclick="document.getElementById('recover-form').style.display='none'; document.getElementById('customer-login-form').style.display='block'; return false;">Cancel</a>
+      </div>
+    {% endform %}
+  </div>
+
+  <div id="customer-login-form">
+    <h1 class="customer-title">Login</h1>
+    {% form 'customer_login', class: 'customer-form' %}
+      {{ form.errors | default_errors }}
+      <div class="customer-field">
+        <label for="CustomerEmail">Email</label>
+        <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" required>
+      </div>
+      {% if form.password_needed %}
+        <div class="customer-field">
+          <label for="CustomerPassword">Password</label>
+          <input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+        </div>
+      {% endif %}
+      
+      <div class="customer-links" style="margin-top:0; margin-bottom:1rem;">
+        {% if form.password_needed %}
+          <a href="#recover" onclick="document.getElementById('recover-form').style.display='block'; document.getElementById('customer-login-form').style.display='none'; return false;">Forgot password?</a>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="customer-btn">Sign In</button>
+      
+      <div class="customer-links" style="justify-content:center; margin-top:2rem;">
+        <a href="{{ routes.account_register_url }}">Create account</a>
+      </div>
+    {% endform %}
+  </div>
+</div>

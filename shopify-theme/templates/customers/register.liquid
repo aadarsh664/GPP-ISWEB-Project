@@ -1,0 +1,100 @@
+<style>
+  .customer-page {
+    max-width: 480px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  .customer-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .customer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .customer-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .customer-field label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .customer-field input {
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .customer-field input:focus {
+    border-color: var(--color-foreground);
+  }
+  .customer-btn {
+    background: var(--color-foreground);
+    color: var(--color-white);
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .customer-btn:hover {
+    background: var(--color-gray-800);
+  }
+  .customer-links {
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 2rem;
+  }
+  .customer-links a {
+    color: var(--color-foreground);
+    text-decoration: underline;
+  }
+</style>
+
+<div class="customer-page animate-up">
+  <h1 class="customer-title">Create Account</h1>
+  
+  {% form 'create_customer', class: 'customer-form' %}
+    {{ form.errors | default_errors }}
+    
+    <div class="customer-field">
+      <label for="RegisterForm-FirstName">First Name</label>
+      <input type="text" name="customer[first_name]" id="RegisterForm-FirstName" autocomplete="given-name">
+    </div>
+    
+    <div class="customer-field">
+      <label for="RegisterForm-LastName">Last Name</label>
+      <input type="text" name="customer[last_name]" id="RegisterForm-LastName" autocomplete="family-name">
+    </div>
+    
+    <div class="customer-field">
+      <label for="RegisterForm-email">Email</label>
+      <input type="email" name="customer[email]" id="RegisterForm-email" autocomplete="email" required>
+    </div>
+    
+    <div class="customer-field">
+      <label for="RegisterForm-password">Password</label>
+      <input type="password" name="customer[password]" id="RegisterForm-password" required>
+    </div>
+    
+    <button type="submit" class="customer-btn">Create</button>
+    
+    <div class="customer-links">
+      <a href="{{ routes.account_login_url }}">Already have an account? Sign In</a>
+    </div>
+  {% endform %}
+</div>
