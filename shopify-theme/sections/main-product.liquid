@@ -890,7 +890,7 @@
             formData.append('designFile', file);
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/api/upload', true);
+            xhr.open('POST', 'https://gpp-isweb-project.onrender.com/api/upload', true);
 
             xhr.upload.onprogress = function(e) {
               if (e.lengthComputable) {
