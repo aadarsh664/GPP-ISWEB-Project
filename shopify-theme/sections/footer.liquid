@@ -234,11 +234,7 @@
     
     <!-- Left Column -->
     <div class="footer__left">
-      {%- if section.settings.logo != blank -%}
-        {{ section.settings.logo | image_url: width: 400 | image_tag: class: 'footer__logo' }}
-      {%- else -%}
-        <div style="font-weight: 700; font-size: 24px;">GURU PRINTING PRESS</div>
-      {%- endif -%}
+      <img src="https://cdn.shopify.com/s/files/1/1022/6561/8797/files/logo.svg?v=1787649778" alt="GPP Logo" class="footer__logo" style="height: 48px; width: auto; object-fit: contain; margin-bottom: 1rem;">
       
       <p class="footer__tagline">{{ section.settings.tagline }}</p>
       

@@ -227,17 +227,7 @@
 
     <!-- Logo -->
     <a href="{{ routes.root_url }}" class="header__heading-link">
-      {%- if section.settings.logo != blank -%}
-        {{ section.settings.logo | image_url: width: 600 | image_tag:
-          class: 'header__heading-logo',
-          widths: '50, 100, 150, 200, 250, 300, 400, 500, 600',
-          height: section.settings.logo.height,
-          width: section.settings.logo.width,
-          alt: section.settings.logo.alt | default: shop.name | escape
-        }}
-      {%- else -%}
-        <span class="h2" style="font-weight:700;font-size:24px;">GURU PRINTING PRESS</span>
-      {%- endif -%}
+      <img src="https://cdn.shopify.com/s/files/1/1022/6561/8797/files/logo.svg?v=1787649778" alt="GPP Logo" class="header__heading-logo" style="height: 36px; width: auto; object-fit: contain;">
     </a>
 
     <!-- Desktop Navigation -->
