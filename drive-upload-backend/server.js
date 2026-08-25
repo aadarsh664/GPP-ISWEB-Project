@@ -15,10 +15,11 @@ app.use(cors({
 }));
 
 // Configure Multer for file uploads (storing temporarily on disk before sending to Drive)
+// Vercel Serverless Functions only allow write access to /tmp/
 const upload = multer({
-  dest: 'temp_uploads/',
+  dest: '/tmp/',
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB limit
+    fileSize: 100 * 1024 * 1024, // 100MB limit (NOTE: Vercel has a hard 4.5MB request body limit)
   }
 });
 
