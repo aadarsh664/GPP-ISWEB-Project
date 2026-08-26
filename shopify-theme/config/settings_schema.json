@@ -1,45 +1,109 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "GPP Custom",
+    "theme_version": "1.0.0",
+    "theme_author": "GPP",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Typography",
     "settings": [
       {
         "type": "header",
-        "content": "t:general.fonts"
+        "content": "Fonts"
       },
       {
         "type": "font_picker",
         "id": "type_primary_font",
         "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "label": "Primary Font"
+      },
+      {
+        "type": "range",
+        "id": "heading_font_size",
+        "min": 16,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "label": "Heading font size",
+        "default": 28
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Body font size",
+        "default": 16
       }
     ]
   },
   {
-    "name": "t:general.layout",
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Core Colors"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FFFFFF",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#333333",
+        "label": "Text / Foreground"
+      },
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "default": "#0056b3",
+        "label": "Primary (Brand Blue)"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "default": "#0088cc",
+        "label": "Accent (Hover Blue)"
+      },
+      {
+        "type": "color",
+        "id": "color_success",
+        "default": "#0056b3",
+        "label": "Success State"
+      },
+      {
+        "type": "color",
+        "id": "color_error",
+        "default": "#d32f2f",
+        "label": "Error State"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
     "settings": [
       {
         "type": "select",
         "id": "max_page_width",
-        "label": "t:labels.page_width",
+        "label": "Page width",
         "options": [
-          {
-            "value": "90rem",
-            "label": "t:options.page_width.narrow"
-          },
-          {
-            "value": "110rem",
-            "label": "t:options.page_width.wide"
-          }
+          { "value": "90rem", "label": "Narrow (90rem)" },
+          { "value": "110rem", "label": "Wide (110rem)" },
+          { "value": "100%", "label": "Full width" }
         ],
-        "default": "90rem"
+        "default": "110rem"
       },
       {
         "type": "range",
@@ -48,25 +112,51 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.page_margin",
+        "label": "Page margin",
         "default": 20
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Spacing & Sizing",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "type": "header",
+        "content": "Section Spacing"
       },
       {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "type": "range",
+        "id": "section_padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Section padding top",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "section_padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Section padding bottom",
+        "default": 40
+      },
+      {
+        "type": "header",
+        "content": "Borders & Radius"
+      },
+      {
+        "type": "range",
+        "id": "button_border_radius",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Button corner radius",
+        "default": 8
       },
       {
         "type": "range",
@@ -75,8 +165,18 @@
         "max": 10,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.input_corner_radius",
+        "label": "Input corner radius",
         "default": 4
+      },
+      {
+        "type": "range",
+        "id": "card_border_radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "label": "Card corner radius",
+        "default": 8
       }
     ]
   }

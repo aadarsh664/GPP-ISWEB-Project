@@ -1,47 +1,71 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Collection page — responsive grid with 2-col mobile layout
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<style>
+  .collection-page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-padding-top, 40px) var(--page-margin) var(--section-padding-bottom, 40px);
+  }
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
-      </div>
-    {% endfor %}
+  .collection-page__title {
+    font-size: var(--font-heading-size, 28px);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
-
-{% stylesheet %}
   .collection-products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-{% endstylesheet %}
+
+  .collection-products .product-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .collection-products .product-card__image-wrap {
+    aspect-ratio: 1 / 1;
+  }
+
+  @media (min-width: 768px) {
+    .collection-products {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .collection-products {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+</style>
+
+<div class="collection-page">
+  <h1 class="collection-page__title">{{ collection.title }}</h1>
+
+  <div class="collection-products">
+    {% paginate collection.products by 20 %}
+      {% for product in collection.products %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+
+      {% if paginate.pages > 1 %}
+        <div style="grid-column: 1 / -1; text-align: center; margin-top: 2rem;">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</div>
 
 {% schema %}
 {
-  "name": "t:general.collection",
+  "name": "Collection",
   "settings": []
 }
 {% endschema %}

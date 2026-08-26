@@ -46,7 +46,9 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
-    padding-bottom: 1rem; /* Space for hover effects/shadows */
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
   }
 
   .product-row-grid::-webkit-scrollbar {
