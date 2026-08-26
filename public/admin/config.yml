@@ -8,7 +8,7 @@ backend:
   # Vercel provides the host dynamically to functions. 
   # Since base_url requires full domain, we'll configure it dynamically or hardcode the production URL.
   # If empty, it defaults to Netlify. We must use our custom OAuth provider base url.
-  base_url: https://gppnew.vercel.app
+  base_url: https://guruprintingpress.com
   # For local testing, you can change this to http://localhost:5173
   auth_endpoint: api/auth
 

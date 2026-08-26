@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // Enable CORS so Shopify storefront can hit this endpoint
 app.use(cors({
-  origin: ['https://k55hut-rj.myshopify.com', 'https://shop.guruprintingpress.com'],
+  origin: ['https://shop.guruprintingpress.com', 'https://guruprintingpress.com'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
