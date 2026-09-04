@@ -70,21 +70,17 @@ export default function ScrollVelocityGSAP({
 
     const renderBlockContent = (copyIndex: number) => {
         return (items ?? []).map((item, itemIndex) => (
-            <span
+            <div
                 key={`copy-${copyIndex}-item-${itemIndex}`}
                 style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: `${gap}px`,
+                    justifyContent: "center",
+                    flexShrink: 0,
                 }}
             >
                 {item}
-                {itemIndex < (items ?? []).length - 1 && (
-                    <span
-                        style={{ display: "inline-block", width: `${gap}px` }}
-                    />
-                )}
-            </span>
+            </div>
         ));
     };
 

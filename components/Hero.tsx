@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     const handleEntrance = () => setIsLoaded(true);
-    
+
     // Check if the global loader has already finished (e.g. returning to home page from another route)
     const loaderEl = document.getElementById('global-loader');
     if (!loaderEl || loaderEl.style.display === 'none') {
@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
     const cores = navigator.hardwareConcurrency || 4;
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     const isSlowNetwork = connection && (connection.effectiveType === '2g' || connection.effectiveType === '3g' || connection.saveData);
-    
+
     // If running on a low-end device (<= 4 cores) or slow network, request compressed video
     if (cores <= 4 || isSlowNetwork) {
       setVideoSrc("/hero/Final Video Compressed.mp4"); // Fallback compressed version
@@ -140,7 +140,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Subtext */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 1.2, ease: "easeInOut" }}
@@ -154,7 +154,7 @@ const Hero: React.FC = () => {
           </motion.div>
 
           {/* Radial Reveal Buttons */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 1.2, ease: "easeInOut", delay: 0.1 }}
@@ -209,7 +209,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Bottom Text Sections (Desktop Only) */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}

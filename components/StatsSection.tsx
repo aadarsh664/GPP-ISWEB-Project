@@ -104,13 +104,13 @@ const StatsSection: React.FC = () => {
               key={i} 
               src={src} 
               alt="Client Logo" 
-              className="h-16 md:h-20 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0"
+              className="h-9 md:h-11 w-auto max-w-[200px] object-contain opacity-60 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0 pointer-events-auto"
               draggable={false}
             />
           ))}
           baseVelocity={2}
           direction="left"
-          gap={40}
+          gap={56}
         />
       </div>
     </section>
