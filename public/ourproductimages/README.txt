@@ -1,0 +1,1 @@
+Place your custom product images here if you want to override Shopify images locally.

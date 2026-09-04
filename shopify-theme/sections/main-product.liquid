@@ -181,10 +181,12 @@
     font-weight: 500;
   }
   .product-unit-text {
-    font-size: 14px;
-    color: var(--color-gray-800);
+    font-size: 15px;
+    color: #666666;
     display: block;
-    margin-top: -5px;
+    margin-top: 4px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   /* Pincode */
@@ -223,25 +225,96 @@
     margin-top: 1rem;
   }
   
-  .quantity-selector {
+  /* Quantity Tier List (Matches Screenshot 1) */
+  .quantity-tier-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm, 8px);
+    background: var(--color-white);
+    overflow: hidden;
+    margin-top: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   }
-  .quantity-selector select {
-    width: 100%;
-    padding: 12px 36px 12px 12px;
-    border: 1px solid var(--color-foreground);
-    border-radius: 6px;
-    font-size: 16px;
-    background: transparent;
-    appearance: auto;
+  .quantity-tier-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1.1fr 1.1fr;
+    align-items: center;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    background: var(--color-white);
+    transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+    outline: none;
   }
-  .quantity-subtext {
-    font-size: 11px;
+  .quantity-tier-row:last-child {
+    border-bottom: none;
+  }
+  .quantity-tier-row:hover {
+    background-color: #f8fafc;
+  }
+  .quantity-tier-row.active {
+    background-color: #f0f7ff;
+    box-shadow: inset 3px 0 0 var(--color-primary);
+  }
+  .quantity-tier-row:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+  .tier-col-qty {
     display: flex;
-    justify-content: space-between;
-    color: var(--color-gray-800);
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .tier-qty-num {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+    white-space: nowrap;
+  }
+  .tier-col-total {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .tier-col-unit {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 400;
+    color: #71717a;
+    font-variant-numeric: tabular-nums;
+  }
+  @media screen and (max-width: 480px) {
+    .quantity-tier-row {
+      padding: 11px 12px;
+      grid-template-columns: 1.3fr 1fr 1fr;
+    }
+    .tier-qty-num, .tier-col-total {
+      font-size: 14px;
+    }
+    .tier-col-unit {
+      font-size: 12.5px;
+    }
+    .tier-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+    }
   }
 
   .variant-group {
@@ -527,10 +600,22 @@
       
       <div>
         <div class="product-price-block">
-          <span class="product-price">₹{{ product.price | default: 350000 | money_without_currency | remove: ',' | remove: '.00' }}</span>
+          <span class="product-price">₹{{ product.selected_or_first_available_variant.price | default: product.price | default: 350000 | money_without_currency | remove: ',' | remove: '.00' }}</span>
           <span class="product-discount-badge">↓ 12% off</span>
         </div>
-        <span class="product-unit-text">for 500 units</span>
+        {%- assign initial_variant = product.selected_or_first_available_variant | default: product.variants.first -%}
+        {%- assign initial_qty = 1 -%}
+        {%- for opt in product.options_with_values -%}
+          {%- assign opt_lower = opt.name | downcase -%}
+          {%- if opt_lower contains 'quantity' or opt_lower contains 'qty' or opt_lower contains 'pack' -%}
+            {%- assign parsed_qty = opt.selected_value | remove: 'units' | remove: 'pcs' | remove: ' ' | plus: 0 -%}
+            {%- if parsed_qty > 0 -%}
+              {%- assign initial_qty = parsed_qty -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign per_unit_initial = initial_variant.price | divided_by: initial_qty -%}
+        <span class="product-unit-text" id="product-unit-breakdown">₹{{ per_unit_initial | money_without_currency }} {{ section.settings.unit_price_suffix | default: 'each' }} / {{ initial_qty }} units</span>
       </div>
 
       <div class="pincode-checker" id="custom-pincode-checker">
@@ -562,17 +647,32 @@
                 </span>
                 
                 {%- assign downcased_name = option.name | downcase -%}
-                {%- if downcased_name contains 'quantity' or downcased_name contains 'qty' -%}
-                  <div class="quantity-selector">
-                    <select class="real-variant-select">
-                      {%- for value in option.values -%}
-                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
-                      {%- endfor -%}
-                    </select>
-                    <div class="quantity-subtext">
-                      <span>Select pack size</span>
-                      <span>Multiples only</span>
-                    </div>
+                {%- if downcased_name contains 'quantity' or downcased_name contains 'qty' or downcased_name contains 'pack' -%}
+                  <div class="quantity-tier-list" role="radiogroup" aria-label="Select {{ option.name }}">
+                    {%- for value in option.values -%}
+                      {%- assign is_recommended = false -%}
+                      {%- assign clean_val = value | strip -%}
+                      {%- if section.settings.recommended_tier != blank and clean_val == section.settings.recommended_tier -%}
+                        {%- assign is_recommended = true -%}
+                      {%- elsif section.settings.recommended_tier == blank and forloop.index == 3 -%}
+                        {%- assign is_recommended = true -%}
+                      {%- endif -%}
+                      <div class="quantity-tier-row {% if option.selected_value == value %}active{% endif %}"
+                           data-value="{{ value | escape }}"
+                           data-qty="{{ value | escape }}"
+                           role="radio"
+                           aria-checked="{% if option.selected_value == value %}true{% else %}false{% endif %}"
+                           tabindex="0">
+                        <div class="tier-col-qty">
+                          <span class="tier-qty-num">{{ value }}</span>
+                          {%- if is_recommended -%}
+                            <span class="tier-badge">{{ section.settings.recommended_badge_label | default: 'Recommended' }}</span>
+                          {%- endif -%}
+                        </div>
+                        <div class="tier-col-total" data-tier-total>₹--</div>
+                        <div class="tier-col-unit" data-tier-unit>₹-- {{ section.settings.unit_price_suffix | default: 'each' }}</div>
+                      </div>
+                    {%- endfor -%}
                   </div>
                 {%- else -%}
                   <div class="variant-options">
@@ -753,7 +853,32 @@
 {% schema %}
 {
   "name": "Main Product",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Quantity Tier Pricing"
+    },
+    {
+      "type": "text",
+      "id": "recommended_tier",
+      "label": "Recommended Quantity Value",
+      "default": "50",
+      "info": "Pack size to display the recommended badge next to (e.g. 50)"
+    },
+    {
+      "type": "text",
+      "id": "recommended_badge_label",
+      "label": "Recommended Badge Label",
+      "default": "Recommended"
+    },
+    {
+      "type": "text",
+      "id": "unit_price_suffix",
+      "label": "Per-Unit Suffix",
+      "default": "each",
+      "info": "Text after per unit price (e.g. each, /pc)"
+    }
+  ]
 }
 {% endschema %}
 
@@ -770,20 +895,83 @@
         const realVariantGroups = document.querySelectorAll('.real-variant-group');
         const hiddenVariantInput = document.querySelector('input[name="id"]');
         const priceDisplay = document.querySelector('.product-price');
+        const unitSuffix = '{{ section.settings.unit_price_suffix | default: "each" }}';
+
+        // Helper to format currency in Indian format
+        const formatINR = (paise) => {
+          const amount = paise / 100;
+          return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }).format(amount);
+        };
+
+        // Recalculate and update prices on all quantity tier rows based on currently selected non-quantity options
+        const refreshTierPricing = (currentSelectedOptions) => {
+          const tierLists = document.querySelectorAll('.quantity-tier-list');
+
+          tierLists.forEach(tierList => {
+            const group = tierList.closest('.real-variant-group');
+            if (!group) return;
+            const qtyPos = group.getAttribute('data-option-position');
+            const rows = tierList.querySelectorAll('.quantity-tier-row');
+
+            rows.forEach(row => {
+              const rowQtyVal = row.getAttribute('data-value');
+              const tempOptions = Object.assign({}, currentSelectedOptions);
+              tempOptions[qtyPos] = rowQtyVal;
+
+              const matched = productVariants.find(variant => {
+                return (
+                  (!tempOptions['option1'] || variant.option1 === tempOptions['option1']) &&
+                  (!tempOptions['option2'] || variant.option2 === tempOptions['option2']) &&
+                  (!tempOptions['option3'] || variant.option3 === tempOptions['option3'])
+                );
+              });
+
+              const totalEl = row.querySelector('[data-tier-total]');
+              const unitEl = row.querySelector('[data-tier-unit]');
+
+              if (matched) {
+                const qtyNum = parseInt(rowQtyVal.replace(/[^0-9]/g, ''), 10) || 1;
+                const totalFormatted = formatINR(matched.price);
+                const perUnitFormatted = formatINR(Math.round(matched.price / qtyNum));
+
+                if (totalEl) totalEl.textContent = totalFormatted;
+                if (unitEl) unitEl.textContent = `${perUnitFormatted} ${unitSuffix}`;
+                row.style.opacity = '1';
+                row.style.pointerEvents = 'auto';
+              } else {
+                if (totalEl) totalEl.textContent = 'Unavailable';
+                if (unitEl) unitEl.textContent = '';
+                row.style.opacity = '0.5';
+                row.style.pointerEvents = 'none';
+              }
+            });
+          });
+        };
 
         const updateVariant = () => {
           let selectedOptions = {};
           realVariantGroups.forEach(g => {
             const pos = g.getAttribute('data-option-position');
             const activePill = g.querySelector('.real-variant-pill.active');
+            const activeTier = g.querySelector('.quantity-tier-row.active');
             const activeSelect = g.querySelector('.real-variant-select');
             
-            if (activePill) {
+            if (activeTier) {
+              selectedOptions[pos] = activeTier.getAttribute('data-value');
+            } else if (activePill) {
               selectedOptions[pos] = activePill.getAttribute('data-value');
             } else if (activeSelect) {
               selectedOptions[pos] = activeSelect.value;
             }
           });
+
+          // Refresh prices for all tiers according to selected options
+          refreshTierPricing(selectedOptions);
 
           // Find matching variant
           const matchedVariant = productVariants.find(variant => {
@@ -802,23 +990,25 @@
             
             // Update Price Display
             if (priceDisplay) {
-              const formatter = new Intl.NumberFormat('en-IN');
-              priceDisplay.innerHTML = '₹' + formatter.format(matchedVariant.price / 100);
+              priceDisplay.innerHTML = formatINR(matchedVariant.price);
             }
 
-            // Update Unit Text if Quantity variant changed
-            const unitText = document.querySelector('.product-unit-text');
+            // Update Unit Breakdown Subtitle (e.g. ₹5.50 each / 10000 units)
+            const unitText = document.getElementById('product-unit-breakdown');
             if (unitText) {
-              // Try to find if one of the selected options is for Quantity
+              let currentQty = 1;
               realVariantGroups.forEach(g => {
                 const optName = g.getAttribute('data-option-name');
-                if (optName && (optName.toLowerCase().includes('quantity') || optName.toLowerCase().includes('qty'))) {
+                if (optName && (optName.toLowerCase().includes('quantity') || optName.toLowerCase().includes('qty') || optName.toLowerCase().includes('pack'))) {
                   const pos = g.getAttribute('data-option-position');
                   if (selectedOptions[pos]) {
-                    unitText.textContent = `for ${selectedOptions[pos]} units`;
+                    const parsed = parseInt(selectedOptions[pos].replace(/[^0-9]/g, ''), 10);
+                    if (parsed) currentQty = parsed;
                   }
                 }
               });
+              const perUnitFormatted = formatINR(Math.round(matchedVariant.price / currentQty));
+              unitText.textContent = `${perUnitFormatted} ${unitSuffix} / ${currentQty} units`;
             }
             
             // Update URL
@@ -835,6 +1025,25 @@
               pills.forEach(p => p.classList.remove('active'));
               pill.classList.add('active');
               updateVariant();
+            });
+          });
+
+          const tierRows = group.querySelectorAll('.quantity-tier-row');
+          tierRows.forEach(row => {
+            row.addEventListener('click', () => {
+              tierRows.forEach(r => {
+                r.classList.remove('active');
+                r.setAttribute('aria-checked', 'false');
+              });
+              row.classList.add('active');
+              row.setAttribute('aria-checked', 'true');
+              updateVariant();
+            });
+            row.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                row.click();
+              }
             });
           });
 

@@ -114,12 +114,12 @@ const Hero: React.FC = () => {
             <div className="hidden md:flex flex-col items-start text-left w-full space-y-0.5">
               <div className="w-full whitespace-nowrap">
                 <h1 className="text-white font-normal tracking-tight leading-[1.05]" style={{ fontSize: '95px' }}>
-                  <FocusReveal text="The Benchmark of" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.8, staggerChildren: 0.05 }} />
+                  <FocusReveal text="The Benchmark of" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.2, staggerChildren: 0.035 }} />
                 </h1>
               </div>
               <div className="w-full whitespace-nowrap">
                 <h1 className="text-white font-normal tracking-tight leading-[1.05]" style={{ fontSize: '95px' }}>
-                  <FocusReveal text="Commercial Print" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.8, delay: 0.5, staggerChildren: 0.05 }} />
+                  <FocusReveal text="Commercial Print" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.2, delay: 0.35, staggerChildren: 0.035 }} />
                 </h1>
               </div>
             </div>
@@ -128,12 +128,12 @@ const Hero: React.FC = () => {
             <div className="md:hidden flex flex-col items-center text-center w-full space-y-0.5">
               <div className="w-full whitespace-nowrap">
                 <h1 className="text-white font-normal tracking-tight leading-[1.05]" style={{ fontSize: 'clamp(40px, 10vw, 60px)' }}>
-                  <FocusReveal text="The Benchmark of" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.8, staggerChildren: 0.05 }} />
+                  <FocusReveal text="The Benchmark of" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.2, staggerChildren: 0.035 }} />
                 </h1>
               </div>
               <div className="w-full whitespace-nowrap">
                 <h1 className="text-white font-normal tracking-tight leading-[1.05]" style={{ fontSize: 'clamp(40px, 10vw, 60px)' }}>
-                  <FocusReveal text="Commercial Print" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.8, delay: 0.5, staggerChildren: 0.05 }} />
+                  <FocusReveal text="Commercial Print" color="white" appearTrigger="custom" customTriggerEvent="hero-entrance-start" transition={{ duration: 1.2, delay: 0.35, staggerChildren: 0.035 }} />
                 </h1>
               </div>
             </div>
@@ -143,7 +143,7 @@ const Hero: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 1.8, ease: "easeInOut" }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
             className="mb-8 md:mb-10 w-full max-w-[800px]"
           >
             <div>
@@ -157,7 +157,7 @@ const Hero: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 1.8, ease: "easeInOut", delay: 0.12 }}
+            transition={{ duration: 1.2, ease: "easeInOut", delay: 0.1 }}
           >
             <div className="flex flex-row items-center justify-center md:justify-start gap-3 sm:gap-5 w-full md:scale-[1.2] md:origin-left mt-2 md:mt-4">
               <RadialRevealButton
@@ -212,7 +212,7 @@ const Hero: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 1.8, ease: "easeInOut", delay: 0.24 }}
+          transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}
           className="hidden md:flex flex-row justify-start gap-24 w-full pt-10"
         >
           <div className="flex flex-col text-left">
